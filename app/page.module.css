@@ -59,6 +59,12 @@
   transition: transform 200ms;
 }
 
+.card img {
+  vertical-align: text-top;
+  margin-top: 2px;
+  margin-right: 6px;
+}
+
 .card h2 {
   font-weight: 600;
   margin-bottom: 0.7rem;
@@ -113,14 +119,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 75px;
-  height: 75px;
+  width: 300px;
+  height: 300px;
   padding: 25px 10px;
   margin-left: 16px;
   transform: translateZ(0);
   border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: 0px 2px 8px -1px #0000001a;
+}
+
+.thirteen img {
+  border-radius: 7px;
 }
 
 .thirteen::before,
@@ -254,11 +264,6 @@
   .vercelLogo {
     filter: invert(1);
   }
-
-  .logo,
-  .thirteen img {
-    filter: invert(1) drop-shadow(0 0 0.3rem #ffffff70);
-  }
 }
 
 @keyframes rotate {
@@ -269,3 +274,4 @@
     transform: rotate(0deg);
   }
 }
+
