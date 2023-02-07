@@ -47,4 +47,4 @@ export const Cards = [
 
 ## 📄 License
 
-[MIT](./license) &copy; [Pruthivi Thejan](https://twitter.com/pruthivithejan)
+[MIT](./LICENSE.md) &copy; [Pruthivi Thejan](https://twitter.com/pruthivithejan)
