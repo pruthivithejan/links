@@ -5,6 +5,7 @@
 ## 📖 Make your own
 
 Prerequisites :
+- Install [Git](https://git-scm.com/downloads).
 - [Nodejs](https://nodejs.org/en/) and [pnpm(recommended)](https://pnpm.io/installation) installed.
 
 Steps :
