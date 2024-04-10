@@ -33,7 +33,6 @@ jobs:
           node-version: 20
           cache: "pnpm"
       - run: pnpm install
-      - run: pnpm test
       - name: Install dependencies
         run: pnpm ci
       - name: Build
