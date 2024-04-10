@@ -49,7 +49,7 @@ description: "I care about Twitter, I hope Elon Musk will not ruin it.", //Chang
 
 - If you want any new Icons add them to `public` folder as SVGs. You can find SVG Icons [here](https://icon-sets.iconify.design/).
 
-- Deploying is automatically set to GitHub Pages
+- Deploying is automatically set to GitHub Pages. make sure you [enable](https://docs.github.com/en/pages/quickstart) Github Pages for the repository.
 
 ✨ Leave a Star on the repository if you like. ✨ <br>
 
