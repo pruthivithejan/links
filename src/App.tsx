@@ -14,7 +14,10 @@ export default function App() {
   }, []);
   return (
     <main className="main" style={{ fontFamily: "Inter" }}>
-      <div className="description animate-enter" style={{ "--stagger": "4" }}>
+      <div
+        className="description animate-enter"
+        style={{ "--stagger": "4" } as React.CSSProperties}
+      >
         <p>
           "{slogan.words}&nbsp;
           <code className="code">{slogan.hightlight}</code>."
@@ -57,7 +60,7 @@ export default function App() {
               target="_blank"
               rel="noopener noreferrer"
               key={index}
-              style={{ "--stagger": index }}
+              style={{ "--stagger": index } as React.CSSProperties}
             >
               <h2 className="className">
                 <img
