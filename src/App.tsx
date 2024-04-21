@@ -14,7 +14,7 @@ export default function App() {
   }, []);
   return (
     <main className="main" style={{ fontFamily: "Inter" }}>
-      <div className="description">
+      <div className="description animate-enter" style={{ "--stagger": "4" }}>
         <p>
           "{slogan.words}&nbsp;
           <code className="code">{slogan.hightlight}</code>."
@@ -37,7 +37,7 @@ export default function App() {
         </div>
       </div>
 
-      <div className="center">
+      <div className="center animate-enter">
         <div className="thirteen">
           <img
             src={`https://avatars.githubusercontent.com/${githubUsername}`}
@@ -53,10 +53,11 @@ export default function App() {
           return (
             <a
               href={card.href}
-              className="card"
+              className="card animate-enter"
               target="_blank"
               rel="noopener noreferrer"
               key={index}
+              style={{ "--stagger": index }}
             >
               <h2 className="className">
                 <img
