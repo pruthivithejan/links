@@ -32,7 +32,7 @@ export default function App() {
             <img
               src="./github.svg"
               alt="Github Logo"
-              className="vercelLogo"
+              className="imgMain"
               width={24}
               height={24}
             />
@@ -41,7 +41,7 @@ export default function App() {
       </div>
 
       <div className="center animate-enter">
-        <div className="thirteen">
+        <div className="animatedRing">
           <img
             src={`https://avatars.githubusercontent.com/${githubUsername}`}
             alt="Avatar"

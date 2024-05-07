@@ -39,6 +39,15 @@
   font-family: var(--font-mono);
 }
 
+@media (max-width: 767px) and (orientation: portrait) {
+  .description a {
+    display: none;
+  }
+  .description p {
+    min-width: 200px;
+  }
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(33%, auto));
@@ -111,11 +120,11 @@
 }
 
 .logo,
-.thirteen {
+.animatedRing {
   position: relative;
 }
 
-.thirteen {
+.animatedRing {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -129,19 +138,19 @@
   box-shadow: 0px 2px 8px -1px #0000001a;
 }
 
-.thirteen img {
+.animatedRing img {
   border-radius: 7px;
 }
 
-.thirteen::before,
-.thirteen::after {
+.animatedRing::before,
+.animatedRing::after {
   content: "";
   position: absolute;
   z-index: -1;
 }
 
 /* Conic Gradient Animation */
-.thirteen::before {
+.animatedRing::before {
   animation: 6s rotate linear infinite;
   width: 200%;
   height: 200%;
@@ -149,7 +158,7 @@
 }
 
 /* Inner Square */
-.thirteen::after {
+.animatedRing::after {
   inset: 0;
   padding: 1px;
   border-radius: var(--border-radius);
@@ -174,7 +183,7 @@
 }
 
 @media (prefers-reduced-motion) {
-  .thirteen::before {
+  .animatedRing::before {
     animation: none;
   }
 
@@ -261,7 +270,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .vercelLogo {
+  .imgMain {
     filter: invert(1);
   }
 }
