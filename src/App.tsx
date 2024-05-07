@@ -30,7 +30,7 @@ export default function App() {
           >
             Made by Pruthivi Thejan{" "}
             <img
-              src="./github.svg"
+              src="/github.svg"
               alt="Github Logo"
               className="vercelLogo"
               width={24}
@@ -64,7 +64,7 @@ export default function App() {
             >
               <h2 className="className">
                 <img
-                  src={`./${card.icon}.svg`}
+                  src={`/${card.icon}.svg`}
                   alt="Icon"
                   className="vercelLogo"
                   width={24}
