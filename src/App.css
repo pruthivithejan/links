@@ -66,6 +66,7 @@
 .card span {
   display: inline-block;
   transition: transform 200ms;
+  text-align: left;
 }
 
 .card img {

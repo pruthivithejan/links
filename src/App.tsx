@@ -13,7 +13,7 @@ export default function App() {
     document.title = heading;
   }, []);
   return (
-    <main className="main" style={{ fontFamily: "Inter" }}>
+    <main className="main" style={{ fontFamily: "Geist" }}>
       <div
         className="description animate-enter"
         style={{ "--stagger": "4" } as React.CSSProperties}
@@ -62,17 +62,17 @@ export default function App() {
               key={index}
               style={{ "--stagger": index } as React.CSSProperties}
             >
-              <h2 className="className">
+              <h2 className="clx">
                 <img
                   src={`./${card.icon}.svg`}
                   alt="Icon"
-                  className="vercelLogo"
+                  className="imgMain"
                   width={24}
                   height={24}
                 />
                 {card.title} <span>-&gt;</span>
               </h2>
-              <p className="className">{card.description}</p>
+              <p>{card.description}</p>
             </a>
           );
         })}

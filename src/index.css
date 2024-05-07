@@ -1,13 +1,13 @@
 @font-face {
-  font-family: "Inter";
-  src: url("./fonts/Inter.woff2") format("woff2");
+  font-family: "Geist";
+  src: url("./fonts/Geist.woff2") format("woff2");
   font-weight: 400;
 }
 
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: Inter;
+  --font-mono: Geist;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
