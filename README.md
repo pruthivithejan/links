@@ -44,12 +44,17 @@ description: "I care about Twitter, I hope Elon Musk will not ruin it.", //Chang
 }, //...add more
 
 ```
-
+- Change the Meta tags on index.html if needed.
+  
 - Save, come back and see if the changes are made.
 
 - If you want any new Icons add them to `public` folder as SVGs. You can find SVG Icons [here](https://icon-sets.iconify.design/).
 
 - Deploying is automatically set to GitHub Pages. make sure you [enable](https://docs.github.com/en/pages/quickstart) Github Pages for the repository.
+  
+- Make sure these things are correct if not deployed
+     https://stackoverflow.com/questions/74518887/blank-page-when-deploying-a-react-app-to-github-pages-and-vite
+     https://stackoverflow.com/questions/77348361/resolved-github-pages-deployment-blank-vite-react-ts
 
 ✨ Leave a Star on the repository if you like. ✨ <br>
 
