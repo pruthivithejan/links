@@ -72,16 +72,22 @@ export const Cards = [
       "Explore my learning projects and code contributions on GitLab.",
   },
   {
-    href: "https://www.behance.net/pruthivithejan",
-    icon: "behance",
-    title: "Behance",
-    description: "Check out my design projects and creative works on Behance.",
+    href: "https://layers.to/pruthivithejan",
+    icon: "layers",
+    title: "Layers",
+    description: "Showcasing component designs and fonts, gradients and more.",
   },
   {
     href: "https://dribbble.com/pruthivithejan",
     icon: "dribbble",
     title: "Dribbble",
     description: "Showcasing my design concepts and shots on Dribbble.",
+  },
+  {
+    href: "https://www.behance.net/pruthivithejan",
+    icon: "behance",
+    title: "Behance",
+    description: "Check out my design projects and creative works on Behance.",
   },
   {
     href: "https://www.pinterest.com/pruthivithejan/",

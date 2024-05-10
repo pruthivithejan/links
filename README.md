@@ -20,7 +20,7 @@ pnpm install
 pnpm run dev
 ```
 
-This will start the project on your `localhost:3000`. Open the browser and see if it works.
+This will start the project on your `localhost:5173`. Open the browser and see if it works.
 
 - All you have to do is go to the `content.ts` file and replace everything with your information.
 
@@ -37,24 +37,25 @@ export const slogan = {
 
 export const Cards = [
 {
-href: "https://mobile.twitter.com/pruthivithejan", //Change the link here to your liking.
-icon: "twitter", //Please check if the `public/` folder has the SVG to your link or place a one yourself, It must be a .svg file.
-title: "Twitter", //Change the title to your liking.
-description: "I care about Twitter, I hope Elon Musk will not ruin it.", //Change the description to your liking.
+href: "https://x.com/pruthivithejan", //Change the link here to your liking.
+icon: "x", //Please check if the `public/` folder has the SVG to your link or place a one yourself, It must be a .svg file.
+title: "X", //Change the title to your liking.
+description: "I share thoughts and updates on various topics.", //Change the description to your liking.
 }, //...add more
 
 ```
-- Change the Meta tags on index.html if needed.
-  
+
+- Change the `meta` tags on index.html if needed.
 - Save, come back and see if the changes are made.
 
 - If you want any new Icons add them to `public` folder as SVGs. You can find SVG Icons [here](https://icon-sets.iconify.design/).
 
+- If you're not using a custom domain delete the `CNAME` file and add your repository name to `vite.config.ts` as `base: "/links/,`
+
 - Deploying is automatically set to GitHub Pages. make sure you [enable](https://docs.github.com/en/pages/quickstart) Github Pages for the repository.
-  
 - Make sure these things are correct if not deployed
-     https://stackoverflow.com/questions/74518887/blank-page-when-deploying-a-react-app-to-github-pages-and-vite
-     https://stackoverflow.com/questions/77348361/resolved-github-pages-deployment-blank-vite-react-ts
+  - https://stackoverflow.com/questions/74518887/blank-page-when-deploying-a-react-app-to-github-pages-and-vite
+  - https://stackoverflow.com/questions/77348361/resolved-github-pages-deployment-blank-vite-react-ts
 
 ✨ Leave a Star on the repository if you like. ✨ <br>
 
