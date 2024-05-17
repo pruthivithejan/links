@@ -5,6 +5,8 @@
   align-items: center;
   padding: 6rem;
   min-height: 100vh;
+  font-family: var(--font-mono), "HelveticaNeue-UltraLight", "Segoe UI",
+    "Roboto Light";
 }
 
 .description {

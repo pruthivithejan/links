@@ -6,6 +6,8 @@ export const slogan = {
   hightlight: "die trying",
 };
 
+export const ga4 = "G-X2L97WZK07";
+
 export const Cards = [
   {
     href: "https://pruthivithejan.me/",

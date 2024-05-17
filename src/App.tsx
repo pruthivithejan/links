@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import ReactGA from "react-ga4";
 import "./App.css";
 import {
   Cards,
@@ -6,7 +7,11 @@ import {
   codeRepository,
   slogan,
   heading,
+  ga4,
 } from "../content";
+
+ReactGA.initialize(ga4);
+ReactGA.send("pageview");
 
 export default function App() {
   useEffect(() => {
