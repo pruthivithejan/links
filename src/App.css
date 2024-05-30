@@ -5,8 +5,7 @@
   align-items: center;
   padding: 6rem;
   min-height: 100vh;
-  font-family: var(--font-mono), "HelveticaNeue-UltraLight", "Segoe UI",
-    "Roboto Light";
+  font-family: var(--font-mono);
 }
 
 .description {
@@ -17,7 +16,6 @@
   max-width: var(--max-width);
   width: 100%;
   z-index: 2;
-  font-family: var(--font-mono);
 }
 
 .description a {
@@ -38,7 +36,6 @@
 
 .code {
   font-weight: 700;
-  font-family: var(--font-mono);
 }
 
 @media (max-width: 767px) and (orientation: portrait) {
