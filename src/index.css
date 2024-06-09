@@ -1,9 +1,33 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+@font-face {
+  font-family: "Switzer-Regular";
+  src: url("./assets/fonts/Switzer-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "InstrumentSerif-Italic";
+  src: url("./assets/fonts/InstrumentSerif-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "JetBrainsMono-Regular";
+  src: url("./assets/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
 
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: "Inter", sans-serif;
+  --font-mono: "JetBrainsMono-Regular";
+  --font-main: "Switzer-Regular";
+  --font-italic: "InstrumentSerif-Italic";
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -76,6 +100,7 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-family: var(--font-main);
 }
 
 html,

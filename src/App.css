@@ -5,7 +5,6 @@
   align-items: center;
   padding: 6rem;
   min-height: 100vh;
-  font-family: var(--font-mono);
 }
 
 .description {
@@ -19,6 +18,7 @@
 }
 
 .description a {
+  font-family: var(--font-mono);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,10 +32,14 @@
   background-color: rgba(var(--callout-rgb), 0.5);
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
   border-radius: var(--border-radius);
+  font-family: var(--font-italic);
+  letter-spacing: 1px;
 }
 
 .code {
+  font-family: var(--font-italic);
   font-weight: 700;
+  letter-spacing: 1px;
 }
 
 @media (max-width: 767px) and (orientation: portrait) {
@@ -66,6 +70,7 @@
   display: inline-block;
   transition: transform 200ms;
   text-align: left;
+  font-family: var(--font-mono);
 }
 
 .card img {
