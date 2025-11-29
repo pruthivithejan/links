@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Links from '../components/Links.astro';
 import { getEntry } from 'astro:content';
 
 const personalData = await getEntry('personal', 'profile');
@@ -14,74 +16,15 @@ const links = (linksData?.data || []) as Array<{
 }>;
 ---
 
-<Layout title={personal?.heading || 'Pruthivi Thejan | Links'}>
-	<main class="flex flex-col justify-between items-center p-16 md:p-24 min-h-screen w-full">
-		<!-- Description/Slogan Section -->
-		<div class="flex flex-col md:flex-row justify-center items-center gap-4 text-sm max-w-[1100px] w-full z-10 animate-enter" style={`--stagger: 4`}>
-			<p class="relative m-0 p-4 rounded-[12px] border border-[rgba(var(--callout-border-rgb),0.3)] text-center md:text-left" style="background-color: rgba(var(--callout-rgb), 0.5); letter-spacing: 1px; font-family: 'InstrumentSerif-Italic', serif;">
-				"{personal?.slogan.words}&nbsp;
-				<code class="font-bold" style="letter-spacing: 1px; font-family: 'JetBrainsMono-Regular', monospace;">{personal?.slogan.highlight}</code>."
-			</p>
-			<a
-				href={`https://github.com/${personal?.githubUsername}/${personal?.codeRepository}`}
-				target="_blank"
-				rel="noopener noreferrer"
-				class="hidden md:flex items-center justify-center gap-2 font-mono"
-				style="font-family: 'JetBrainsMono-Regular', monospace;"
-			>
-				Build Your Own
-				<img
-					src="/github.svg"
-					alt="Github Logo"
-					class="imgMain w-6 h-6"
-					width={24}
-					height={24}
-				/>
-			</a>
-		</div>
-
-		<!-- Center with Avatar and Animated Border -->
-		<div class="flex justify-center items-center relative p-8 md:p-16 animate-enter" style={`--stagger: 1`}>
-			<div class="relative flex justify-center items-center w-[300px] h-[300px] rounded-[12px] overflow-hidden" style="margin-left: 16px; transform: translateZ(0); box-shadow: 0px 2px 8px -1px #0000001a;">
-				<img
-					src={`https://avatars.githubusercontent.com/${personal?.githubUsername}`}
-					alt="Avatar"
-					width={280}
-					height={280}
-					class="rounded-[7px] w-full h-full"
-					style="object-fit: cover; position: relative; z-index: 1;"
-				/>
-				<!-- Animated rotating border -->
-				<div class="absolute inset-0 -z-10" style="animation: 6s rotate linear infinite; width: 200%; height: 200%; background: var(--tile-border); left: 50%; top: 50%; transform: translate(-50%, -50%);"></div>
-				<!-- Inner gradient background -->
-				<div class="absolute inset-0 -z-10 rounded-[12px]" style="padding: 2px; background: linear-gradient(to bottom right, rgba(var(--tile-start-rgb), 1), rgba(var(--tile-end-rgb), 1)); background-clip: content-box;"></div>
-			</div>
-		</div>
-
-		<!-- Links Grid -->
-		<div class="w-full max-w-[1100px] grid grid-cols-1 md:grid-cols-3 gap-4 px-4">
-			{links.map((card: { href: string; icon: string; title: string; description: string }, index: number) => (
-				<a
-					href={card.href}
-					target="_blank"
-					rel="noopener noreferrer"
-					class="card-link group p-4 md:p-5 rounded-[12px] no-underline block cursor-pointer transition-all duration-200 border border-[rgba(var(--card-border-rgb),0)] animate-enter hover:border-[rgba(var(--card-border-rgb),0.15)]"
-					style={`--stagger: ${index}; background: rgba(var(--card-rgb), 0);`}
-				>
-					<h2 class="font-semibold mb-2.5 flex items-center gap-2 text-base md:text-lg">
-						<img
-							src={`/${card.icon}.svg`}
-							alt={`${card.title} Icon`}
-							class="imgMain w-6 h-6 flex-shrink-0"
-							width={24}
-							height={24}
-						/>
-						{card.title}
-						<span class="card-arrow transition-transform duration-200 inline-block">-&gt;</span>
-					</h2>
-					<p class="m-0 opacity-60 text-xs md:text-sm leading-6 max-w-[34ch]">{card.description}</p>
-				</a>
-			))}
-		</div>
+<Layout title={personal?.heading}>
+	<main class="flex flex-col justify-between items-center p-16 md:p-24 min-h-screen w-full gap-8 md:gap-16">
+		<Hero 
+			slogan={personal?.slogan}
+			githubUsername={personal?.githubUsername}
+			codeRepository={personal?.codeRepository}
+		/>
+		
+		<Links links={links} />
 	</main>
 </Layout>
+
