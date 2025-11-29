@@ -1,8 +1,8 @@
-<h1 align="center">Links - A Linktree Clone for Developers</h1>
+<h1 align="center">Links - A way for developers to link what's important</h1>
 
 ## Introduction
 
-Welcome to **Links**, a Linktree clone built with [Astro.js](https://astro.build/) and styled with [Tailwind CSS](https://tailwindcss.com/). This project provides a modern, fast, and customizable solution for developers and creators to showcase their links and social profiles on a single page.
+Welcome to **Links**, a website built with [Astro.js](https://astro.build/) and styled with [Tailwind CSS](https://tailwindcss.com/). This project provides a modern, fast, and customizable solution for developers and creators to showcase their links and social profiles on a single page.
 
 **Why this project?**
 - ⚡ **Ultra-fast** - Built with Astro for minimal JavaScript and blazing performance
@@ -16,7 +16,7 @@ Welcome to **Links**, a Linktree clone built with [Astro.js](https://astro.build
 ### Prerequisites
 
 - [Git](https://git-scm.com/downloads) installed on your machine
-- [Bun.js](https://nodejs.org/en/) (v18 or higher)
+- [Bun.js](https://bun.com/)
 
 
 ### Installation
@@ -29,7 +29,9 @@ cd links
 
 2. Install dependencies:
 ```bash
-pnpm install
+bun install
+# or 
+bun i
 ```
 
 3. Start the development server:
@@ -231,40 +233,6 @@ This creates an optimized static site in the `dist/` folder.
 3. Select **Deploy from a branch** and choose `main` branch, `/root` folder
 
 For more details, see [Astro GitHub Pages Deployment Guide](https://docs.astro.build/en/guides/deploy/github/).
-
-### Using a Custom Domain
-
-If deploying to your own domain (not `username.github.io`):
-
-1. Update `astro.config.mjs`:
-```javascript
-export default defineConfig({
-  // Remove or keep base as "/" for root domain
-  // site: "https://yourdomain.com",
-  vite: {
-    plugins: [tailwind()],
-  },
-});
-```
-
-2. Add a `CNAME` file in `public/` with your domain name:
-```
-yourdomain.com
-```
-
-3. Deploy to your hosting provider
-
-### Vercel
-
-```bash
-pnpm run build
-```
-
-Deploy the `dist/` folder to [Vercel](https://vercel.com/).
-
-### Netlify
-
-Connect your GitHub repository to [Netlify](https://netlify.com/) and it will auto-deploy on push.
 
 ## Troubleshooting
 
