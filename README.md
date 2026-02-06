@@ -216,16 +216,6 @@ src/
 
 ## Building & Deployment
 
-### Build for Production
-
-```bash
-pnpm run build
-# or
-npm run build
-```
-
-This creates an optimized static site in the `dist/` folder.
-
 ### GitHub Pages
 
 1. Enable GitHub Pages in repository settings

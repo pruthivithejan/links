@@ -6,12 +6,6 @@
     "description": "Explore more about me, my work, and my interests on my personal website."
   },
   {
-    "href": "https://x.com/pruthivithejan",
-    "icon": "x",
-    "title": "X",
-    "description": "I share thoughts and updates on various topics."
-  },
-  {
     "href": "https://lk.linkedin.com/in/pruthivithejan",
     "icon": "linkedin",
     "title": "LinkedIn",
@@ -24,28 +18,28 @@
     "description": "I post my designs, code snippets, and other content on Threads."
   },
   {
+    "href": "https://x.com/pruthivithejan",
+    "icon": "x",
+    "title": "X",
+    "description": "I share thoughts and updates on various topics."
+  },
+  {
     "href": "https://github.com/pruthivithejan",
     "icon": "github",
     "title": "GitHub",
     "description": "Find my coding projects and contributions on GitHub."
   },
   {
-    "href": "https://gitlab.com/pruthivithejan",
-    "icon": "gitlab",
-    "title": "GitLab",
-    "description": "Explore my learning projects and code contributions on GitLab."
+    "href": "https://contra.com/pruthivithejan",
+    "icon": "contra",
+    "title": "Contra",
+    "description": "Contact me through Contra for any design or development work."
   },
   {
     "href": "https://layers.to/pruthivithejan",
     "icon": "layers",
     "title": "Layers",
     "description": "Showcasing component designs and fonts, gradients and more."
-  },
-  {
-    "href": "https://dribbble.com/pruthivithejan",
-    "icon": "dribbble",
-    "title": "Dribbble",
-    "description": "Showcasing my design concepts and shots on Dribbble."
   },
   {
     "href": "https://www.figma.com/@pruthivithejan",
@@ -60,19 +54,19 @@
     "description": "Explore my pins and collections on Pinterest."
   },
   {
-    "href": "https://www.reddit.com/user/pruthivithejan/",
-    "icon": "reddit",
-    "title": "Reddit",
-    "description": "Engage in discussions and share insights on Reddit."
-  },
-  {
     "href": "https://open.spotify.com/user/cipqdclr942xwcn7tdeo14o06?si=14e86fca3b8e462d",
     "icon": "spotify",
     "title": "Spotify",
     "description": "Explore my curated playlists on Spotify."
   },
   {
-    "href": "mailto:pruthivi@pruthivithejan.me",
+    "href": "https://t.me/pruthivithejan",
+    "icon": "telegram",
+    "title": "Telegram",
+    "description": "Drop a message if you want to create something or collaborate."
+  },
+  {
+    "href": "mailto:hi@pruthivithejan.me",
     "icon": "mail",
     "title": "Mail",
     "description": "Drop an email if you want to create something or collaborate."
