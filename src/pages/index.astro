@@ -17,7 +17,7 @@ const links = (linksData?.data || []) as Array<{
 ---
 
 <Layout title={personal?.heading}>
-	<main class="flex flex-col justify-between items-center p-16 md:p-24 min-h-screen w-full gap-8 md:gap-16">
+	<main class="flex flex-col justify-between items-center min-h-screen w-full gap-8 md:gap-16 px-4 py-10 sm:px-6 sm:py-12 md:p-24">
 		<Hero 
 			slogan={personal?.slogan || { words: '', highlight: '' }}
 			githubUsername={personal?.githubUsername || ''}
@@ -27,4 +27,3 @@ const links = (linksData?.data || []) as Array<{
 		<Links links={links} />
 	</main>
 </Layout>
-
