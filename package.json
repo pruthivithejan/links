@@ -4,6 +4,7 @@
   "version": "0.5.0",
   "author": "Pruthivi Thejan",
   "scripts": {
+    "prebuild": "node scripts/fetch-link-previews.mjs",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
