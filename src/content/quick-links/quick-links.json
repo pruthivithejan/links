@@ -1,0 +1,38 @@
+[
+  {
+    "href": "https://pruthivithejan.me/",
+    "icon": "link",
+    "label": "Website",
+    "preview": {
+      "title": "Personal site",
+      "meta": "pruthivithejan.me"
+    }
+  },
+  {
+    "href": "https://github.com/pruthivithejan",
+    "icon": "github",
+    "label": "GitHub",
+    "preview": {
+      "title": "GitHub profile",
+      "meta": "github.com/pruthivithejan"
+    }
+  },
+  {
+    "href": "https://lk.linkedin.com/in/pruthivithejan",
+    "icon": "linkedin",
+    "label": "LinkedIn",
+    "preview": {
+      "title": "LinkedIn",
+      "meta": "linkedin.com/in/pruthivithejan"
+    }
+  },
+  {
+    "href": "mailto:hi@pruthivithejan.me",
+    "icon": "mail",
+    "label": "Email",
+    "preview": {
+      "title": "Say hello",
+      "meta": "hi@pruthivithejan.me"
+    }
+  }
+]

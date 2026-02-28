@@ -1,0 +1,130 @@
+---
+import generatedPreviews from "../data/link-previews.json";
+
+interface QuickLink {
+	href: string;
+	icon: string;
+	label: string;
+	preview?: {
+		title?: string;
+		description?: string;
+		meta?: string;
+		image?: string;
+		site?: string;
+	};
+}
+
+interface Props {
+	links: QuickLink[];
+}
+
+const { links } = Astro.props;
+type Preview = {
+	title?: string;
+	description?: string;
+	meta?: string;
+	image?: string;
+	site?: string;
+};
+
+const generatedByHref = generatedPreviews as Record<string, Preview | undefined>;
+
+const hostname = (href: string) => {
+	try {
+		return new URL(href).hostname;
+	} catch {
+		return href.replace(/^mailto:/, '');
+	}
+};
+
+const safeId = (value: string) => value.replace(/[^a-zA-Z0-9_-]/g, '-');
+
+const getPreview = (link: QuickLink): Preview | null => {
+	const generated = generatedByHref[link.href] || {};
+	const manual = link.preview || {};
+	const merged: Preview = {
+		...generated,
+		...manual,
+		meta: manual.meta || generated.site || generated.meta,
+		title: manual.title || generated.title,
+		image: manual.image || generated.image,
+	};
+	if (!merged.title && !merged.meta && !merged.image) return null;
+	return merged;
+};
+---
+
+{
+	links?.length ? (
+		<nav class="w-full flex justify-center" aria-label="Quick links">
+			<div class="w-full max-w-[1100px] flex flex-wrap items-center justify-center gap-3 px-4">
+				{links.map((link: QuickLink, index: number) => {
+					const preview = getPreview(link);
+					return (
+					<div class="group relative" style={`--stagger: ${index}`} data-hovercard data-url={link.href}>
+						<a
+							href={link.href}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="quick-link inline-flex h-11 items-center justify-center gap-2.5 whitespace-nowrap rounded-full border border-[color:var(--border)] bg-[color:var(--background)] px-5 py-2.5 text-base font-medium text-[color:var(--foreground)] shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--ring)] focus-visible:border-[color:var(--ring)] hover:bg-[color:var(--muted)] hover:text-[color:var(--foreground)] disabled:pointer-events-none disabled:opacity-50 [&_img]:pointer-events-none [&_img]:h-5 [&_img]:w-5 [&_img]:shrink-0 animate-enter"
+							aria-describedby={`hovercard-${safeId(link.label)}-${index}`}
+						>
+							<img
+								src={`/icons/${link.icon}.svg`}
+								alt=""
+								class="imgMain"
+								width={16}
+								height={16}
+								loading="lazy"
+							/>
+							<span>{link.label}</span>
+						</a>
+
+						{preview ? (
+							<div
+								id={`hovercard-${safeId(link.label)}-${index}`}
+								role="tooltip"
+								class="pointer-events-none absolute left-1/2 top-[calc(100%+12px)] z-20 w-80 -translate-x-1/2 overflow-hidden rounded-xl border border-[color:var(--border)] bg-[color:var(--popover)] shadow-xl ring-1 ring-[color:var(--border)]/70 opacity-0 scale-95 transform-gpu transition duration-150 ease-out group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:scale-100 group-focus-within:pointer-events-auto"
+							>
+								<div class="absolute left-1/2 -top-[7px] h-3 w-3 -translate-x-1/2 rotate-45 border border-[color:var(--border)] border-b-0 border-r-0 bg-[color:var(--popover)]" aria-hidden="true" />
+
+								<div class="flex flex-col gap-3 p-4">
+									<div class="flex items-center gap-3">
+										<div class="flex h-12 w-12 items-center justify-center rounded-full bg-[color:var(--muted)]">
+											<img
+												src={`/icons/${link.icon}.svg`}
+												alt=""
+												class="h-6 w-6 imgMain"
+												loading="lazy"
+											/>
+										</div>
+										<div class="min-w-0">
+											<p class="hovercard-title truncate text-sm font-semibold leading-tight">
+												{preview.title || link.label}
+											</p>
+											<p class="hovercard-meta truncate text-xs text-[color:var(--muted-foreground)]">
+												{preview.meta || hostname(link.href)}
+											</p>
+										</div>
+									</div>
+
+									{preview.image ? (
+										<div class="overflow-hidden rounded-lg border border-[color:var(--border)] bg-[color:var(--muted)]">
+											<img
+												src={preview.image}
+												alt=""
+												class="h-44 w-full object-cover"
+												loading="lazy"
+											/>
+										</div>
+									) : null}
+								</div>
+							</div>
+						) : null}
+					</div>
+					);
+				})}
+			</div>
+		</nav>
+	) : null
+}
