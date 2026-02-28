@@ -1,11 +1,12 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import Links from '../components/Links.astro';
-import { getEntry } from 'astro:content';
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Links from "../components/Links.astro";
+import { getEntry } from "astro:content";
 
-const personalData = await getEntry('personal', 'profile');
-const linksData = await getEntry('links', 'links');
+const personalData = await getEntry("personal", "profile");
+const linksData = await getEntry("links", "links");
+// const quickLinksData = await getEntry("quick-links", "quick-links");
 
 const personal = personalData?.data;
 const links = (linksData?.data || []) as Array<{
@@ -14,16 +15,31 @@ const links = (linksData?.data || []) as Array<{
 	title: string;
 	description: string;
 }>;
+
+// const quickLinks = (quickLinksData?.data || []) as Array<{
+// 	href: string;
+// 	icon: string;
+// 	label: string;
+// 	preview?: {
+// 		title?: string;
+// 		description?: string;
+// 		meta?: string;
+// 		image?: string;
+// 	};
+// }>;
 ---
 
 <Layout title={personal?.heading}>
-	<main class="flex flex-col justify-between items-center min-h-screen w-full gap-8 md:gap-16 px-4 py-10 sm:px-6 sm:py-12 md:p-24">
-		<Hero 
-			slogan={personal?.slogan || { words: '', highlight: '' }}
-			githubUsername={personal?.githubUsername || ''}
-			codeRepository={personal?.codeRepository || ''}
+	<main
+		class="flex flex-col justify-between items-center min-h-screen w-full gap-8 md:gap-16 px-4 py-10 sm:px-6 sm:py-12 md:p-24 pt-24"
+	>
+		<Hero
+			slogan={personal?.slogan || { words: "", highlight: "" }}
+			githubUsername={personal?.githubUsername || ""}
+			codeRepository={personal?.codeRepository || ""}
 		/>
-		
+
+		<!-- <QuickLinks links={quickLinks} /> -->
 		<Links links={links} />
 	</main>
 </Layout>

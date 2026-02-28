@@ -15,28 +15,43 @@ const { links } = Astro.props;
 
 <!-- Links Grid Section -->
 <section class="w-full flex justify-center">
-	<div class="w-full max-w-[1100px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 items-stretch" style="grid-auto-rows: 1fr;">
-		{links.map((card: Card, index: number) => (
-			<a
-				href={card.href}
-				target="_blank"
-				rel="noopener noreferrer"
-				class="card-link group p-4 md:p-5 rounded-[12px] no-underline block cursor-pointer transition-all duration-200 border border-[rgba(var(--card-border-rgb),0.08)] animate-enter hover:border-[rgba(var(--card-border-rgb),0.15)] h-full flex flex-col"
-				style={`--stagger: ${index}; background: rgba(var(--card-rgb), 0);`}
-			>
-				<h2 class="font-semibold leading-none tracking-tight mb-2 flex items-center gap-2 text-base sm:text-lg">
-					<img
-						src={`/${card.icon}.svg`}
-						alt={`${card.title} Icon`}
-						class="imgMain w-6 h-6 flex-shrink-0"
-						width={24}
-						height={24}
-					/>
-					{card.title}
-					<span class="card-arrow transition-transform duration-200 inline-block" style="font-family: 'JetBrainsMono-Regular', monospace;">-&gt;</span>
-				</h2>
-				<p class="m-0 opacity-70 text-sm leading-relaxed max-w-none md:max-w-[34ch]">{card.description}</p>
-			</a>
-		))}
+	<div
+		class="w-full max-w-[1100px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 items-stretch"
+		style="grid-auto-rows: 1fr;"
+	>
+		{
+			links.map((card: Card, index: number) => (
+				<a
+					href={card.href}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="card-link group p-4 md:p-5 rounded-[12px] no-underline block cursor-pointer transition-all duration-200 border border-[color:var(--border)] bg-[color:var(--background)] animate-enter h-full flex flex-col text-[color:var(--foreground)] hover:bg-[color:var(--muted)]"
+					style={`--stagger: ${index}`}
+				>
+					<h2 class="font-semibold leading-none tracking-tight mb-2 flex items-center gap-2 text-base sm:text-lg transition-colors group-hover:text-[color:var(--foreground)]">
+						<img
+							src={`/icons/${card.icon}.svg`}
+							alt={`${card.title} Icon`}
+							class="imgMain w-6 h-6 flex-shrink-0"
+							width={24}
+							height={24}
+						/>
+						{card.title}
+						<span class="card-arrow transition-transform duration-200 inline-block font-mono">
+							<img
+								src="/arrow-right.svg"
+								alt="Arrow Right"
+								class="imgMain w-8 h-8"
+								width={16}
+								height={16}
+							/>
+						</span>
+					</h2>
+					<p class="m-0 text-sm leading-relaxed max-w-none md:max-w-[34ch] text-[color:var(--muted-foreground)] transition-colors group-hover:text-[color:var(--foreground)]">
+						{card.description}
+					</p>
+				</a>
+			))
+		}
 	</div>
 </section>

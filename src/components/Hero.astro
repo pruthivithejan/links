@@ -11,12 +11,24 @@ interface Props {
 const { slogan, githubUsername, codeRepository } = Astro.props;
 ---
 
-<section class="w-full flex flex-col items-center justify-center gap-8 md:gap-12">
+<section
+	class="w-full flex flex-col items-center justify-center gap-8 md:gap-12"
+>
 	<!-- Description/Slogan Section -->
-	<div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm max-w-[1100px] w-full z-10 animate-enter px-4" style={`--stagger: 4`}>
-		<p class="relative m-0 p-4 rounded-xl border border-[rgba(var(--callout-border-rgb),0.3)] text-center md:text-left" style="background-color: rgba(var(--callout-rgb), 0.5); letter-spacing: 1px; font-family: 'InstrumentSerif-Italic', serif;">
+	<div
+		class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm max-w-[1100px] w-full z-10 animate-enter px-4"
+		style={`--stagger: 4`}
+	>
+		<p
+			class="relative m-0 p-4 rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] text-center md:text-left text-[color:var(--foreground)]"
+			style="letter-spacing: 1px; font-family: 'InstrumentSerif-Italic', serif;"
+		>
 			"{slogan.words}&nbsp;
-			<code class="font-bold" style="letter-spacing: 1px; font-family: 'JetBrainsMono-Regular', monospace;">{slogan.highlight}</code>."
+			<code
+				class="font-bold"
+				style="letter-spacing: 1px; font-family: 'JetBrainsMono-Regular', monospace;"
+				>{slogan.highlight}</code
+			>."
 		</p>
 		<a
 			href={`https://github.com/${githubUsername}/${codeRepository}`}
@@ -27,7 +39,7 @@ const { slogan, githubUsername, codeRepository } = Astro.props;
 		>
 			Build Your Own
 			<img
-				src="/github.svg"
+				src="/icons/github.svg"
 				alt="Github Logo"
 				class="imgMain w-6 h-6"
 				width={24}
@@ -37,9 +49,12 @@ const { slogan, githubUsername, codeRepository } = Astro.props;
 	</div>
 
 	<!-- Center with Avatar and Animated Conic Gradient Border -->
-	<div class="flex justify-center items-center relative p-8 md:p-16 animate-enter" style={`--stagger: 1`}>
+	<div
+		class="flex justify-center items-center relative p-8 md:p-16 pb-0 animate-enter"
+		style={`--stagger: 1`}
+	>
 		<!-- Avatar Container with Animated Border - Exactly like React version -->
-		<div 
+		<div
 			class="relative flex justify-center items-center rounded-xl overflow-hidden"
 			style="
 				width: 300px;
@@ -48,11 +63,11 @@ const { slogan, githubUsername, codeRepository } = Astro.props;
 				margin-left: 16px;
 				transform: translateZ(0);
 				box-shadow: 0px 2px 8px -1px #0000001a;
-				background: linear-gradient(to bottom right, rgba(var(--tile-start-rgb), 0.5), rgba(var(--tile-end-rgb), 0.5));
+				background: linear-gradient(to bottom right, var(--tile-start), var(--tile-end));
 			"
 		>
 			<!-- Rotating conic gradient border (::before equivalent) -->
-			<div 
+			<div
 				class="absolute"
 				style="
 					width: 200%;
@@ -61,19 +76,21 @@ const { slogan, githubUsername, codeRepository } = Astro.props;
 					animation: rotate 6s linear infinite;
 					z-index: -1;
 				"
-			></div>
+			>
+			</div>
 
 			<!-- Inner gradient background (::after equivalent) -->
-			<div 
+			<div
 				class="absolute rounded-xl"
 				style="
 					inset: 0;
 					padding: 1px;
-					background: linear-gradient(to bottom right, rgba(var(--tile-start-rgb), 1), rgba(var(--tile-end-rgb), 1));
+					background: linear-gradient(to bottom right, var(--tile-start), var(--tile-end));
 					background-clip: content-box;
 					z-index: -1;
 				"
-			></div>
+			>
+			</div>
 
 			<!-- Avatar Image -->
 			<img
@@ -86,5 +103,3 @@ const { slogan, githubUsername, codeRepository } = Astro.props;
 		</div>
 	</div>
 </section>
-
-

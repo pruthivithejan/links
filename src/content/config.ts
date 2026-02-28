@@ -26,7 +26,27 @@ const linksCollection = defineCollection({
   ),
 });
 
+const quickLinksCollection = defineCollection({
+  type: 'data',
+  schema: z.array(
+    z.object({
+      href: z.string().url(),
+      icon: z.string(),
+      label: z.string(),
+      preview: z
+        .object({
+          title: z.string().optional(),
+          description: z.string().optional(),
+          meta: z.string().optional(),
+          image: z.string().optional(),
+        })
+        .optional(),
+    })
+  ),
+});
+
 export const collections = {
   personal: personalCollection,
   links: linksCollection,
+  'quick-links': quickLinksCollection,
 };
