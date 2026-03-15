@@ -2,14 +2,12 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
 import Links from "../components/Links.astro";
-import { getEntry } from "astro:content";
-
-const personalData = await getEntry("personal", "profile");
-const linksData = await getEntry("links", "links");
+import personalData from "../content/personal/profile.json";
+import linksArray from "../content/links/links.json";
 // const quickLinksData = await getEntry("quick-links", "quick-links");
 
-const personal = personalData?.data;
-const links = (linksData?.data || []) as Array<{
+const personal = personalData;
+const links = (linksArray || []) as Array<{
 	href: string;
 	icon: string;
 	title: string;

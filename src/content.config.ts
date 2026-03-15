@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 
 const personalCollection = defineCollection({
   type: 'data',
@@ -18,7 +19,7 @@ const linksCollection = defineCollection({
   type: 'data',
   schema: z.array(
     z.object({
-      href: z.string().url(),
+      href: z.url(),
       icon: z.string(),
       title: z.string(),
       description: z.string(),
@@ -30,7 +31,7 @@ const quickLinksCollection = defineCollection({
   type: 'data',
   schema: z.array(
     z.object({
-      href: z.string().url(),
+      href: z.url(),
       icon: z.string(),
       label: z.string(),
       preview: z
