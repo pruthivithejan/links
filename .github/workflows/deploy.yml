@@ -25,13 +25,21 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
-      - name: Install, build, and upload your site output
-        uses: withastro/action@v3
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          # Ensure CI uses Node 22 (Astro v6 requires >=22.12.0)
-          node-version: '22.12.0'
-          # path: . # The root location of your Astro project inside the repository. (optional)
-          # package-manager: yarn # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
+          bun-version: 'latest'
+
+      - name: Install dependencies with Bun
+        run: bun install
+
+      - name: Build site with Bun
+        run: bun run build
+
+      - name: Upload build output
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./dist
 
   deploy:
     needs: build
