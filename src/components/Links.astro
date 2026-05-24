@@ -25,7 +25,7 @@ const { links } = Astro.props;
 					href={card.href}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="card-link group p-4 md:p-5 rounded-[12px] no-underline block cursor-pointer transition-all duration-200 border border-[color:var(--border)] bg-[color:var(--background)] animate-enter h-full flex flex-col text-[color:var(--foreground)] hover:bg-[color:var(--muted)]"
+					class="card-link group p-4 md:p-5 rounded-[12px] no-underline block cursor-pointer transition-all duration-200 border border-[color:var(--border)] bg-[color:var(--background)] animate-enter h-full flex flex-col text-[color:var(--foreground)] hover:bg-[color:var(--muted)] relative"
 					style={`--stagger: ${index}`}
 				>
 					<h2 class="font-semibold leading-none tracking-tight mb-2 flex items-center gap-2 text-base sm:text-lg transition-colors group-hover:text-[color:var(--foreground)]">
@@ -50,8 +50,54 @@ const { links } = Astro.props;
 					<p class="m-0 text-sm leading-relaxed max-w-none md:max-w-[34ch] text-[color:var(--muted-foreground)] transition-colors group-hover:text-[color:var(--foreground)]">
 						{card.description}
 					</p>
+
+					<button
+						class="copy-btn absolute top-4 right-4 z-10 p-2 rounded-lg border border-[color:var(--border)] bg-[color:var(--background)] text-[color:var(--muted-foreground)] hover:text-[color:var(--foreground)] hover:bg-[color:var(--muted)] shadow-sm transition-all duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none cursor-pointer flex items-center justify-center h-8 w-8"
+						data-clipboard-text={card.href}
+						aria-label="Copy link to clipboard"
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="copy-icon h-4 w-4"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="check-icon h-4 w-4 hidden text-emerald-500 dark:text-emerald-400"><path d="M20 6 9 17l-5-5"/></svg>
+					</button>
 				</a>
 			))
 		}
 	</div>
 </section>
+
+<script>
+	// Client-side clipboard coping logic
+	const copyButtons = document.querySelectorAll('.copy-btn');
+	copyButtons.forEach((btn) => {
+		btn.addEventListener('click', async (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+
+			const text = btn.getAttribute('data-clipboard-text');
+			if (!text) return;
+
+			try {
+				await navigator.clipboard.writeText(text);
+
+				const copyIcon = btn.querySelector('.copy-icon');
+				const checkIcon = btn.querySelector('.check-icon');
+
+				if (copyIcon && checkIcon) {
+					copyIcon.classList.add('hidden');
+					checkIcon.classList.remove('hidden');
+
+					// Add styling to represent active green copy border/accent briefly
+					btn.classList.add('border-emerald-500', 'dark:border-emerald-400');
+
+					setTimeout(() => {
+						copyIcon.classList.remove('hidden');
+						checkIcon.classList.add('hidden');
+						btn.classList.remove('border-emerald-500', 'dark:border-emerald-400');
+					}, 2000);
+				}
+			} catch (err) {
+				console.error('Failed to copy text to clipboard:', err);
+			}
+		});
+	});
+</script>
