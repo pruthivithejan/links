@@ -11,6 +11,7 @@ interface QuickLink {
 		meta?: string;
 		image?: string;
 		site?: string;
+		description_manual?: string;
 	};
 }
 
@@ -19,6 +20,7 @@ interface Props {
 }
 
 const { links } = Astro.props;
+
 type Preview = {
 	title?: string;
 	description?: string;
@@ -39,18 +41,43 @@ const hostname = (href: string) => {
 
 const safeId = (value: string) => value.replace(/[^a-zA-Z0-9_-]/g, '-');
 
-const getPreview = (link: QuickLink): Preview | null => {
+const getPreview = (link: QuickLink): Preview => {
 	const generated = generatedByHref[link.href] || {};
 	const manual = link.preview || {};
-	const merged: Preview = {
+	const merged = {
 		...generated,
 		...manual,
 		meta: manual.meta || generated.site || generated.meta,
 		title: manual.title || generated.title,
 		image: manual.image || generated.image,
+		description: manual.description || generated.description,
 	};
-	if (!merged.title && !merged.meta && !merged.image) return null;
+
+	// Server-side check for GitHub profiles to pre-render the contribution graph
+	try {
+		const parsed = new URL(link.href);
+		if (parsed.hostname.includes('github.com')) {
+			const pathParts = parsed.pathname.split('/').filter(Boolean);
+			const reservedKeywords = ['features', 'about', 'blog', 'search', 'explore', 'trending', 'settings', 'notifications'];
+			if (pathParts.length === 1 && !reservedKeywords.includes(pathParts[0])) {
+				merged.image = `https://ghchart.rshah.org/${pathParts[0]}`;
+			}
+		}
+	} catch {}
+
 	return merged;
+};
+
+const checkGitHub = (href: string) => {
+	try {
+		const parsed = new URL(href);
+		if (parsed.hostname.includes('github.com')) {
+			const pathParts = parsed.pathname.split('/').filter(Boolean);
+			const reservedKeywords = ['features', 'about', 'blog', 'search', 'explore', 'trending', 'settings', 'notifications'];
+			return pathParts.length === 1 && !reservedKeywords.includes(pathParts[0]);
+		}
+	} catch {}
+	return false;
 };
 ---
 
@@ -60,27 +87,27 @@ const getPreview = (link: QuickLink): Preview | null => {
 			<div class="w-full max-w-[1100px] flex flex-wrap items-center justify-center gap-3 px-4">
 				{links.map((link: QuickLink, index: number) => {
 					const preview = getPreview(link);
+					const isGH = checkGitHub(link.href);
 					return (
-					<div class="group relative" style={`--stagger: ${index}`} data-hovercard data-url={link.href}>
-						<a
-							href={link.href}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="quick-link inline-flex h-11 items-center justify-center gap-2.5 whitespace-nowrap rounded-full border border-[color:var(--border)] bg-[color:var(--background)] px-5 py-2.5 text-base font-medium text-[color:var(--foreground)] shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--ring)] focus-visible:border-[color:var(--ring)] hover:bg-[color:var(--muted)] hover:text-[color:var(--foreground)] disabled:pointer-events-none disabled:opacity-50 [&_img]:pointer-events-none [&_img]:h-5 [&_img]:w-5 [&_img]:shrink-0 animate-enter"
-							aria-describedby={`hovercard-${safeId(link.label)}-${index}`}
-						>
-							<img
-								src={`/icons/${link.icon}.svg`}
-								alt=""
-								class="imgMain"
-								width={16}
-								height={16}
-								loading="lazy"
-							/>
-							<span>{link.label}</span>
-						</a>
+						<div class="group relative" style={`--stagger: ${index}`} data-hovercard data-url={link.href}>
+							<a
+								href={link.href}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="quick-link inline-flex h-11 items-center justify-center gap-2.5 whitespace-nowrap rounded-full border border-[color:var(--border)] bg-[color:var(--background)] px-5 py-2.5 text-base font-medium text-[color:var(--foreground)] shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--ring)] focus-visible:border-[color:var(--ring)] hover:bg-[color:var(--muted)] hover:text-[color:var(--foreground)] disabled:pointer-events-none disabled:opacity-50 [&_img]:pointer-events-none [&_img]:h-5 [&_img]:w-5 [&_img]:shrink-0 animate-enter"
+								aria-describedby={`hovercard-${safeId(link.label)}-${index}`}
+							>
+								<img
+									src={`/icons/${link.icon}.svg`}
+									alt=""
+									class="imgMain"
+									width={16}
+									height={16}
+									loading="lazy"
+								/>
+								<span>{link.label}</span>
+							</a>
 
-						{preview ? (
 							<div
 								id={`hovercard-${safeId(link.label)}-${index}`}
 								role="tooltip"
@@ -98,7 +125,7 @@ const getPreview = (link: QuickLink): Preview | null => {
 												loading="lazy"
 											/>
 										</div>
-										<div class="min-w-0">
+										<div class="min-w-0 flex-grow">
 											<p class="hovercard-title truncate text-sm font-semibold leading-tight">
 												{preview.title || link.label}
 											</p>
@@ -108,23 +135,154 @@ const getPreview = (link: QuickLink): Preview | null => {
 										</div>
 									</div>
 
-									{preview.image ? (
-										<div class="overflow-hidden rounded-lg border border-[color:var(--border)] bg-[color:var(--muted)]">
-											<img
-												src={preview.image}
-												alt=""
-												class="h-44 w-full object-cover"
-												loading="lazy"
-											/>
-										</div>
-									) : null}
+									<div class={`hovercard-desc text-xs text-[color:var(--muted-foreground)] leading-normal mt-0.5 ${preview.description ? '' : 'hidden'}`}>
+										{preview.description && <p class="m-0">{preview.description}</p>}
+									</div>
+
+									<div class={`hovercard-image-container overflow-hidden rounded-lg border border-[color:var(--border)] bg-[color:var(--muted)] ${preview.image ? '' : 'hidden'}`}>
+										<img
+											src={preview.image || ''}
+											alt=""
+											class={`hovercard-image h-44 w-full transition-opacity duration-300 opacity-100 ${isGH ? 'object-contain p-3 bg-white dark:bg-zinc-900' : 'object-cover p-0'}`}
+											loading="lazy"
+										/>
+									</div>
 								</div>
 							</div>
-						) : null}
-					</div>
+						</div>
 					);
 				})}
 			</div>
 		</nav>
 	) : null
 }
+
+<script>
+	// Client-side dynamic metadata fetching for hovercards
+	const hovercards = document.querySelectorAll('[data-hovercard]');
+
+	// Simple in-memory cache to prevent redundant API fetches
+	const cache = new Map();
+
+	const isGitHubProfile = (url: string) => {
+		try {
+			const parsed = new URL(url);
+			if (parsed.hostname.includes('github.com')) {
+				const pathParts = parsed.pathname.split('/').filter(Boolean);
+				const reservedKeywords = ['features', 'about', 'blog', 'search', 'explore', 'trending', 'settings', 'notifications'];
+				return pathParts.length === 1 && !reservedKeywords.includes(pathParts[0]);
+			}
+		} catch {}
+		return false;
+	};
+
+	hovercards.forEach((card) => {
+		const url = card.getAttribute('data-url');
+		if (!url || !url.startsWith('http')) return;
+
+		let isFetching = false;
+
+		const fetchMetadata = async () => {
+			if (isFetching || cache.has(url)) return;
+			isFetching = true;
+
+			const titleEl = card.querySelector('.hovercard-title');
+			const metaEl = card.querySelector('.hovercard-meta');
+			const imageContainerEl = card.querySelector('.hovercard-image-container');
+			const imageEl = card.querySelector('.hovercard-image') as HTMLImageElement | null;
+			const descEl = card.querySelector('.hovercard-desc');
+
+			// Check if we already have static content rendered
+			const hasStaticImage = imageEl && imageEl.getAttribute('src') && imageEl.getAttribute('src') !== '';
+			const hasStaticDesc = descEl && descEl.textContent && descEl.textContent.trim() !== '';
+
+			// Show shimmer loading state if static content doesn't exist
+			if (!hasStaticDesc && descEl) {
+				descEl.classList.remove('hidden');
+				descEl.innerHTML = '<div class="h-3 w-4/5 rounded bg-[color:var(--border)] animate-pulse mb-1"></div><div class="h-3 w-2/3 rounded bg-[color:var(--border)] animate-pulse"></div>';
+			}
+
+			if (!hasStaticImage && imageContainerEl) {
+				imageContainerEl.classList.remove('hidden');
+				imageContainerEl.classList.add('animate-pulse');
+				if (imageEl) {
+					imageEl.classList.add('opacity-0');
+				}
+			}
+
+			try {
+				const response = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`);
+				if (!response.ok) throw new Error('Network response was not ok');
+				const result = await response.json();
+
+				if (result.status === 'success' && result.data) {
+					const data = result.data;
+					
+					// Cache the result
+					cache.set(url, data);
+
+					// 1. Update Title (if dynamic title exists and not already overridden manually)
+					if (titleEl && data.title) {
+						titleEl.textContent = data.title;
+					}
+
+					// 2. Update Meta
+					if (metaEl && data.publisher) {
+						metaEl.textContent = data.publisher;
+					}
+
+					// 3. Update Description
+					if (descEl) {
+						if (data.description) {
+							descEl.classList.remove('hidden');
+							descEl.innerHTML = `<p class="m-0 leading-normal text-xs text-[color:var(--muted-foreground)]">${data.description}</p>`;
+						} else if (!hasStaticDesc) {
+							descEl.classList.add('hidden');
+						}
+					}
+
+					// 4. Update Image
+					let imgUrl = data.image?.url || data.logo?.url;
+					let isGH = false;
+
+					if (isGitHubProfile(url)) {
+						const username = new URL(url).pathname.split('/').filter(Boolean)[0];
+						imgUrl = `https://ghchart.rshah.org/${username}`;
+						isGH = true;
+					}
+
+					if (imgUrl && imageEl && imageContainerEl) {
+						imageEl.setAttribute('src', imgUrl);
+						if (isGH) {
+							imageEl.className = "hovercard-image h-44 w-full object-contain transition-opacity duration-300 opacity-0 p-3 bg-white dark:bg-zinc-900";
+						} else {
+							imageEl.className = "hovercard-image h-44 w-full object-cover transition-opacity duration-300 opacity-0 p-0";
+						}
+						imageEl.onload = () => {
+							imageContainerEl.classList.remove('animate-pulse');
+							imageEl.classList.remove('opacity-0');
+							imageEl.classList.add('opacity-100');
+						};
+					} else if (imageContainerEl && !hasStaticImage) {
+						imageContainerEl.classList.add('hidden');
+					}
+				}
+			} catch (error) {
+				console.error(`[Hovercard] Failed to dynamically fetch metadata for ${url}:`, error);
+				// Graceful cleanup on error
+				if (imageContainerEl && !hasStaticImage) {
+					imageContainerEl.classList.add('hidden');
+				}
+				if (descEl && !hasStaticDesc) {
+					descEl.classList.add('hidden');
+				}
+			} finally {
+				isFetching = false;
+			}
+		};
+
+		// Trigger metadata fetch on hover or keyboard focus
+		card.addEventListener('mouseenter', fetchMetadata);
+		card.addEventListener('focusin', fetchMetadata);
+	});
+</script>

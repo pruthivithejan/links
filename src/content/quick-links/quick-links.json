@@ -13,7 +13,7 @@
     "icon": "github",
     "label": "GitHub",
     "preview": {
-      "title": "GitHub profile",
+      "title": "GitHub Profile",
       "meta": "github.com/pruthivithejan"
     }
   },
@@ -22,8 +22,10 @@
     "icon": "linkedin",
     "label": "LinkedIn",
     "preview": {
-      "title": "LinkedIn",
-      "meta": "linkedin.com/in/pruthivithejan"
+      "title": "LinkedIn Profile",
+      "meta": "linkedin.com/in/pruthivithejan",
+      "description": "Connect with me on LinkedIn to explore my professional experience, network, and latest updates.",
+      "image": "https://images.unsplash.com/photo-1616469829581-73993eb86b02?q=80&w=640&auto=format&fit=crop"
     }
   },
   {
@@ -31,8 +33,10 @@
     "icon": "mail",
     "label": "Email",
     "preview": {
-      "title": "Say hello",
-      "meta": "hi@pruthivithejan.me"
+      "title": "Send an Email",
+      "meta": "hi@pruthivithejan.me",
+      "description": "Feel free to reach out directly via email for collaborations, questions, or just to say hello!",
+      "image": "https://images.unsplash.com/photo-1557200134-90327ee9fafa?q=80&w=640&auto=format&fit=crop"
     }
   }
 ]
