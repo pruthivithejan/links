@@ -1,53 +1,14 @@
 ---
 interface Props {
-	slogan: {
-		words: string;
-		highlight: string;
-	};
 	githubUsername: string;
-	codeRepository: string;
 }
 
-const { slogan, githubUsername, codeRepository } = Astro.props;
+const { githubUsername } = Astro.props;
 ---
 
 <section
 	class="w-full flex flex-col items-center justify-center gap-8 md:gap-12"
 >
-	<!-- Description/Slogan Section -->
-	<div
-		class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm max-w-[1100px] w-full z-10 animate-enter px-4"
-		style={`--stagger: 4`}
-	>
-		<p
-			class="relative m-0 p-4 rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] text-center md:text-left text-[color:var(--foreground)]"
-			style="letter-spacing: 1px; font-family: 'InstrumentSerif-Italic', serif;"
-		>
-			"{slogan.words}&nbsp;
-			<code
-				class="font-bold"
-				style="letter-spacing: 1px; font-family: 'JetBrainsMono-Regular', monospace;"
-				>{slogan.highlight}</code
-			>."
-		</p>
-		<a
-			href={`https://github.com/${githubUsername}/${codeRepository}`}
-			target="_blank"
-			rel="noopener noreferrer"
-			class="hidden md:flex items-center justify-center gap-2 font-mono"
-			style="font-family: 'JetBrainsMono-Regular', monospace;"
-		>
-			Build Your Own
-			<img
-				src="/icons/github.svg"
-				alt="Github Logo"
-				class="imgMain w-6 h-6"
-				width={24}
-				height={24}
-			/>
-		</a>
-	</div>
-
 	<!-- Center with Avatar and Animated Conic Gradient Border -->
 	<div
 		class="flex justify-center items-center relative p-8 md:p-16 pb-0 animate-enter"

@@ -2,9 +2,10 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
 import Links from "../components/Links.astro";
+import QuickLinks from "../components/QuickLinks.astro";
 import personalData from "../content/personal/profile.json";
 import linksArray from "../content/links/links.json";
-// const quickLinksData = await getEntry("quick-links", "quick-links");
+import quickLinksArray from "../content/quick-links/quick-links.json";
 
 const personal = personalData;
 const links = (linksArray || []) as Array<{
@@ -14,17 +15,17 @@ const links = (linksArray || []) as Array<{
 	description: string;
 }>;
 
-// const quickLinks = (quickLinksData?.data || []) as Array<{
-// 	href: string;
-// 	icon: string;
-// 	label: string;
-// 	preview?: {
-// 		title?: string;
-// 		description?: string;
-// 		meta?: string;
-// 		image?: string;
-// 	};
-// }>;
+const quickLinks = (quickLinksArray || []) as Array<{
+	href: string;
+	icon: string;
+	label: string;
+	preview?: {
+		title?: string;
+		description?: string;
+		meta?: string;
+		image?: string;
+	};
+}>;
 ---
 
 <Layout title={personal?.heading}>
@@ -32,12 +33,47 @@ const links = (linksArray || []) as Array<{
 		class="flex flex-col justify-between items-center min-h-screen w-full gap-8 md:gap-16 px-4 py-10 sm:px-6 sm:py-12 md:p-24 pt-24"
 	>
 		<Hero
-			slogan={personal?.slogan || { words: "", highlight: "" }}
 			githubUsername={personal?.githubUsername || ""}
-			codeRepository={personal?.codeRepository || ""}
 		/>
 
-		<!-- <QuickLinks links={quickLinks} /> -->
+		<QuickLinks links={quickLinks} />
 		<Links links={links} />
+
+		<!-- Footer: Quote on left, Build Your Own on right -->
+		<footer class="w-full flex justify-center mt-12 md:mt-16">
+			<div
+				class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm max-w-[1100px] w-full z-10 animate-enter px-4 pb-4"
+				style={`--stagger: 4`}
+			>
+				<p
+					class="relative m-0 p-4 rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] text-center md:text-left text-[color:var(--foreground)]"
+					style="letter-spacing: 1px; font-family: 'InstrumentSerif-Italic', serif;"
+				>
+					"{personal?.slogan?.words}&nbsp;
+					<code
+						class="font-bold"
+						style="letter-spacing: 1px; font-family: 'JetBrainsMono-Regular', monospace;"
+						>{personal?.slogan?.highlight}</code
+					>."
+				</p>
+				<a
+					href={`https://github.com/${personal?.githubUsername}/${personal?.codeRepository}`}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="hidden md:flex items-center justify-center gap-2 font-mono"
+					style="font-family: 'JetBrainsMono-Regular', monospace;"
+				>
+					Build Your Own
+					<img
+						src="/icons/github.svg"
+						alt="Github Logo"
+						class="imgMain w-6 h-6"
+						width={24}
+						height={24}
+					/>
+				</a>
+			</div>
+		</footer>
 	</main>
 </Layout>
+

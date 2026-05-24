@@ -1,17 +1,5 @@
 [
   {
-    "href": "https://pruthivithejan.me/",
-    "icon": "link",
-    "title": "Personal Website",
-    "description": "Explore more about me, my work, and my interests on my personal website."
-  },
-  {
-    "href": "https://lk.linkedin.com/in/pruthivithejan",
-    "icon": "linkedin",
-    "title": "LinkedIn",
-    "description": "Connect with me professionally and view my professional profile on LinkedIn."
-  },
-  {
     "href": "https://www.threads.net/@pruthivithejan",
     "icon": "threads",
     "title": "Threads",
@@ -22,12 +10,6 @@
     "icon": "x",
     "title": "X",
     "description": "I share thoughts and updates on various topics."
-  },
-  {
-    "href": "https://github.com/pruthivithejan",
-    "icon": "github",
-    "title": "GitHub",
-    "description": "Find my coding projects and contributions on GitHub."
   },
   {
     "href": "https://contra.com/pruthivithejan",
@@ -64,12 +46,6 @@
     "icon": "telegram",
     "title": "Telegram",
     "description": "Drop a message if you want to create something or collaborate."
-  },
-  {
-    "href": "mailto:hi@pruthivithejan.me",
-    "icon": "mail",
-    "title": "Mail",
-    "description": "Drop an email if you want to create something or collaborate."
   },
   {
     "href": "https://buymeacoffee.com/pruthivithejan",
