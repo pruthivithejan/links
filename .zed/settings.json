@@ -1,0 +1,44 @@
+{
+  "tab_size": 2,
+  "format_on_save": "on",
+  "languages": {
+    "Astro": {
+      "tab_size": 2,
+      "format_on_save": "on",
+    },
+    "TypeScript": {
+      "tab_size": 2,
+      "format_on_save": "on",
+    },
+    "JavaScript": {
+      "tab_size": 2,
+      "format_on_save": "on",
+    },
+    "JSON": {
+      "tab_size": 2,
+      "format_on_save": "on",
+    },
+    "CSS": {
+      "tab_size": 2,
+      "format_on_save": "on",
+    },
+    "Markdown": {
+      "soft_wrap": "editor_width",
+      "preferred_line_length": 80,
+    },
+  },
+  "lsp": {
+    "tailwindcss-language-server": {
+      "settings": {
+        "tailwindCSS": {
+          "experimental": {
+            "classRegex": [
+              ["class=\\s*\"([^\"]*)\"", "([^\\s'\"]+)"],
+              ["class:\\s*\"([^\"]*)\"", "([^\\s'\"]+)"],
+            ],
+          },
+        },
+      },
+    },
+  },
+}
