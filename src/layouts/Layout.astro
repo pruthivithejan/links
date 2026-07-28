@@ -14,7 +14,18 @@ const { title = 'Pruthivi Thejan | Links' } = Astro.props;
 		<meta charset="UTF-8" />
 		<meta name="description" content="Pruthivi Thejan Links - Explore all my profiles and projects" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link
+			rel="icon"
+			type="image/svg+xml"
+			href="/pruthivi.svg"
+			media="(prefers-color-scheme: light)"
+		/>
+		<link
+			rel="icon"
+			type="image/svg+xml"
+			href="/pruthivi-light.svg"
+			media="(prefers-color-scheme: dark)"
+		/>
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<script is:inline>

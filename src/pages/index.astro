@@ -26,14 +26,20 @@ const quickLinks = (quickLinksArray || []) as Array<{
 		image?: string;
 	};
 }>;
+
+const githubUsername = personal?.githubUsername || "";
+const profileName = personal?.profileName || githubUsername;
+const profileBio = personal?.profileBio || "";
 ---
 
 <Layout title={personal?.heading}>
 	<main
-		class="flex flex-col justify-between items-center min-h-screen w-full gap-8 md:gap-16 px-4 py-10 sm:px-6 sm:py-12 md:p-24 pt-24"
+		class="flex flex-col justify-between items-center min-h-screen w-full gap-8 md:gap-12 px-4 py-10 sm:px-6 sm:py-12 md:p-24 pt-24"
 	>
 		<Hero
-			githubUsername={personal?.githubUsername || ""}
+			githubUsername={githubUsername}
+			profileName={profileName}
+			profileBio={profileBio}
 		/>
 
 		<QuickLinks links={quickLinks} />
@@ -42,17 +48,15 @@ const quickLinks = (quickLinksArray || []) as Array<{
 		<!-- Footer: Quote on left, Build Your Own on right -->
 		<footer class="w-full flex justify-center mt-12 md:mt-16">
 			<div
-				class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm max-w-[1100px] w-full z-10 animate-enter px-4 pb-4"
+				class="z-10 flex w-full max-w-[1100px] flex-col items-center justify-between gap-4 px-4 pb-4 text-sm opacity-0 animate-[enter_500ms_forwards] [animation-delay:calc(var(--stagger,0)*200ms)] md:flex-row"
 				style={`--stagger: 4`}
 			>
 				<p
-					class="relative m-0 p-4 rounded-xl border border-[color:var(--border)] bg-[color:var(--background)] text-center md:text-left text-[color:var(--foreground)]"
-					style="letter-spacing: 1px; font-family: 'InstrumentSerif-Italic', serif;"
+					class="relative m-0 rounded-[var(--radius-card)] bg-[color:var(--card-bg)] p-4 text-center font-['InstrumentSerif-Italic',serif] tracking-[1px] text-[color:var(--foreground)] shadow-[var(--shadow-card)] md:text-left"
 				>
 					"{personal?.slogan?.words}&nbsp;
 					<code
-						class="font-bold"
-						style="letter-spacing: 1px; font-family: 'JetBrainsMono-Regular', monospace;"
+						class="font-['JetBrains_Mono',monospace] font-bold tracking-[1px]"
 						>{personal?.slogan?.highlight}</code
 					>."
 				</p>
@@ -60,14 +64,13 @@ const quickLinks = (quickLinksArray || []) as Array<{
 					href={`https://github.com/${personal?.githubUsername}/${personal?.codeRepository}`}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="hidden md:flex items-center justify-center gap-2 font-mono"
-					style="font-family: 'JetBrainsMono-Regular', monospace;"
+					class="hidden h-9 items-center justify-center gap-2 rounded-[var(--radius-chip)] bg-[color:var(--chip-bg)] px-[13px] font-['JetBrains_Mono',monospace] text-[color:var(--icon-color-muted)] shadow-[var(--shadow-border)] transition-colors duration-150 hover:text-[color:var(--icon-color)] md:inline-flex"
 				>
 					Build Your Own
 					<img
 						src="/icons/github.svg"
 						alt="Github Logo"
-						class="imgMain w-6 h-6"
+						class="h-6 w-6 [filter:var(--icon-filter)] transition-[filter] duration-200"
 						width={24}
 						height={24}
 					/>
@@ -76,4 +79,3 @@ const quickLinks = (quickLinksArray || []) as Array<{
 		</footer>
 	</main>
 </Layout>
-

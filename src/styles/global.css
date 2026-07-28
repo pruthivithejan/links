@@ -26,33 +26,95 @@
 
 @layer base {
   :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
+    /* Surfaces */
+    --bg-page: #fdfdfd;
+    --card-bg: #ffffff;
+    --card-bg-hover: color-mix(in srgb, var(--card-bg) 99%, #000 1%);
+    --card-border: rgba(0, 0, 0, 0.06);
+    --card-border-hover: rgba(0, 0, 0, 0.18);
+    --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+    --stage-bg: #f9f9f9;
+    --stage-border: rgba(0, 0, 0, 0.04);
+    --chip-bg: #f4f4f4;
+    --chip-bg-hover: #f1f1f1;
+    --chip-bg-pressed: #eae9e9;
+
+    /* Text */
+    --text-strong: #0d0d0d;
+    --text-muted: #6c6c6c;
+    --text-subtle: #767676;
+
+    /* Copy control */
+    --copy-bg: rgba(255, 255, 255, 0.9);
+    --copy-bg-tint: #bfc0cb;
+    --copy-bg-hover: #f1f1f1;
+    --copy-bg-pressed: #eae9e9;
+    --icon-color: #0d0d0d;
+    --icon-color-muted: rgba(13, 13, 13, 0.6);
+
+    /* Shadows — light mode layered rings */
+    --shadow-card:
+      var(--card-shadow), inset 0 0 0 1px var(--card-border),
+      inset 0 -1px 0 0 var(--card-border);
+    --shadow-border:
+      0 0 0 1px rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.06),
+      0 2px 4px 0 rgba(0, 0, 0, 0.04);
+    --shadow-tooltip:
+      0 2px 8px 0 rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.06),
+      0 1px 1px 0 rgba(0, 0, 0, 0.04);
+    --material-shadow:
+      0 4px 42px 0 rgba(0, 0, 0, 0.06), 0 2px 6px 0 rgba(0, 0, 0, 0.05),
+      0 0 0 1px rgba(0, 0, 0, 0.06);
+
+    /* Radii */
+    --radius-card: 12px;
+    --radius-chip: 50px;
+    --radius-copy: 24px;
+    --radius-ghost: 8px;
+
+    /* Motion */
+    --text-swap-dur: 150ms;
+    --text-swap-translate-y: 4px;
+    --text-swap-blur: 2px;
+    --text-swap-ease: ease-in-out;
+    --icon-swap-dur: 250ms;
+    --icon-swap-blur: 2px;
+    --icon-swap-start-scale: 0.25;
+    --icon-swap-ease: ease-in-out;
+    --dropdown-open-dur: 250ms;
+    --dropdown-close-dur: 150ms;
+
+    /* Semantic aliases (existing components) */
+    --background: var(--bg-page);
+    --foreground: var(--text-strong);
+    --card: var(--card-bg);
+    --card-foreground: var(--text-strong);
+    --popover: var(--card-bg);
+    --popover-foreground: var(--text-strong);
+    --primary: #2d2d2d;
+    --primary-foreground: #ffffff;
+    --secondary: var(--chip-bg);
+    --secondary-foreground: var(--text-strong);
+    --muted: var(--chip-bg);
+    --muted-foreground: var(--text-muted);
+    --accent: var(--chip-bg-hover);
+    --accent-foreground: var(--text-strong);
     --destructive: oklch(0.58 0.22 27);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --radius: 0.625rem;
+    --border: var(--card-border);
+    --input: rgba(0, 0, 0, 0.04);
+    --ring: rgba(0, 0, 0, 0.2);
+    --radius: var(--radius-card);
     --font-mono: "JetBrains Mono", monospace;
-    --tile-start: var(--card);
-    --tile-end: var(--muted);
-    --tile-border: conic-gradient(from 180deg at 50% 50%,
-        var(--border),
-        transparent 40%,
-        var(--border) 70%,
-        transparent);
+    /* Keep the avatar frame on its original neutral gradient. */
+    --tile-start: oklch(1 0 0);
+    --tile-end: oklch(0.97 0 0);
+    --tile-border: conic-gradient(
+      from 180deg at 50% 50%,
+      oklch(0.922 0 0),
+      transparent 40%,
+      oklch(0.922 0 0) 70%,
+      transparent
+    );
     --icon-filter: none;
   }
 
@@ -60,35 +122,85 @@
     scroll-behavior: smooth;
     background: var(--background);
     color-scheme: light;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
   }
 
   html.dark {
     color-scheme: dark;
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.87 0.00 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.371 0 0);
-    --accent-foreground: oklch(0.985 0 0);
+
+    --bg-page: #121212;
+    --card-bg: #181818;
+    --card-bg-hover: color-mix(in srgb, var(--card-bg) 99.5%, #fff 0.5%);
+    --card-border: rgba(0, 0, 0, 0.06);
+    --card-border-hover: rgba(255, 255, 255, 0.18);
+    --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+    --stage-bg: #131313;
+    --stage-border: rgba(255, 255, 255, 0.02);
+    --chip-bg: rgba(255, 255, 255, 0.07);
+    --chip-bg-hover: rgba(255, 255, 255, 0.1);
+    --chip-bg-pressed: rgba(255, 255, 255, 0.08);
+
+    --text-strong: #ffffff;
+    --text-muted: rgba(202, 202, 202, 0.7);
+    --text-subtle: #767676;
+
+    --copy-bg: rgba(255, 255, 255, 0.08);
+    --copy-bg-tint: transparent;
+    --copy-bg-hover: rgba(255, 255, 255, 0.1);
+    --copy-bg-pressed: rgba(255, 255, 255, 0.1);
+    --icon-color: #ededed;
+    --icon-color-muted: rgba(237, 237, 237, 0.6);
+
+    --shadow-card:
+      0 1px 3px 0 rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
+      inset 0 0 0 1px rgba(0, 0, 0, 0.06), inset 0 -1px 0 0 rgba(0, 0, 0, 0.06),
+      inset 0 0 0 1px rgba(196, 196, 196, 0.07);
+    --shadow-border:
+      0 1px 3px 0 rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
+      inset 0 0 0 1px rgba(0, 0, 0, 0.06), inset 0 -1px 0 0 rgba(0, 0, 0, 0.06),
+      inset 0 0 0 1px rgba(196, 196, 196, 0.08);
+    --shadow-tooltip:
+      0 1px 16px 0 rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
+      inset 0 0 0 1px rgba(0, 0, 0, 0.06), inset 0 -1px 0 0 rgba(0, 0, 0, 0.06),
+      inset 0 0 0 1px rgba(196, 196, 196, 0.08);
+    --material-shadow:
+      0 1px 3px 0 rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
+      inset 0 0 0 1px rgba(0, 0, 0, 0.06), inset 0 -1px 0 0 rgba(0, 0, 0, 0.06),
+      inset 0 0 0 1px rgba(196, 196, 196, 0.08);
+
+    --background: var(--bg-page);
+    --foreground: var(--text-strong);
+    --card: var(--card-bg);
+    --card-foreground: var(--text-strong);
+    --popover: var(--card-bg);
+    --popover-foreground: var(--text-strong);
+    --primary: #f7f7f7;
+    --primary-foreground: #1b1b1b;
+    --secondary: var(--chip-bg);
+    --secondary-foreground: var(--text-strong);
+    --muted: var(--chip-bg);
+    --muted-foreground: var(--text-muted);
+    --accent: var(--chip-bg-hover);
+    --accent-foreground: var(--text-strong);
     --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --tile-start: var(--card);
-    --tile-end: var(--muted);
-    --tile-border: conic-gradient(from 180deg at 50% 50%,
-        var(--border),
-        transparent 40%,
-        var(--border) 70%,
-        transparent);
+    --border: rgba(255, 255, 255, 0.08);
+    --input: rgba(255, 255, 255, 0.04);
+    --ring: rgba(255, 255, 255, 0.2);
+    --tile-start: oklch(0.205 0 0);
+    --tile-end: oklch(0.269 0 0);
+    --tile-border: conic-gradient(
+      from 180deg at 50% 50%,
+      oklch(1 0 0 / 10%),
+      transparent 40%,
+      oklch(1 0 0 / 10%) 70%,
+      transparent
+    );
     --icon-filter: invert(1);
   }
 
@@ -96,16 +208,29 @@
     margin: 0;
     color: var(--foreground);
     background: var(--background);
-    font-family: "Switzer-Regular", -apple-system, BlinkMacSystemFont,
-      "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
-      "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family:
+      "Switzer-Regular",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      "Helvetica Neue",
+      Arial,
+      sans-serif,
+      "Apple Color Emoji",
+      "Segoe UI Emoji",
+      "Segoe UI Symbol";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
   }
 
   code {
-    font-family: var(--font-mono), "InstrumentSerif-Italic",
-      source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-family:
+      var(--font-mono), "InstrumentSerif-Italic", source-code-pro, Menlo,
+      Monaco, Consolas, "Courier New", monospace;
   }
 
   ::selection {
@@ -168,35 +293,7 @@
   }
 }
 
-.animate-enter {
-  opacity: 0;
-  animation: enter 500ms forwards;
-  animation-delay: calc(var(--stagger, 0) * 200ms);
-}
-
-.imgMain {
-  transition: filter 200ms;
-  filter: var(--icon-filter);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .card-arrow {
-    transition: transform 200ms;
-  }
-
-  .card-link:hover .card-arrow {
-    animation: card-hover-arrow 200ms forwards;
-  }
-
-  .card-link:hover {
-    background: var(--muted) !important;
-    border: 1px solid var(--border) !important;
-    color: var(--foreground);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-
   *,
   ::before,
   ::after {

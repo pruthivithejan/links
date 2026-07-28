@@ -1,66 +1,64 @@
 ---
 interface Props {
 	githubUsername: string;
+	profileName?: string;
+	profileBio?: string;
 }
 
-const { githubUsername } = Astro.props;
+const { githubUsername, profileName, profileBio } = Astro.props;
+const displayName = profileName || githubUsername;
 ---
 
 <section
-	class="w-full flex flex-col items-center justify-center gap-8 md:gap-12"
+	class="w-full flex flex-col items-center justify-center gap-5 md:gap-6"
 >
 	<!-- Center with Avatar and Animated Conic Gradient Border -->
 	<div
-		class="flex justify-center items-center relative p-8 md:p-16 pb-0 animate-enter"
+		class="relative flex items-center justify-center px-0 pt-8 opacity-0 animate-[enter_500ms_forwards] [animation-delay:calc(var(--stagger,0)*200ms)] sm:px-8 md:px-16 md:pt-16"
 		style={`--stagger: 1`}
 	>
-		<!-- Avatar Container with Animated Border - Exactly like React version -->
+		<!-- Avatar Container with Animated Border -->
 		<div
-			class="relative flex justify-center items-center rounded-xl overflow-hidden"
-			style="
-				width: 300px;
-				height: 300px;
-				padding: 25px 10px;
-				margin-left: 16px;
-				transform: translateZ(0);
-				box-shadow: 0px 2px 8px -1px #0000001a;
-				background: linear-gradient(to bottom right, var(--tile-start), var(--tile-end));
-			"
+			class="relative flex h-[300px] w-[300px] translate-z-0 items-center justify-center overflow-hidden rounded-xl bg-[linear-gradient(to_bottom_right,var(--tile-start),var(--tile-end))] px-[10px] py-[25px] shadow-[0_2px_8px_-1px_#0000001a] sm:ml-4"
 		>
-			<!-- Rotating conic gradient border (::before equivalent) -->
+			<!-- Rotating conic gradient border -->
 			<div
-				class="absolute"
-				style="
-					width: 200%;
-					height: 200%;
-					background: var(--tile-border);
-					animation: rotate 6s linear infinite;
-					z-index: -1;
-				"
+				class="absolute -z-10 h-[200%] w-[200%] animate-[rotate_6s_linear_infinite] bg-[image:var(--tile-border)]"
 			>
 			</div>
 
-			<!-- Inner gradient background (::after equivalent) -->
+			<!-- Inner gradient background -->
 			<div
-				class="absolute rounded-xl"
-				style="
-					inset: 0;
-					padding: 1px;
-					background: linear-gradient(to bottom right, var(--tile-start), var(--tile-end));
-					background-clip: content-box;
-					z-index: -1;
-				"
+				class="absolute inset-0 -z-10 rounded-xl bg-[linear-gradient(to_bottom_right,var(--tile-start),var(--tile-end))] bg-clip-content p-px"
 			>
 			</div>
 
 			<!-- Avatar Image -->
 			<img
 				src={`https://avatars.githubusercontent.com/${githubUsername}`}
-				alt="Avatar"
+				alt={displayName}
 				width={280}
 				height={280}
 				class="rounded-[7px] w-[280px] h-[280px] object-cover relative z-10"
 			/>
 		</div>
+	</div>
+
+	<div
+		class="flex flex-col items-center px-4 opacity-0 animate-[enter_500ms_forwards] [animation-delay:calc(var(--stagger,0)*200ms)]"
+		style={`--stagger: 2`}
+	>
+		<h1
+			class="m-0 text-center text-[clamp(1.75rem,4vw,2rem)] font-semibold leading-[1.2] text-[color:var(--foreground)]"
+		>
+			{displayName}
+		</h1>
+		{
+			profileBio ? (
+				<p class="mb-0 mt-[7px] max-w-[560px] text-center text-[17px] font-normal leading-[1.5] text-[color:var(--text-muted)]">
+					{profileBio}
+				</p>
+			) : null
+		}
 	</div>
 </section>

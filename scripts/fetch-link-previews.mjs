@@ -40,6 +40,18 @@ const sanitizeUrl = (input) => {
   }
 };
 
+const resolveImageUrl = (input, baseUrl) => {
+  if (!input) return undefined;
+  try {
+    const resolved = new URL(input, baseUrl);
+    if (!['http:', 'https:'].includes(resolved.protocol)) return undefined;
+    if (/\/image-default(?:\.[a-z0-9]+)?$/i.test(resolved.pathname)) return undefined;
+    return resolved.toString();
+  } catch {
+    return undefined;
+  }
+};
+
 const fetchPreview = async (url) => {
   const safeUrl = sanitizeUrl(url);
   if (!safeUrl) return null;
@@ -55,7 +67,7 @@ const fetchPreview = async (url) => {
   if (!res.ok) return null;
   const html = await res.text();
 
-  const image = pickMeta(html, META_KEYS.image);
+  const image = resolveImageUrl(pickMeta(html, META_KEYS.image), safeUrl);
   const title = pickMeta(html, META_KEYS.title) || getTitleTag(html);
   const site = pickMeta(html, META_KEYS.site) || new URL(safeUrl).hostname;
 

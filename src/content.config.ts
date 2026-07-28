@@ -10,6 +10,8 @@ const personalCollection = defineCollection({
       highlight: z.string(),
     }),
     githubUsername: z.string(),
+    profileName: z.string().optional(),
+    profileBio: z.string().optional(),
     codeRepository: z.string(),
     ga4: z.string().optional(),
   }),

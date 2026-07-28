@@ -16,8 +16,7 @@ const { links } = Astro.props;
 <!-- Links Grid Section -->
 <section class="w-full flex justify-center">
 	<div
-		class="w-full max-w-[1100px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 items-stretch"
-		style="grid-auto-rows: 1fr;"
+		class="grid w-full max-w-[1100px] auto-rows-fr grid-cols-1 items-stretch gap-4 px-4 md:grid-cols-2 lg:grid-cols-3"
 	>
 		{
 			links.map((card: Card, index: number) => (
@@ -25,39 +24,49 @@ const { links } = Astro.props;
 					href={card.href}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="card-link group p-4 md:p-5 rounded-[12px] no-underline block cursor-pointer transition-all duration-200 border border-[color:var(--border)] bg-[color:var(--background)] animate-enter h-full flex flex-col text-[color:var(--foreground)] hover:bg-[color:var(--muted)] relative"
-					style={`--stagger: ${index}`}
+					class="group relative flex h-full cursor-pointer flex-col overflow-visible rounded-[var(--radius-card)] border border-[color:var(--card-border)] bg-[color:var(--card-bg)] p-4 text-[color:var(--foreground)] no-underline opacity-0 shadow-[var(--shadow-card)] transition-[border-color,box-shadow,background-color] duration-150 animate-[enter_500ms_forwards] [animation-delay:calc(var(--stagger,0)*200ms)] hover:border-[color:var(--card-border-hover)] hover:bg-[color:var(--card-bg-hover)] md:p-5"
+					style={`--stagger: ${index + 3}`}
 				>
 					<h2 class="font-semibold leading-none tracking-tight mb-2 flex items-center gap-2 text-base sm:text-lg transition-colors group-hover:text-[color:var(--foreground)]">
 						<img
 							src={`/icons/${card.icon}.svg`}
 							alt={`${card.title} Icon`}
-							class="imgMain w-6 h-6 flex-shrink-0"
+							class="h-6 w-6 flex-shrink-0 [filter:var(--icon-filter)] transition-[filter] duration-200"
 							width={24}
 							height={24}
 						/>
 						{card.title}
-						<span class="card-arrow transition-transform duration-200 inline-block font-mono">
+						<span class="inline-block font-mono transition-transform duration-200 group-hover:animate-[card-hover-arrow_200ms_forwards]">
 							<img
 								src="/arrow-right.svg"
 								alt="Arrow Right"
-								class="imgMain w-8 h-8"
+								class="h-8 w-8 [filter:var(--icon-filter)] transition-[filter] duration-200"
 								width={16}
 								height={16}
 							/>
 						</span>
 					</h2>
-					<p class="m-0 text-sm leading-relaxed max-w-none md:max-w-[34ch] text-[color:var(--muted-foreground)] transition-colors group-hover:text-[color:var(--foreground)]">
+					<p class="m-0 text-sm leading-relaxed max-w-none md:max-w-[34ch] text-[color:var(--text-subtle)]">
 						{card.description}
 					</p>
 
 					<button
-						class="copy-btn absolute top-4 right-4 z-10 p-2 rounded-lg border border-[color:var(--border)] bg-[color:var(--background)] text-[color:var(--muted-foreground)] hover:text-[color:var(--foreground)] hover:bg-[color:var(--muted)] shadow-sm transition-all duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none cursor-pointer flex items-center justify-center h-8 w-8"
+						type="button"
+						class="card-copy group/copy absolute right-4 top-4 z-10 inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-[var(--radius-copy)] border-0 bg-[color:var(--copy-bg-tint)] p-0 text-[color:var(--icon-color-muted)] opacity-0 [background-image:linear-gradient(90deg,var(--copy-bg)_0%,var(--copy-bg)_100%)] [-webkit-tap-highlight-color:transparent] transition-[background-color,color,opacity] duration-150 group-hover:opacity-100 group-focus-within:opacity-100 hover:bg-[color:var(--copy-bg-tint)] hover:text-[color:var(--icon-color)] hover:[background-image:linear-gradient(90deg,var(--copy-bg-hover)_0%,var(--copy-bg-hover)_100%)] active:bg-[color:var(--copy-bg-tint)] active:text-[color:var(--icon-color)] active:[background-image:linear-gradient(90deg,var(--copy-bg-pressed)_0%,var(--copy-bg-pressed)_100%)] focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--icon-color)] dark:bg-[color:var(--copy-bg)] dark:[background-image:none] dark:hover:bg-[color:var(--copy-bg-hover)] dark:hover:[background-image:none] dark:active:bg-[color:var(--copy-bg-pressed)] dark:active:[background-image:none]"
 						data-clipboard-text={card.href}
-						aria-label="Copy link to clipboard"
+						aria-label="Copy link"
 					>
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="copy-icon h-4 w-4"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="check-icon h-4 w-4 hidden text-emerald-500 dark:text-emerald-400"><path d="M20 6 9 17l-5-5"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-copy absolute left-1/2 top-1/2 block h-4 w-4 -translate-x-1/2 -translate-y-1/2 scale-100 opacity-100 blur-0 transition-[opacity,transform,filter] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform,filter] group-data-[copied=true]/copy:scale-25 group-data-[copied=true]/copy:opacity-0 group-data-[copied=true]/copy:blur-[4px]" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-check absolute left-1/2 top-1/2 block h-4 w-4 -translate-x-1/2 -translate-y-1/2 scale-25 opacity-0 blur-[4px] transition-[opacity,transform,filter] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform,filter] group-data-[copied=true]/copy:scale-100 group-data-[copied=true]/copy:opacity-100 group-data-[copied=true]/copy:blur-0" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+						<span class="card-copy-tooltip pointer-events-none invisible absolute bottom-[calc(100%+8px)] left-1/2 z-10 box-border inline-flex h-8 -translate-x-1/2 items-center whitespace-nowrap rounded-full bg-white px-3 text-xs font-normal leading-4 text-[#17181c] opacity-0 shadow-[var(--shadow-tooltip)] [transition:opacity_150ms_cubic-bezier(0.22,1,0.36,1),visibility_0s_linear_150ms] group-hover/copy:visible group-hover/copy:opacity-100 group-hover/copy:[transition-delay:50ms,50ms] group-focus-visible/copy:visible group-focus-visible/copy:opacity-100 group-focus-visible/copy:[transition-delay:50ms,50ms] group-data-[copied=true]/copy:visible group-data-[copied=true]/copy:opacity-100 group-data-[copied=true]/copy:[transition-delay:0ms,0ms] dark:bg-[#181818] dark:text-[#e3e3e3]" role="tooltip" aria-hidden="true">
+							<span class="tt-text inline-flex items-baseline leading-4">
+								<span class="tt-stem">Cop</span>
+								<span class="tt-swap group/swap relative inline-block w-[var(--tt-w-a,auto)] align-baseline leading-4 transition-[width] duration-[240ms] ease-[cubic-bezier(0.22,1,0.36,1)] data-[state=copied]:w-[var(--tt-w-b,auto)]" data-state="copy">
+									<span class="tt-label tt-a inline-block whitespace-pre opacity-100 blur-0 transition-[opacity,filter] duration-[180ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,filter] group-data-[state=copied]/swap:opacity-0 group-data-[state=copied]/swap:blur-[2px]">y link</span>
+									<span class="tt-label tt-b absolute left-0 top-0 whitespace-pre opacity-0 blur-[2px] transition-[opacity,filter] duration-[180ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,filter] group-data-[state=copied]/swap:opacity-100 group-data-[state=copied]/swap:blur-0">ied</span>
+								</span>
+							</span>
+						</span>
 					</button>
 				</a>
 			))
@@ -66,9 +75,55 @@ const { links } = Astro.props;
 </section>
 
 <script>
-	// Client-side clipboard coping logic
-	const copyButtons = document.querySelectorAll('.copy-btn');
-	copyButtons.forEach((btn) => {
+	function measureTooltipWidths(btn: HTMLButtonElement) {
+		const swap = btn.querySelector('.tt-swap') as HTMLElement | null;
+		const tooltip = btn.querySelector('.card-copy-tooltip') as HTMLElement | null;
+		if (!swap || !tooltip) return;
+
+		const measurer = document.createElement('div');
+		measurer.setAttribute('aria-hidden', 'true');
+		measurer.style.cssText =
+			'position:absolute;left:-9999px;top:0;visibility:hidden;pointer-events:none;';
+		document.body.appendChild(measurer);
+
+		const clone = tooltip.cloneNode(true) as HTMLElement;
+		clone.style.visibility = 'hidden';
+		clone.style.opacity = '0';
+		clone.style.display = 'inline-flex';
+		measurer.appendChild(clone);
+
+		const widths: number[] = [];
+		clone.querySelectorAll('.tt-label').forEach((lbl) => {
+			const el = lbl as HTMLElement;
+			el.style.position = 'static';
+			el.style.display = 'inline-block';
+			widths.push(el.getBoundingClientRect().width);
+		});
+
+		measurer.remove();
+		if (widths[0]) swap.style.setProperty('--tt-w-a', `${widths[0]}px`);
+		if (widths[1]) swap.style.setProperty('--tt-w-b', `${widths[1]}px`);
+	}
+
+	function fallbackCopy(text: string, onDone: () => void) {
+		try {
+			const ta = document.createElement('textarea');
+			ta.value = text;
+			ta.style.position = 'fixed';
+			ta.style.opacity = '0';
+			document.body.appendChild(ta);
+			ta.select();
+			document.execCommand('copy');
+			document.body.removeChild(ta);
+			onDone();
+		} catch {
+			/* ignore */
+		}
+	}
+
+	document.querySelectorAll<HTMLButtonElement>('.card-copy').forEach((btn) => {
+		measureTooltipWidths(btn);
+
 		btn.addEventListener('click', async (e) => {
 			e.preventDefault();
 			e.stopPropagation();
@@ -76,27 +131,31 @@ const { links } = Astro.props;
 			const text = btn.getAttribute('data-clipboard-text');
 			if (!text) return;
 
+			const markCopied = () => {
+				btn.setAttribute('data-copied', 'true');
+				const swap = btn.querySelector('.tt-swap');
+				if (swap) swap.setAttribute('data-state', 'copied');
+
+				const isTouch = window.matchMedia?.('(hover: none)').matches;
+				const dwell = isTouch ? 2000 : 1600;
+
+				window.setTimeout(() => {
+					btn.removeAttribute('data-copied');
+					window.setTimeout(() => {
+						if (swap) swap.setAttribute('data-state', 'copy');
+					}, 200);
+				}, dwell);
+			};
+
 			try {
-				await navigator.clipboard.writeText(text);
-
-				const copyIcon = btn.querySelector('.copy-icon');
-				const checkIcon = btn.querySelector('.check-icon');
-
-				if (copyIcon && checkIcon) {
-					copyIcon.classList.add('hidden');
-					checkIcon.classList.remove('hidden');
-
-					// Add styling to represent active green copy border/accent briefly
-					btn.classList.add('border-emerald-500', 'dark:border-emerald-400');
-
-					setTimeout(() => {
-						copyIcon.classList.remove('hidden');
-						checkIcon.classList.add('hidden');
-						btn.classList.remove('border-emerald-500', 'dark:border-emerald-400');
-					}, 2000);
+				if (navigator.clipboard?.writeText) {
+					await navigator.clipboard.writeText(text);
+					markCopied();
+				} else {
+					fallbackCopy(text, markCopied);
 				}
-			} catch (err) {
-				console.error('Failed to copy text to clipboard:', err);
+			} catch {
+				fallbackCopy(text, markCopied);
 			}
 		});
 	});
