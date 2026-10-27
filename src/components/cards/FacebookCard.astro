@@ -1,0 +1,108 @@
+---
+import CardShell from "./CardShell.astro";
+import type { CardData } from "./types";
+
+interface Props {
+  card: CardData;
+  index: number;
+  name: string;
+  username: string;
+}
+
+const { card, index, name, username } = Astro.props;
+
+const { meta } = card;
+const displayName = meta?.name || name || username;
+const bio = meta?.headline;
+const avatar = meta?.avatar;
+const banner = meta?.banner;
+
+const initials = displayName
+  .split(/\s+/u)
+  .map((part) => part[0])
+  .filter(Boolean)
+  .slice(0, 2)
+  .join("")
+  .toUpperCase();
+
+const stats = [
+  meta?.followers === undefined ? "" : `${meta.followers} followers`,
+  meta?.following === undefined ? "" : `${meta.following} following`,
+  meta?.friends === undefined ? "" : `${meta.friends} friends`,
+  meta?.mutual === undefined ? "" : `${meta.mutual} mutual`,
+].filter(Boolean);
+---
+
+<CardShell card={card} index={index} kind="facebook" username={username}>
+  <div class="flex h-full flex-col">
+    {
+      banner && (
+        <div class="relative h-24 w-full shrink-0 overflow-hidden">
+          <img
+            src={banner}
+            alt=""
+            class="absolute inset-0 h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
+            referrerpolicy="no-referrer"
+            data-social-image
+          />
+        </div>
+      )
+    }
+
+    <div
+      class={`flex min-h-0 flex-1 flex-col px-4 pb-4 md:px-5 md:pb-4 ${banner ? "" : "pt-4"}`}
+    >
+      <div
+        class={`flex items-end justify-between ${banner ? "-mt-10" : ""}`}
+      >
+        <div class="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-(--card-bg) bg-[linear-gradient(135deg,#1877f2,#0c4082)] text-lg font-semibold text-white">
+          <span
+            class="absolute inset-0 flex items-center justify-center"
+            aria-hidden="true"
+          >
+            {initials || "f"}
+          </span>
+          {
+            avatar && (
+              <img
+                src={avatar}
+                alt=""
+                class="relative h-full w-full object-cover"
+                loading="lazy"
+                decoding="async"
+                referrerpolicy="no-referrer"
+                data-card-avatar
+                data-fallback-avatar={meta?.fallbackAvatar}
+              />
+            )
+          }
+        </div>
+        <img
+          src="/icons/facebook.svg"
+          alt=""
+          class="mb-2 h-6 w-6 shrink-0 opacity-70 filter-(--icon-filter)"
+          width={24}
+          height={24}
+        />
+      </div>
+
+      <div class="mt-2 flex min-h-0 flex-1 flex-col">
+        <h3 class="truncate text-lg font-semibold leading-tight">
+          {displayName}
+        </h3>
+        <div class="mt-auto pt-3">
+          {
+            stats.length > 0 && (
+              <p class="truncate text-sm text-(--text-muted)">
+                {stats.join(" · ")}
+              </p>
+            )
+          }
+          {bio && <p class="mt-2 line-clamp-3 text-sm leading-snug text-(--text-subtle)">{bio}</p>}
+        </div>
+      </div>
+    </div>
+  </div>
+</CardShell>

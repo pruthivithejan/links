@@ -1,0 +1,99 @@
+---
+import CardShell from "./CardShell.astro";
+import type { CardData } from "./types";
+import { formatCount } from "./preview";
+
+interface Props {
+  card: CardData;
+  index: number;
+  name: string;
+  username: string;
+}
+
+const { card, index, name, username } = Astro.props;
+const { meta } = card;
+const joinedDate = meta?.joined ? new Date(meta.joined) : undefined;
+
+const joined = joinedDate && !Number.isNaN(joinedDate.getTime())
+  ? joinedDate.toLocaleDateString("en-US", { month: "long", timeZone: "UTC", year: "numeric" })
+  : undefined;
+---
+
+<CardShell card={card} index={index} kind="x" username={username}>
+  <div class="flex h-full flex-col">
+    <div class="card-media-fallback relative h-28 w-full shrink-0 overflow-hidden">
+      {meta?.banner && <img
+        src={meta.banner}
+        alt=""
+        class="absolute inset-0 h-full w-full object-cover"
+        data-social-image
+        loading="lazy"
+        referrerpolicy="no-referrer"
+      />}
+    </div>
+
+    <div class="flex min-h-0 flex-1 flex-col px-4 pb-4 md:px-5 md:pb-4">
+      <div class="-mt-7 mb-1 flex items-end justify-between">
+        <div class="relative h-14 w-14 shrink-0 overflow-hidden rounded-full border-4 border-(--card-bg) bg-(--chip-bg)">
+          <span
+            class="absolute inset-0 flex items-center justify-center"
+            data-x-avatar-fallback
+          >
+            <img
+              src="/icons/x.svg"
+              alt=""
+              class="h-5 w-5 filter-(--icon-filter)"
+              width={20}
+              height={20}
+            />
+          </span>
+          {meta?.avatar && <img
+            src={meta.avatar}
+            alt=""
+            class="relative h-full w-full object-cover"
+            data-card-avatar
+            data-fallback-avatar={meta.fallbackAvatar}
+            loading="lazy"
+            referrerpolicy="no-referrer"
+          />}
+        </div>
+        <img
+          src="/icons/x.svg"
+          alt=""
+          class="mb-1 h-4 w-4 shrink-0 opacity-60 filter-(--icon-filter)"
+          width={16}
+          height={16}
+        />
+      </div>
+
+      <p class="truncate text-sm font-semibold leading-tight" data-x-name>
+        {name}
+      </p>
+      <p class="truncate text-xs leading-tight text-(--text-muted)" data-x-handle>
+        @{username}
+      </p>
+      {meta?.headline && <p
+        class="mt-2 line-clamp-2 text-xs leading-snug text-(--text-subtle)"
+        data-x-bio
+      >
+        {meta.headline}
+      </p>}
+
+      <div class="mt-auto flex items-center gap-3 pt-2 text-[11px] text-(--text-muted)">
+        {joined && <span class="truncate" data-x-joined>Joined {joined}</span>}
+        {meta?.following !== undefined && <span class="ml-auto whitespace-nowrap">
+          <b class="font-semibold text-(--foreground)" data-x-following>
+            {formatCount(meta.following)}
+          </b>{" "}
+          Following
+        </span>}
+        {meta?.followers !== undefined && <span class="whitespace-nowrap">
+          <b class="font-semibold text-(--foreground)" data-x-followers>
+            {formatCount(meta.followers)}
+          </b>{" "}
+          Followers
+        </span>}
+      </div>
+    </div>
+  </div>
+</CardShell>
