@@ -28,21 +28,64 @@ const { title = 'Pruthivi Thejan | Links' } = Astro.props;
 		/>
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Manrope:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Grotesk:wght@300..700&display=swap"
+			rel="stylesheet"
+		/>
 		<script is:inline>
-			// Check system preference and apply dark mode
-			function applyTheme() {
-				if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-					document.documentElement.classList.add('dark');
-				} else {
-					document.documentElement.classList.remove('dark');
+			(() => {
+				const storageKey = 'links:theme-lab:v1';
+				const root = document.documentElement;
+
+				const isSystemDark = window.matchMedia(
+					'(prefers-color-scheme: dark)',
+				).matches;
+
+				const readTheme = () => {
+					try {
+						const raw = localStorage.getItem(storageKey);
+
+						return raw ? JSON.parse(raw) : null;
+					} catch {
+						return null;
+					}
+				};
+
+				const theme = readTheme();
+				const mode = theme?.mode;
+				const isDark = mode === 'dark' || (mode !== 'light' && isSystemDark);
+
+				root.classList.toggle('dark', isDark);
+
+				if (theme?.tokens) {
+					const tokens = isDark ? theme.tokens.dark : theme.tokens.light;
+
+					if (tokens) {
+						for (const [property, value] of Object.entries(tokens)) {
+							root.style.setProperty(property, value);
+						}
+					}
 				}
-			}
 
-			// Apply theme immediately to prevent flash
-			applyTheme();
+				const themeMode = isDark ? 'dark' : 'light';
 
-			// Listen for changes in system preference
-			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+				const attributes = {
+					avatar: theme?.avatar,
+					borders: theme?.borders === false ? 'off' : undefined,
+					font: theme?.font,
+					headingFont: theme?.headingFont,
+					shadows: theme?.shadows === false ? 'off' : undefined,
+					theme: theme ? themeMode : undefined,
+				};
+
+				for (const [name, value] of Object.entries(attributes)) {
+					if (value) {
+						root.dataset[name] = value;
+					}
+				}
+			})();
 		</script>
 	</head>
 	<body>

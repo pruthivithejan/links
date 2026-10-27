@@ -1,0 +1,1533 @@
+---
+const palettes = [
+  { accent: "#2d2d2d", id: "mono", name: "Mono" },
+  { accent: "#7c5cff", id: "violet", name: "Violet" },
+  { accent: "#f97316", id: "ember", name: "Ember" },
+  { accent: "#0ea5e9", id: "ocean", name: "Ocean" },
+  { accent: "#10b981", id: "forest", name: "Forest" },
+  { accent: "#f43f5e", id: "rose", name: "Rose" },
+  { accent: "#eab308", id: "sun", name: "Sun" },
+  { accent: "#64748b", id: "ice", name: "Ice" },
+];
+
+const fonts = [
+  {
+    id: "switzer",
+    name: "Switzer",
+    stack:
+      '"Switzer-Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+  },
+  {
+    id: "manrope",
+    name: "Manrope",
+    stack:
+      '"Manrope", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  },
+  {
+    id: "dmsans",
+    name: "DM Sans",
+    stack:
+      '"DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  },
+  {
+    id: "grotesk",
+    name: "Space Grotesk",
+    stack:
+      '"Space Grotesk", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  },
+  {
+    id: "playfair",
+    name: "Playfair Display",
+    stack:
+      '"Playfair Display", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif',
+  },
+  {
+    id: "lora",
+    name: "Lora",
+    stack: '"Lora", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif',
+  },
+  {
+    id: "instrument",
+    name: "Instrument Serif",
+    stack: '"InstrumentSerif-Italic", "Instrument Serif", Georgia, serif',
+  },
+  {
+    id: "mono",
+    name: "JetBrains Mono",
+    stack:
+      '"JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace',
+  },
+];
+
+const avatarPresets = [
+  { id: "circle", name: "Rounded" },
+  { id: "squircle", name: "Squircle" },
+  { id: "square", name: "Squared" },
+  { id: "check", name: "Verified" },
+];
+---
+
+<aside
+  class="theme-lab t-morph"
+  data-open="false"
+  data-theme-lab
+  aria-label="Theme customization"
+>
+  <section
+    id="theme-lab-panel"
+    class="tl-panel t-morph-menu"
+    role="dialog"
+    aria-modal="false"
+    aria-label="Theme lab"
+    aria-hidden="true"
+    tabindex="-1"
+    data-theme-panel
+    hidden
+    inert
+  >
+    <header class="tl-head">
+      <h2 class="tl-title">Theme lab</h2>
+      <button
+        type="button"
+        class="tl-icon-btn"
+        data-theme-close
+        aria-label="Close theme lab"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M18 6 6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+    </header>
+
+    <div class="tl-body">
+      <div class="tl-section">
+        <span class="tl-label">Mode</span>
+        <div class="tl-seg" role="group" aria-label="Color mode">
+          <button type="button" data-mode="light" aria-pressed="false">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4"></circle>
+              <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"
+              ></path>
+            </svg>
+            Light
+          </button>
+          <button type="button" data-mode="dark" aria-pressed="false">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+            </svg>
+            Dark
+          </button>
+        </div>
+      </div>
+
+      <div class="tl-section">
+        <span class="tl-label">Profiles</span>
+        <div class="tl-palettes" role="group" aria-label="Theme profiles">
+          {
+            palettes.map((palette) => (
+              <button
+                type="button"
+                class="tl-palette"
+                data-palette={palette.id}
+                data-accent={palette.accent}
+                aria-label={`${palette.name} profile`}
+                title={palette.name}
+                aria-pressed="false"
+                style={`--swatch:${palette.accent}`}
+              />
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="tl-section">
+        <span class="tl-label">Typeface</span>
+        <div class="tl-selects">
+          <label class="tl-select-row">
+            <span class="tl-select-label">Title</span>
+            <span class="tl-select-wrap">
+              <select
+                class="tl-select"
+                data-font-choice="heading"
+                aria-label="Title font"
+              >
+                {
+                  fonts.map((font) => (
+                    <option value={font.id} style={`font-family:${font.stack}`}>
+                      {font.name}
+                    </option>
+                  ))
+                }
+              </select>
+            </span>
+          </label>
+          <label class="tl-select-row">
+            <span class="tl-select-label">Body</span>
+            <span class="tl-select-wrap">
+              <select
+                class="tl-select"
+                data-font-choice="body"
+                aria-label="Body font"
+              >
+                {
+                  fonts.map((font) => (
+                    <option value={font.id} style={`font-family:${font.stack}`}>
+                      {font.name}
+                    </option>
+                  ))
+                }
+              </select>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div class="tl-section">
+        <span class="tl-label">Surface</span>
+        <div class="tl-toggles">
+          <div class="tl-toggle">
+            <span class="tl-toggle__label">Borders</span>
+            <button
+              type="button"
+              class="tl-switch"
+              role="switch"
+              aria-checked="true"
+              aria-label="Toggle borders"
+              data-theme-borders
+            >
+              <span class="tl-switch__thumb" aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="tl-toggle">
+            <span class="tl-toggle__label">Shadows</span>
+            <button
+              type="button"
+              class="tl-switch"
+              role="switch"
+              aria-checked="true"
+              aria-label="Toggle shadows"
+              data-theme-shadows
+            >
+              <span class="tl-switch__thumb" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="tl-subsection">
+          <span class="tl-label">Avatar</span>
+          <div class="tl-seg tl-seg--avatar" role="group" aria-label="Avatar">
+            {
+              avatarPresets.map((preset) => (
+                <button
+                  type="button"
+                  data-avatar-preset={preset.id}
+                  aria-label={`${preset.name} avatar`}
+                  title={preset.name}
+                  aria-pressed="false"
+                >
+                  <span
+                    class={`tl-shape__glyph tl-shape__glyph--${preset.id}`}
+                    aria-hidden="true"
+                  />
+                </button>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="tl-foot">
+      <div class="tl-actions">
+        <button
+          type="button"
+          class="tl-action tl-action--primary"
+          data-theme-shuffle
+        >
+          Surprise me
+        </button>
+        <button type="button" class="tl-action" data-theme-reset>
+          Reset
+        </button>
+      </div>
+    </footer>
+  </section>
+
+  <button
+    type="button"
+    class="tl-trigger t-morph-plus"
+    data-theme-trigger
+    aria-expanded="false"
+    aria-controls="theme-lab-panel"
+    aria-label="Open theme lab"
+    title="Theme lab"
+  >
+    <svg
+      class="tl-trigger__icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.7"
+      stroke-linecap="round"
+      aria-hidden="true"
+    >
+      <path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"></path>
+      <path d="M1 14h6M9 8h6M17 16h6"></path>
+    </svg>
+  </button>
+</aside>
+
+<style>
+  .theme-lab {
+    --tl-top: max(1rem, env(safe-area-inset-top));
+    --tl-bottom: max(1rem, env(safe-area-inset-bottom));
+    --tl-inline-start: max(var(--page-inline-padding), env(safe-area-inset-left));
+    --tl-inline-end: max(var(--page-inline-padding), env(safe-area-inset-right));
+    --morph-open-w: min(336px, calc(100vw - 2rem));
+    position: fixed;
+    top: var(--tl-top);
+    right: max(1rem, env(safe-area-inset-right));
+    z-index: 80;
+    width: 44px;
+    height: 44px;
+    overflow: hidden;
+    color: var(--text-strong);
+    background: var(--card-bg);
+    border-radius: var(--morph-r-closed);
+    box-shadow: var(--shadow-border);
+    transition:
+      width var(--morph-close-dur) var(--morph-close-ease),
+      height var(--morph-close-dur) var(--morph-close-ease),
+      border-radius var(--morph-close-dur) var(--morph-close-ease),
+      box-shadow var(--morph-close-dur) var(--morph-close-ease);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .theme-lab[data-open="true"] {
+    width: var(--morph-open-w, 336px);
+    height: min(
+      var(--morph-open-h, 560px),
+      calc(100dvh - var(--tl-top) - var(--tl-bottom))
+    );
+    border-radius: var(--morph-r-open);
+    box-shadow: var(--shadow-card);
+    transition:
+      width var(--morph-open-dur) var(--morph-ease),
+      height var(--morph-open-dur) var(--morph-ease),
+      border-radius var(--morph-open-dur) var(--morph-ease),
+      box-shadow var(--morph-open-dur) var(--morph-ease);
+  }
+
+  .theme-lab.is-measuring {
+    width: var(--morph-open-w, 336px);
+    height: auto;
+    visibility: hidden;
+    border-radius: var(--morph-r-open);
+    box-shadow: none;
+    transition: none;
+  }
+
+  .tl-trigger {
+    position: absolute;
+    inset: 0 0 auto auto;
+    display: grid;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    place-items: center;
+    color: var(--text-strong);
+    cursor: pointer;
+    background: var(--chip-bg);
+    border: 0;
+    border-radius: var(--morph-r-closed);
+    transition:
+      opacity var(--morph-fade-dur) var(--morph-close-ease),
+      transform var(--morph-open-dur) var(--morph-close-ease),
+      filter var(--morph-fade-dur) var(--morph-close-ease),
+      background-color 180ms ease;
+  }
+
+  .tl-trigger:hover {
+    background: var(--chip-bg-hover);
+  }
+
+  .tl-trigger:active {
+    transform: scale(0.96);
+  }
+
+  .tl-trigger:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+
+  .theme-lab[data-open="true"] .tl-trigger {
+    opacity: 0;
+    filter: blur(var(--morph-blur));
+    pointer-events: none;
+    transform: translateX(calc(-1 * var(--morph-slide)));
+  }
+
+  .tl-trigger__icon {
+    width: 19px;
+    height: 19px;
+    transition: transform var(--morph-open-dur) var(--morph-close-ease);
+  }
+
+  .theme-lab[data-open="true"] .tl-trigger__icon {
+    transform: scale(var(--morph-scale)) rotate(var(--morph-rotate));
+  }
+
+  .tl-panel {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: inherit;
+    opacity: 0;
+    transform: translateX(var(--morph-slide)) scale(var(--morph-scale));
+    filter: blur(var(--morph-blur));
+    pointer-events: none;
+    transition:
+      opacity var(--morph-fade-dur) var(--morph-close-ease),
+      transform var(--morph-open-dur) var(--morph-close-ease),
+      filter var(--morph-fade-dur) var(--morph-close-ease);
+  }
+
+  .theme-lab[data-open="true"] .tl-panel {
+    opacity: 1;
+    filter: blur(0);
+    pointer-events: auto;
+    transform: translateX(0) scale(1);
+  }
+
+  .theme-lab.is-measuring .tl-panel {
+    position: relative;
+    inset: auto;
+    height: auto;
+    opacity: 1;
+    filter: none;
+    transform: none;
+    transition: none;
+  }
+
+  .tl-panel:focus {
+    outline: none;
+  }
+
+  .tl-head {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .tl-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .tl-icon-btn {
+    display: grid;
+    flex: none;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    place-items: center;
+    color: var(--text-muted);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 8px;
+    transition:
+      color 150ms ease,
+      background-color 150ms ease;
+  }
+
+  .tl-icon-btn:hover {
+    color: var(--text-strong);
+    background: var(--chip-bg);
+  }
+
+  .tl-icon-btn:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+
+  .tl-icon-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .tl-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 18px;
+    padding: 16px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .tl-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tl-label {
+    font-family: inherit;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .tl-seg {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    height: 30px;
+    padding: 3px;
+    background: var(--chip-bg);
+    border-radius: 8px;
+  }
+
+  .tl-seg button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 24px;
+    padding: 0 6px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 6px;
+    transition:
+      color 150ms ease,
+      background-color 150ms ease;
+  }
+
+  .tl-seg button svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .tl-seg button:hover {
+    color: var(--text-strong);
+  }
+
+  .tl-seg button[aria-pressed="true"] {
+    color: var(--text-strong);
+    background: var(--card-bg);
+  }
+
+  .tl-seg button:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+
+  .tl-seg--avatar {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .tl-shape__glyph {
+    display: block;
+    width: 15px;
+    height: 15px;
+    background: currentColor;
+    transition:
+      background-color 150ms ease,
+      border-radius 150ms ease;
+  }
+
+  .tl-shape__glyph--circle {
+    border-radius: 999px;
+  }
+
+  .tl-shape__glyph--squircle {
+    border-radius: 34%;
+  }
+
+  .tl-shape__glyph--square {
+    border-radius: 4px;
+  }
+
+  .tl-shape__glyph--check {
+    width: 17px;
+    height: 17px;
+    border-radius: 0;
+    -webkit-mask: var(--mask-verified) center / contain no-repeat;
+    mask: var(--mask-verified) center / contain no-repeat;
+  }
+
+  .tl-palettes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .tl-palette {
+    height: 30px;
+    padding: 0;
+    cursor: pointer;
+    background: var(--swatch);
+    border: 0;
+    border-radius: 6px;
+    opacity: 0.55;
+    transition:
+      opacity 150ms ease,
+      transform 150ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .tl-palette:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+  }
+
+  .tl-palette:active {
+    transform: scale(0.97);
+  }
+
+  .tl-palette[aria-pressed="true"] {
+    opacity: 1;
+  }
+
+  .tl-palette:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  .tl-selects {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .tl-select-row {
+    display: flex;
+    height: 34px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .tl-select-label {
+    font-size: 12px;
+    color: var(--text-strong);
+  }
+
+  .tl-select-wrap {
+    position: relative;
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+  }
+
+  .tl-select {
+    width: 190px;
+    max-width: 100%;
+    height: 30px;
+    padding: 0 26px 0 10px;
+    overflow: hidden;
+    font-family: inherit;
+    font-size: 11px;
+    color: var(--text-strong);
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    appearance: none;
+    cursor: pointer;
+    background: var(--chip-bg);
+    border: 0;
+    border-radius: 8px;
+  }
+
+  .tl-select:hover {
+    background: var(--chip-bg-hover);
+  }
+
+  .tl-select:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+
+  .tl-select-wrap::after {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 6px;
+    height: 6px;
+    pointer-events: none;
+    content: "";
+    border-right: 1.5px solid var(--text-muted);
+    border-bottom: 1.5px solid var(--text-muted);
+    transform: translateY(-65%) rotate(45deg);
+  }
+
+  .tl-toggles {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .tl-toggle {
+    display: flex;
+    height: 34px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .tl-toggle__label {
+    font-size: 12px;
+    color: var(--text-strong);
+  }
+
+  .tl-switch {
+    position: relative;
+    width: 32px;
+    height: 18px;
+    padding: 0;
+    cursor: pointer;
+    background: var(--chip-bg-hover);
+    border: 0;
+    border-radius: 999px;
+    transition: background-color 150ms ease;
+  }
+
+  .tl-switch__thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 12px;
+    height: 12px;
+    background: var(--text-muted);
+    border-radius: 999px;
+    transition:
+      transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 150ms ease;
+  }
+
+  .tl-switch[aria-checked="true"] {
+    background: var(--primary);
+  }
+
+  .tl-switch[aria-checked="true"] .tl-switch__thumb {
+    background: var(--primary-foreground);
+    transform: translateX(14px);
+  }
+
+  .tl-switch:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  .tl-subsection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .tl-foot {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    padding: 12px 16px 16px;
+    border-top: 1px solid var(--card-border);
+  }
+
+  .tl-actions {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+  }
+
+  .tl-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px;
+    padding: 0 12px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--text-strong);
+    cursor: pointer;
+    background: var(--chip-bg);
+    border: 0;
+    border-radius: 9px;
+    transition:
+      transform 150ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+
+  .tl-action:hover {
+    background: var(--chip-bg-hover);
+  }
+
+  .tl-action:active {
+    transform: scale(0.98);
+  }
+
+  .tl-action:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  .tl-action--primary {
+    color: var(--primary-foreground);
+    background: var(--primary);
+  }
+
+  .tl-action--primary:hover {
+    background: color-mix(in oklab, var(--primary) 88%, var(--text-strong));
+  }
+
+  @media (width < 48rem) {
+    .theme-lab {
+      --morph-open-w: calc(100vw - var(--tl-inline-start) - var(--tl-inline-end));
+      top: auto;
+      right: var(--tl-inline-end);
+      bottom: var(--tl-bottom);
+    }
+
+    .tl-trigger {
+      inset: auto 0 0 auto;
+    }
+
+    .tl-panel {
+      transform-origin: bottom right;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .theme-lab,
+    .tl-trigger,
+    .tl-trigger__icon,
+    .tl-panel,
+    .tl-palette,
+    .tl-select,
+    .tl-switch,
+    .tl-switch__thumb,
+    .tl-shape__glyph,
+    .tl-action {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  const STORAGE_KEY = "links:theme-lab:v1";
+  const root = document.documentElement;
+
+  const morph = document.querySelector<HTMLElement>("[data-theme-lab]");
+  const panel = document.querySelector<HTMLElement>("[data-theme-panel]");
+
+  const trigger =
+    document.querySelector<HTMLButtonElement>("[data-theme-trigger]");
+
+  const closeButton =
+    document.querySelector<HTMLButtonElement>("[data-theme-close]");
+
+  const shuffleButton =
+    document.querySelector<HTMLButtonElement>("[data-theme-shuffle]");
+
+  const resetButton =
+    document.querySelector<HTMLButtonElement>("[data-theme-reset]");
+
+  const bordersToggle =
+    document.querySelector<HTMLButtonElement>("[data-theme-borders]");
+
+  const shadowsToggle =
+    document.querySelector<HTMLButtonElement>("[data-theme-shadows]");
+
+  const modeButtons = [
+    ...document.querySelectorAll<HTMLButtonElement>("[data-mode]"),
+  ];
+
+  const paletteButtons = [
+    ...document.querySelectorAll<HTMLButtonElement>("[data-palette]"),
+  ];
+
+  const bodyFontSelect =
+    document.querySelector<HTMLSelectElement>('select[data-font-choice="body"]');
+
+  const headingFontSelect =
+    document.querySelector<HTMLSelectElement>(
+      'select[data-font-choice="heading"]'
+    );
+
+  const avatarPresetButtons = [
+    ...document.querySelectorAll<HTMLButtonElement>("button[data-avatar-preset]"),
+  ];
+
+  const palettes = paletteButtons.map((button) => ({
+    accent: button.dataset.accent ?? "#2d2d2d",
+    button,
+    id: button.dataset.palette ?? "mono",
+  }));
+
+  const avatarPresets = avatarPresetButtons.map((button) => ({
+    button,
+    id: button.dataset.avatarPreset ?? "circle",
+  }));
+
+  const fontIds = new Set(
+    Array.from(bodyFontSelect?.options ?? [], (option) => option.value)
+  );
+
+  const defaultPalette =
+    palettes.find((palette) => palette.id === "mono") ?? palettes[0];
+
+  const defaultFontId = "switzer";
+
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
+
+  type Mode = "light" | "dark";
+
+  type AvatarPreset = "circle" | "squircle" | "square" | "check";
+
+  interface StoredTheme {
+    mode: Mode;
+    palette: string;
+    accent: string;
+    font: string;
+    headingFont: string;
+    avatar: AvatarPreset;
+    borders: boolean;
+    shadows: boolean;
+    tokens?: Record<string, Record<string, string>>;
+  }
+
+  const isMode = (value: string | undefined): value is Mode =>
+    value === "light" || value === "dark";
+
+  const isAvatarPreset = (value: string | undefined): value is AvatarPreset =>
+    value === "circle" ||
+    value === "squircle" ||
+    value === "square" ||
+    value === "check";
+
+  const systemMode = (): Mode => (media.matches ? "dark" : "light");
+
+  const readStored = (): StoredTheme | null => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+
+      if (!raw) {
+        return null;
+      }
+
+      // SAFETY: This key is only written by this component with StoredTheme.
+      const parsed = JSON.parse(raw) as StoredTheme;
+
+      return parsed && !Array.isArray(parsed) ? parsed : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const normalizeHex = (value: string | undefined): string | null => {
+    if (!value) {
+      return null;
+    }
+
+    const trimmed = value.trim();
+
+    const short = /^#?(?<r>[\da-f])(?<g>[\da-f])(?<b>[\da-f])$/iu.exec(
+      trimmed
+    );
+
+    if (short?.groups) {
+      const { r, g, b } = short.groups;
+
+      return `#${r}${r}${g}${g}${b}${b}`.toLowerCase();
+    }
+
+    const full = /^#?(?<hex>[\da-f]{6})$/iu.exec(trimmed);
+
+    return full?.groups ? `#${full.groups.hex}`.toLowerCase() : null;
+  };
+
+  const stored = readStored();
+
+  const storedPalette = palettes.find(
+    (palette) => palette.id === stored?.palette
+  );
+
+  const state: StoredTheme = {
+    accent:
+      normalizeHex(stored?.accent) ??
+      storedPalette?.accent ??
+      defaultPalette?.accent ??
+      "#2d2d2d",
+    avatar: isAvatarPreset(stored?.avatar) ? stored.avatar : "circle",
+    borders: stored?.borders !== false,
+    font: fontIds.has(stored?.font ?? "") ? (stored?.font ?? "") : defaultFontId,
+    headingFont: fontIds.has(stored?.headingFont ?? "")
+      ? (stored?.headingFont ?? "")
+      : defaultFontId,
+    mode: isMode(stored?.mode) ? stored.mode : systemMode(),
+    palette: storedPalette?.id ?? defaultPalette?.id ?? "mono",
+    shadows: stored?.shadows !== false,
+  };
+
+  let lastFocus: HTMLElement | null = null;
+
+  const parseHex = (hex: string): [number, number, number] => {
+    const normalized = normalizeHex(hex) ?? "#2d2d2d";
+
+    return [
+      Number.parseInt(normalized.slice(1, 3), 16),
+      Number.parseInt(normalized.slice(3, 5), 16),
+      Number.parseInt(normalized.slice(5, 7), 16),
+    ];
+  };
+
+  const toHex = (rgb: [number, number, number]): string =>
+    `#${rgb
+      .map((channel) =>
+        Math.min(255, Math.max(0, Math.round(channel)))
+          .toString(16)
+          .padStart(2, "0")
+      )
+      .join("")}`;
+
+  const blend = (
+    rgb: [number, number, number],
+    target: [number, number, number],
+    amount: number
+  ): [number, number, number] => [
+    rgb[0] + (target[0] - rgb[0]) * amount,
+    rgb[1] + (target[1] - rgb[1]) * amount,
+    rgb[2] + (target[2] - rgb[2]) * amount,
+  ];
+
+  const luminance = (rgb: [number, number, number]): number => {
+    const [r, g, b] = rgb.map((channel) => {
+      const value = channel / 255;
+
+      return value <= 0.0405 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+    });
+
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+
+  const onColor = (rgb: [number, number, number]): string =>
+    luminance(rgb) > 0.42 ? "#111111" : "#ffffff";
+
+  const readablePrimary = (
+    rgb: [number, number, number],
+    mode: Mode
+  ): [number, number, number] => {
+    const light = luminance(rgb);
+
+    if (mode === "light" && light > 0.82) {
+      return blend(rgb, [17, 17, 17], 0.45);
+    }
+
+    if (mode === "dark" && light < 0.18) {
+      return blend(rgb, [255, 255, 255], 0.34);
+    }
+
+    return rgb;
+  };
+
+  const buildTokens = (accent: string, mode: Mode) => {
+    const rgb = parseHex(accent);
+
+    if (mode === "light") {
+      const primary = readablePrimary(rgb, "light");
+      const primaryHex = toHex(primary);
+
+      return {
+        "--bg-page": `color-mix(in oklab, ${accent} 4%, #fdfdfd)`,
+        "--border": `color-mix(in srgb, ${accent} 12%, transparent)`,
+        "--card-bg": `color-mix(in oklab, ${accent} 1.5%, #ffffff)`,
+        "--card-bg-hover": `color-mix(in oklab, ${accent} 4%, #ffffff)`,
+        "--card-border": `color-mix(in srgb, ${accent} 12%, rgb(0 0 0 / 0.06))`,
+        "--card-border-hover": `color-mix(in srgb, ${accent} 48%, transparent)`,
+        "--chip-bg": `color-mix(in oklab, ${accent} 8%, #f4f4f4)`,
+        "--chip-bg-hover": `color-mix(in oklab, ${accent} 13%, #f4f4f4)`,
+        "--chip-bg-pressed": `color-mix(in oklab, ${accent} 17%, #efefef)`,
+        "--primary": primaryHex,
+        "--primary-foreground": onColor(primary),
+        "--ring": `color-mix(in srgb, ${primaryHex} 42%, transparent)`,
+        "--text-muted": `color-mix(in oklab, ${accent} 18%, #6c6c6c)`,
+        "--text-strong": `color-mix(in oklab, ${accent} 9%, #0d0d0d)`,
+        "--text-subtle": `color-mix(in oklab, ${accent} 18%, #767676)`,
+        "--theme-accent": primaryHex,
+        "--theme-glow": `color-mix(in oklab, ${primaryHex} 9%, transparent)`,
+        "--theme-halo": `color-mix(in srgb, ${primaryHex} 16%, transparent)`,
+      };
+    }
+
+    const lifted = blend(rgb, [255, 255, 255], 0.3);
+    const primary = readablePrimary(lifted, "dark");
+    const primaryHex = toHex(primary);
+
+    return {
+      "--bg-page": `color-mix(in oklab, ${accent} 5%, #121212)`,
+      "--border": `color-mix(in srgb, ${primaryHex} 16%, transparent)`,
+      "--card-bg": `color-mix(in oklab, ${accent} 7%, #181818)`,
+      "--card-bg-hover": `color-mix(in oklab, ${accent} 10%, #181818)`,
+      "--card-border": `color-mix(in srgb, ${primaryHex} 18%, transparent)`,
+      "--card-border-hover": `color-mix(in srgb, ${primaryHex} 48%, transparent)`,
+      "--chip-bg": `color-mix(in oklab, ${accent} 14%, #1c1c1c)`,
+      "--chip-bg-hover": `color-mix(in oklab, ${accent} 20%, #1c1c1c)`,
+      "--chip-bg-pressed": `color-mix(in oklab, ${accent} 17%, #1c1c1c)`,
+      "--primary": primaryHex,
+      "--primary-foreground": onColor(primary),
+      "--ring": `color-mix(in srgb, ${primaryHex} 42%, transparent)`,
+      "--text-muted": `color-mix(in oklab, ${accent} 16%, #a9a9a9)`,
+      "--text-strong": `color-mix(in oklab, ${accent} 7%, #ffffff)`,
+      "--text-subtle": `color-mix(in oklab, ${accent} 12%, #767676)`,
+      "--theme-accent": primaryHex,
+      "--theme-glow": `color-mix(in oklab, ${primaryHex} 8%, transparent)`,
+      "--theme-halo": `color-mix(in srgb, ${primaryHex} 14%, transparent)`,
+    };
+  };
+
+  const tokenKeys = new Set([
+    ...Object.keys(buildTokens("#2d2d2d", "light")),
+    ...Object.keys(buildTokens("#2d2d2d", "dark")),
+  ]);
+
+  const isNeutralTheme = () =>
+    state.palette === defaultPalette?.id &&
+    normalizeHex(state.accent) === normalizeHex(defaultPalette?.accent);
+
+  const applyTheme = () => {
+    const font = fontIds.has(state.font) ? state.font : defaultFontId;
+
+    const headingFont = fontIds.has(state.headingFont)
+      ? state.headingFont
+      : defaultFontId;
+
+    root.classList.toggle("dark", state.mode === "dark");
+    root.dataset.theme = state.mode;
+
+    if (isNeutralTheme()) {
+      for (const key of tokenKeys) {
+        root.style.removeProperty(key);
+      }
+    } else {
+      const tokens = buildTokens(state.accent, state.mode);
+
+      for (const [key, value] of Object.entries(tokens)) {
+        root.style.setProperty(key, value);
+      }
+    }
+
+    if (font === defaultFontId) {
+      delete root.dataset.font;
+    } else {
+      root.dataset.font = font;
+    }
+
+    if (headingFont === defaultFontId) {
+      delete root.dataset.headingFont;
+    } else {
+      root.dataset.headingFont = headingFont;
+    }
+
+    root.dataset.avatar = state.avatar;
+
+    if (state.borders) {
+      delete root.dataset.borders;
+    } else {
+      root.dataset.borders = "off";
+    }
+
+    if (state.shadows) {
+      delete root.dataset.shadows;
+    } else {
+      root.dataset.shadows = "off";
+    }
+  };
+
+  const persistTheme = () => {
+    const neutral = isNeutralTheme();
+
+    const payload: StoredTheme = {
+      ...state,
+      tokens: neutral
+        ? undefined
+        : {
+            dark: buildTokens(state.accent, "dark"),
+            light: buildTokens(state.accent, "light"),
+          },
+    };
+
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    } catch {
+      /* storage can be unavailable in private windows */
+    }
+  };
+
+  const syncUi = () => {
+    for (const button of modeButtons) {
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.mode === state.mode)
+      );
+    }
+
+    for (const palette of palettes) {
+      palette.button.setAttribute(
+        "aria-pressed",
+        String(palette.id === state.palette)
+      );
+    }
+
+    if (bodyFontSelect) {
+      bodyFontSelect.value = state.font;
+    }
+
+    if (headingFontSelect) {
+      headingFontSelect.value = state.headingFont;
+    }
+
+    for (const preset of avatarPresets) {
+      preset.button.setAttribute(
+        "aria-pressed",
+        String(preset.id === state.avatar)
+      );
+    }
+
+    bordersToggle?.setAttribute("aria-checked", String(state.borders));
+    shadowsToggle?.setAttribute("aria-checked", String(state.shadows));
+  };
+
+  const update = () => {
+    applyTheme();
+    persistTheme();
+    syncUi();
+  };
+
+  const setMode = (mode: Mode) => {
+    state.mode = mode;
+    update();
+  };
+
+  const setPalette = (id: string) => {
+    const palette = palettes.find((item) => item.id === id);
+
+    if (!palette) {
+      return;
+    }
+
+    state.palette = palette.id;
+    state.accent = palette.accent;
+    update();
+  };
+
+  const setFont = (id: string) => {
+    if (!fontIds.has(id)) {
+      return;
+    }
+
+    state.font = id;
+    update();
+  };
+
+  const setHeadingFont = (id: string) => {
+    if (!fontIds.has(id)) {
+      return;
+    }
+
+    state.headingFont = id;
+    update();
+  };
+
+  const setAvatarPreset = (id: string) => {
+    if (!isAvatarPreset(id)) {
+      return;
+    }
+
+    state.avatar = id;
+    update();
+  };
+
+  const shuffle = () => {
+    const paletteChoices = palettes.filter(
+      (palette) => palette.id !== state.palette
+    );
+
+    const avatarChoices = avatarPresets.filter(
+      (preset) => preset.id !== state.avatar
+    );
+
+    const fontIdList = [...fontIds];
+    const modes: Mode[] = ["light", "dark"];
+
+    const pickFont = (exclude: string) => {
+      const choices = fontIdList.filter((id) => id !== exclude);
+
+      return (
+        choices[Math.floor(Math.random() * choices.length)] ?? defaultFontId
+      );
+    };
+
+    const palette =
+      paletteChoices[Math.floor(Math.random() * paletteChoices.length)] ??
+      palettes[Math.floor(Math.random() * palettes.length)];
+
+    const avatar =
+      avatarChoices[Math.floor(Math.random() * avatarChoices.length)] ??
+      avatarPresets[Math.floor(Math.random() * avatarPresets.length)];
+
+    const mode = modes[Math.floor(Math.random() * modes.length)] ?? "dark";
+
+    if (palette) {
+      state.palette = palette.id;
+      state.accent = palette.accent;
+    }
+
+    if (avatar && isAvatarPreset(avatar.id)) {
+      state.avatar = avatar.id;
+    }
+
+    state.borders = Math.random() < 0.5;
+    state.font = pickFont(state.font);
+    state.headingFont = pickFont(state.headingFont);
+    state.mode = mode;
+    state.shadows = Math.random() < 0.5;
+    update();
+
+    if (shuffleButton) {
+      shuffleButton.dataset.busy = "true";
+      window.setTimeout(() => {
+        shuffleButton.dataset.busy = "false";
+      }, 480);
+    }
+  };
+
+  const reset = () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
+
+    for (const key of tokenKeys) {
+      root.style.removeProperty(key);
+    }
+
+    delete root.dataset.theme;
+    delete root.dataset.font;
+    delete root.dataset.headingFont;
+    delete root.dataset.avatar;
+    delete root.dataset.borders;
+    delete root.dataset.shadows;
+
+    state.avatar = "circle";
+    state.borders = true;
+    state.shadows = true;
+    state.mode = systemMode();
+    state.palette = defaultPalette?.id ?? "mono";
+    state.accent = defaultPalette?.accent ?? "#2d2d2d";
+    state.font = defaultFontId;
+    state.headingFont = defaultFontId;
+
+    root.classList.toggle("dark", state.mode === "dark");
+    syncUi();
+  };
+
+  const measureOpenSize = () => {
+    if (!morph || !panel) {
+      return;
+    }
+
+    morph.classList.add("is-measuring");
+
+    const height = panel.offsetHeight;
+
+    morph.classList.remove("is-measuring");
+    morph.style.setProperty("--morph-open-h", `${height}px`);
+  };
+
+  const openPanel = () => {
+    if (!morph || !panel || !trigger) {
+      return;
+    }
+
+    panel.removeAttribute("hidden");
+    measureOpenSize();
+    lastFocus =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+
+    morph.dataset.open = "true";
+    panel.removeAttribute("inert");
+    panel.setAttribute("aria-hidden", "false");
+    trigger.setAttribute("aria-expanded", "true");
+    trigger.setAttribute("aria-label", "Close theme lab");
+    trigger.tabIndex = -1;
+
+    window.requestAnimationFrame(() => panel.focus({ preventScroll: true }));
+  };
+
+  const closePanel = (restoreFocus = true) => {
+    if (!morph || !panel || !trigger) {
+      return;
+    }
+
+    morph.dataset.open = "false";
+    panel.setAttribute("aria-hidden", "true");
+    panel.setAttribute("inert", "");
+    trigger.setAttribute("aria-expanded", "false");
+    trigger.setAttribute("aria-label", "Open theme lab");
+    trigger.tabIndex = 0;
+
+    if (restoreFocus) {
+      (lastFocus ?? trigger).focus({ preventScroll: true });
+    }
+  };
+
+  syncUi();
+
+  for (const button of modeButtons) {
+    button.addEventListener("click", () => {
+      if (isMode(button.dataset.mode)) {
+        setMode(button.dataset.mode);
+      }
+    });
+  }
+
+  for (const palette of palettes) {
+    palette.button.addEventListener("click", () => setPalette(palette.id));
+  }
+
+  if (bodyFontSelect) {
+    bodyFontSelect.addEventListener("change", () => {
+      setFont(bodyFontSelect.value);
+    });
+  }
+
+  if (headingFontSelect) {
+    headingFontSelect.addEventListener("change", () => {
+      setHeadingFont(headingFontSelect.value);
+    });
+  }
+
+  for (const preset of avatarPresets) {
+    preset.button.addEventListener("click", () => setAvatarPreset(preset.id));
+  }
+
+  bordersToggle?.addEventListener("click", () => {
+    state.borders = !state.borders;
+    update();
+  });
+
+  shadowsToggle?.addEventListener("click", () => {
+    state.shadows = !state.shadows;
+    update();
+  });
+
+  shuffleButton?.addEventListener("click", shuffle);
+
+  resetButton?.addEventListener("click", reset);
+
+  trigger?.addEventListener("click", () => {
+    if (morph?.dataset.open === "true") {
+      closePanel();
+    } else {
+      openPanel();
+    }
+  });
+
+  closeButton?.addEventListener("click", () => closePanel());
+
+  document.addEventListener("pointerdown", (event) => {
+    if (!morph || morph.dataset.open !== "true") {
+      return;
+    }
+
+    const target = event.target instanceof Node ? event.target : null;
+
+    if (target && !morph.contains(target)) {
+      closePanel(false);
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const target = event.target instanceof HTMLElement ? event.target : null;
+
+    const isTyping =
+      target?.isContentEditable || target?.matches("input, textarea, select");
+
+    if (event.key === "Escape" && morph?.dataset.open === "true") {
+      event.preventDefault();
+      closePanel();
+
+      return;
+    }
+
+    if (
+      event.key.toLowerCase() === "t" &&
+      event.shiftKey &&
+      !event.metaKey &&
+      !event.ctrlKey &&
+      !event.altKey &&
+      !isTyping
+    ) {
+      event.preventDefault();
+
+      if (morph?.dataset.open === "true") {
+        closePanel();
+      } else {
+        openPanel();
+      }
+    }
+  });
+
+  window.requestAnimationFrame(measureOpenSize);
+
+  window.addEventListener("resize", measureOpenSize);
+
+  document.fonts.addEventListener("loadingdone", measureOpenSize);
+</script>

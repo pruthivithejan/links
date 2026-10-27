@@ -26,6 +26,8 @@
 
 @layer base {
   :root {
+    --page-inline-padding: 1rem;
+
     /* Surfaces */
     --bg-page: #fdfdfd;
     --card-bg: #ffffff;
@@ -83,6 +85,24 @@
     --icon-swap-ease: ease-in-out;
     --dropdown-open-dur: 250ms;
     --dropdown-close-dur: 150ms;
+    --morph-open-dur: 350ms;
+    --morph-close-dur: 250ms;
+    --morph-ease: cubic-bezier(0.34, 1.25, 0.64, 1);
+    --morph-close-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --morph-r-closed: 40px;
+    --morph-r-open: 20px;
+    --morph-fade-dur: 200ms;
+    --morph-slide: 40px;
+    --morph-rotate: 45deg;
+    --morph-scale: 0.97;
+    --morph-blur: 2px;
+    --font-tracking: normal;
+    --font-leading: normal;
+    --font-heading-tracking: 0.02em;
+    --font-heading-leading: 1.15;
+    --font-heading:
+      "Switzer-Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif;
 
     /* Semantic aliases (existing components) */
     --background: var(--bg-page);
@@ -105,6 +125,7 @@
     --ring: rgba(0, 0, 0, 0.2);
     --radius: var(--radius-card);
     --font-mono: "JetBrains Mono", monospace;
+    --mask-verified: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzEuNzA0MTcgMS43MDQxNyAyMC41OTE2NiAyMC41OTE2Nic+PHBhdGggZmlsbD0nd2hpdGUnIGQ9J005Ljc2IDMuMmMuNy0uNzYgMS4wMy0xLjE1IDEuNDItMS4zMmEyIDIgMCAwIDEgMS42NCAwYy4zOS4xNy43My41NiAxLjQyIDEuMzNjLjMxLjM1LjQ3LjUyLjY1LjY1YTIgMiAwIDAgMCAuODIuMzRjLjIyLjA0LjQ2LjAzLjkzIDBhNSA1IDAgMCAxIDEuOTQuMDdhMiAyIDAgMCAxIDEuMTUgMS4xNWMuMTUuNC4xMy45MS4wNyAxLjk0Yy0uMDMuNDctLjA0LjcgMCAuOTNhMiAyIDAgMCAwIC4zNC44MmMuMTMuMTguMy4zNC42NS42NWMuNzcuNyAxLjE2IDEuMDMgMS4zMyAxLjQyYTIgMiAwIDAgMSAwIDEuNjRjLS4xOC4zOS0uNTYuNzMtMS4zMyAxLjQyYy0uMzUuMzEtLjUyLjQ3LS42NS42NWEyIDIgMCAwIDAtLjM0LjgyYy0uMDQuMjItLjAzLjQ2IDAgLjkzYTUgNSAwIDAgMS0uMDcgMS45NGEyIDIgMCAwIDEtMS4xNSAxLjE1Yy0uNC4xNS0uOTEuMTMtMS45NC4wN2MtLjQ3LS4wMy0uNy0uMDQtLjkzIDBhMiAyIDAgMCAwLS44Mi4zNGMtLjE4LjEzLS4zNC4zLS42NS42NWMtLjcuNzctMS4wMyAxLjE2LTEuNDIgMS4zM2EyIDIgMCAwIDEtMS42NCAwYy0uMzktLjE4LS43My0uNTYtMS40Mi0xLjMzYTQgNCAwIDAgMC0uNjUtLjY1YTIgMiAwIDAgMC0uODItLjM0YTQgNCAwIDAgMC0uOTMgMGE1IDUgMCAwIDEtMS45NC0uMDdhMiAyIDAgMCAxLTEuMTUtMS4xNWMtLjE1LS40LS4xMy0uOTEtLjA3LTEuOTRjLjAzLS40Ny4wNC0uNyAwLS45M2EyIDIgMCAwIDAtLjM0LS44MmMtLjEzLS4xOC0uMy0uMzQtLjY1LS42NWMtLjc3LS43LTEuMTYtMS4wMy0xLjMzLTEuNDJhMiAyIDAgMCAxIDAtMS42NGMuMTctLjM5LjU2LS43MyAxLjMzLTEuNDJjLjM1LS4zMS41Mi0uNDcuNjUtLjY1YTIgMiAwIDAgMCAuMzQtLjgyYy4wNC0uMjIuMDMtLjQ2IDAtLjkzYTUgNSAwIDAgMSAuMDctMS45NGEyIDIgMCAwIDEgMS4xNS0xLjE1Yy40LS4xNS45MS0uMTMgMS45NC0uMDdjLjQ3LjAzLjcuMDQuOTMgMGEyIDIgMCAwIDAgLjgyLS4zNGMuMTgtLjEzLjM0LS4zLjY1LS42NScvPjwvc3ZnPg==");
     /* Keep the avatar frame on its original neutral gradient. */
     --tile-start: oklch(1 0 0);
     --tile-end: oklch(0.97 0 0);
@@ -116,6 +137,18 @@
       transparent
     );
     --icon-filter: none;
+  }
+
+  @media (min-width: 40rem) {
+    :root {
+      --page-inline-padding: 1.5rem;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    :root {
+      --page-inline-padding: 6rem;
+    }
   }
 
   html {
@@ -204,27 +237,239 @@
     --icon-filter: invert(1);
   }
 
+  html[data-font="switzer"] {
+    --font-body:
+      "Switzer-Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+    --font-tracking: normal;
+    --font-leading: normal;
+  }
+
+  html[data-font="manrope"] {
+    --font-body:
+      "Manrope", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+    --font-tracking: -0.011em;
+    --font-leading: 1.55;
+  }
+
+  html[data-font="dmsans"] {
+    --font-body:
+      "DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+    --font-tracking: -0.009em;
+    --font-leading: 1.55;
+  }
+
+  html[data-font="grotesk"] {
+    --font-body:
+      "Space Grotesk", ui-sans-serif, system-ui, -apple-system,
+      BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-tracking: -0.016em;
+    --font-leading: 1.55;
+  }
+
+  html[data-font="playfair"] {
+    --font-body:
+      "Playfair Display", "Iowan Old Style", "Palatino Linotype", Palatino,
+      Georgia, serif;
+    --font-tracking: 0;
+    --font-leading: 1.5;
+  }
+
+  html[data-font="lora"] {
+    --font-body:
+      "Lora", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --font-tracking: 0;
+    --font-leading: 1.55;
+  }
+
+  html[data-font="instrument"] {
+    --font-body: "InstrumentSerif-Italic", "Instrument Serif", Georgia, serif;
+    --font-tracking: 0.005em;
+    --font-leading: 1.42;
+  }
+
+  html[data-font="mono"] {
+    --font-body:
+      "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco,
+      Consolas, monospace;
+    --font-tracking: -0.02em;
+    --font-leading: 1.55;
+  }
+
+  html[data-heading-font="switzer"] {
+    --font-heading:
+      "Switzer-Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+    --font-heading-tracking: 0.02em;
+    --font-heading-leading: 1.15;
+  }
+
+  html[data-heading-font="manrope"] {
+    --font-heading:
+      "Manrope", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+    --font-heading-tracking: -0.02em;
+    --font-heading-leading: 1.1;
+  }
+
+  html[data-heading-font="dmsans"] {
+    --font-heading:
+      "DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+    --font-heading-tracking: -0.02em;
+    --font-heading-leading: 1.1;
+  }
+
+  html[data-heading-font="grotesk"] {
+    --font-heading:
+      "Space Grotesk", ui-sans-serif, system-ui, -apple-system,
+      BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-heading-tracking: -0.025em;
+    --font-heading-leading: 1.08;
+  }
+
+  html[data-heading-font="playfair"] {
+    --font-heading:
+      "Playfair Display", "Iowan Old Style", "Palatino Linotype", Palatino,
+      Georgia, serif;
+    --font-heading-tracking: -0.012em;
+    --font-heading-leading: 1.12;
+  }
+
+  html[data-heading-font="lora"] {
+    --font-heading:
+      "Lora", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --font-heading-tracking: -0.01em;
+    --font-heading-leading: 1.12;
+  }
+
+  html[data-heading-font="instrument"] {
+    --font-heading:
+      "InstrumentSerif-Italic", "Instrument Serif", Georgia, serif;
+    --font-heading-tracking: 0;
+    --font-heading-leading: 1.05;
+  }
+
+  html[data-heading-font="mono"] {
+    --font-heading:
+      "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco,
+      Consolas, monospace;
+    --font-heading-tracking: -0.03em;
+    --font-heading-leading: 1.1;
+  }
+
+  html[data-borders="off"] {
+    --card-border: transparent !important;
+    --card-border-hover: transparent !important;
+    --border: transparent !important;
+    --stage-border: transparent !important;
+    --tile-border: none !important;
+  }
+
+  html[data-shadows="off"] {
+    --card-shadow: none !important;
+    --shadow-card: none !important;
+    --shadow-border: none !important;
+    --shadow-tooltip: none !important;
+    --material-shadow: none !important;
+    --theme-halo: transparent !important;
+  }
+
+  h1,
+  h2 {
+    font-family: var(--font-heading);
+  }
+
   body {
     margin: 0;
     color: var(--foreground);
-    background: var(--background);
+    background-color: var(--background);
+    background-image: radial-gradient(
+      ellipse 90% 55% at 50% -8%,
+      var(--theme-glow, transparent),
+      transparent 70%
+    );
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     font-family:
-      "Switzer-Regular",
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      "Helvetica Neue",
-      Arial,
-      sans-serif,
-      "Apple Color Emoji",
-      "Segoe UI Emoji",
-      "Segoe UI Symbol";
+      var(--font-body, "Switzer-Regular"), -apple-system, BlinkMacSystemFont,
+      "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    letter-spacing: var(--font-tracking);
+    line-height: var(--font-leading);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition:
       background-color 0.2s ease,
       color 0.2s ease;
+  }
+
+  .avatar-stage {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 11rem;
+    height: 11rem;
+    flex: none;
+  }
+
+  .avatar {
+    box-sizing: border-box;
+    width: 8rem;
+    height: 8rem;
+    border: 0 solid transparent;
+    border-radius: 999px;
+    box-shadow: 0 0 0 6px var(--theme-halo, transparent);
+    transition:
+      width 300ms cubic-bezier(0.22, 1, 0.36, 1),
+      height 300ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-radius 300ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 300ms ease,
+      box-shadow 300ms ease,
+      transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+      clip-path 300ms ease;
+  }
+
+  .avatar__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    transition:
+      border-radius 300ms ease,
+      transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html[data-avatar="squircle"] .avatar {
+    border-radius: 34%;
+    box-shadow: var(--shadow-card);
+  }
+
+  html[data-avatar="square"] .avatar {
+    border-width: 1px;
+    border-color: var(--card-border);
+    border-radius: 12px;
+    box-shadow: none;
+  }
+
+  html[data-avatar="check"] .avatar {
+    width: 9rem;
+    height: 9rem;
+    border: 0;
+    border-radius: 0;
+    background: var(--card-bg);
+    box-shadow: none;
+    transform: none;
+    -webkit-mask: var(--mask-verified) center / 100% 100% no-repeat;
+    mask: var(--mask-verified) center / 100% 100% no-repeat;
+  }
+
+  html[data-avatar="check"] .avatar__image {
+    border-radius: 0;
+    transform: none;
   }
 
   code {
@@ -259,6 +504,16 @@
   ::-webkit-scrollbar-thumb:hover {
     background: var(--ring);
   }
+}
+
+.card-media-fallback {
+  background:
+    radial-gradient(
+      120% 100% at 20% 0%,
+      color-mix(in oklab, var(--foreground) 7%, transparent),
+      transparent 60%
+    ),
+    var(--chip-bg);
 }
 
 @keyframes rotate {
