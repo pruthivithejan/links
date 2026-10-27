@@ -10,37 +10,19 @@ const displayName = profileName || githubUsername;
 ---
 
 <section
-  class="w-full flex flex-col items-center justify-center gap-5 md:gap-6"
+  class="w-full flex flex-col items-center justify-center gap-2 md:gap-3"
 >
-  <!-- Center with Avatar and Animated Conic Gradient Border -->
-  <div
-    class="relative flex items-center justify-center px-0 pt-8 opacity-0 animate-[enter_500ms_forwards] [animation-delay:calc(var(--stagger,0)*200ms)] sm:px-8 md:px-16 md:pt-16"
-    style={`--stagger: 1`}
-  >
-    <!-- Avatar Container with Animated Border -->
-    <div
-      class="relative flex h-55 w-55 translate-z-0 items-center justify-center overflow-hidden rounded-xl bg-[linear-gradient(to_bottom_right,var(--tile-start),var(--tile-end))] px-2.5 py-6.25 shadow-[0_2px_8px_-1px_#0000001a] sm:ml-4"
-    >
-      <!-- Rotating conic gradient border -->
-      <div
-        class="absolute -z-10 h-[200%] w-[200%] animate-[rotate_6s_linear_infinite] bg-(image:--tile-border"
-      >
+  <div class="flex items-center justify-center px-4 pt-4 md:pt-6">
+    <div class="avatar-stage">
+      <div class="avatar">
+        <img
+          src={`https://avatars.githubusercontent.com/${githubUsername}`}
+          alt={displayName}
+          width={128}
+          height={128}
+          class="avatar__image"
+        />
       </div>
-
-      <!-- Inner gradient background -->
-      <div
-        class="absolute inset-0 -z-10 rounded-xl bg-[linear-gradient(to_bottom_right,var(--tile-start),var(--tile-end))] bg-clip-content p-px"
-      >
-      </div>
-
-      <!-- Avatar Image -->
-      <img
-        src={`https://avatars.githubusercontent.com/${githubUsername}`}
-        alt={displayName}
-        width={200}
-        height={200}
-        class="rounded-[7px] w-50 h-50 object-cover relative z-10"
-      />
     </div>
   </div>
 
@@ -49,13 +31,13 @@ const displayName = profileName || githubUsername;
     style={`--stagger: 2`}
   >
     <h1
-      class="m-0 text-center text-[clamp(1.75rem,4vw,2rem)] font-semibold leading-[1.2] tracking-wide text-(--foreground"
+      class="m-0 text-center text-[40px] font-semibold leading-(--font-heading-leading) tracking-(--font-heading-tracking) text-(--text-strong)"
     >
       {displayName}
     </h1>
     {
       profileBio ? (
-        <p class="mb-0 mt-1.75 max-w-140 text-center text-[17px] font-normal leading-no text-(--text-muted)">
+        <p class="mb-0 mt-1.75 max-w-140 text-center text-[16px] font-[425] not-italic leading-[24px] text-(--text-muted)">
           {profileBio}
         </p>
       ) : null

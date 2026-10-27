@@ -2,39 +2,29 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
 import Links from "../components/Links.astro";
+import LinkCards from "../components/LinkCards.astro";
 import QuickLinks from "../components/QuickLinks.astro";
+import ThemeLab from "../components/ThemeLab.astro";
 import personalData from "../content/personal/profile.json";
 import linksArray from "../content/links/links.json";
 import quickLinksArray from "../content/quick-links/quick-links.json";
+import linkCardsArray from "../content/link-cards/link-cards.json";
 
 const personal = personalData;
-const links = (linksArray || []) as Array<{
-  href: string;
-  icon: string;
-  title: string;
-  description: string;
-}>;
 
-const quickLinks = (quickLinksArray || []) as Array<{
-  href: string;
-  icon: string;
-  label: string;
-  preview?: {
-    title?: string;
-    description?: string;
-    meta?: string;
-    image?: string;
-  };
-}>;
+const links = linksArray || [];
+const quickLinks = quickLinksArray || [];
+const profileCards = linkCardsArray || [];
 
 const githubUsername = personal?.githubUsername || "";
 const profileName = personal?.profileName || githubUsername;
 const profileBio = personal?.profileBio || "";
+
 ---
 
 <Layout title={personal?.heading}>
   <main
-    class="flex flex-col justify-between items-center min-h-screen w-full gap-8 md:gap-12 px-4 py-10 sm:px-6 sm:py-12 md:p-24 pt-24"
+    class="flex flex-col justify-between items-center min-h-screen w-full gap-8 md:gap-12 px-(--page-inline-padding) pb-10 sm:pb-12 md:pb-24 pt-8"
   >
     <Hero
       githubUsername={githubUsername}
@@ -43,6 +33,7 @@ const profileBio = personal?.profileBio || "";
     />
 
     <QuickLinks links={quickLinks} />
+    <LinkCards links={profileCards} />
     <Links links={links} />
 
     <!-- Footer: Quote on left, Build Your Own on right -->
@@ -52,11 +43,11 @@ const profileBio = personal?.profileBio || "";
         style={`--stagger: 4`}
       >
         <p
-          class="relative m-0 rounded-(--radius-card) bg-(--card-bg) p-4 text-center font-['InstrumentSerif-Italic',serif] tracking-[1px] text-[color:var(--foreground)] shadow-[var(--shadow-card)] md:text-left"
+          class="m-0 max-w-150 text-center font-[inherit] leading-(--font-leading) tracking-(--font-tracking) text-[color:var(--foreground)] md:text-left"
         >
           "{personal?.slogan?.words}&nbsp;
           <code
-            class="font-['JetBrains_Mono',monospace] font-bold tracking-[1px]"
+            class="font-[inherit] font-bold"
             >{personal?.slogan?.highlight}</code
           >."
         </p>
@@ -64,7 +55,7 @@ const profileBio = personal?.profileBio || "";
           href={`https://github.com/${personal?.githubUsername}/${personal?.codeRepository}`}
           target="_blank"
           rel="noopener noreferrer"
-          class="hidden h-9 items-center justify-center gap-2 rounded-(--radius-chip) bg-(--chip-bg) px-[13px] font-['JetBrains_Mono',monospace] text-(--icon-color-muted) shadow-(--shadow-border) transition-colors duration-150 hover:text-(--icon-color) md:inline-flex"
+          class="hidden h-9 items-center justify-center gap-2 rounded-(--radius-chip) bg-(--chip-bg) px-[13px] font-[inherit] tracking-(--font-tracking) text-(--text-muted) shadow-(--shadow-border) transition-colors duration-150 hover:text-(--text-strong) md:inline-flex"
         >
           Build Your Own
           <img
@@ -78,4 +69,6 @@ const profileBio = personal?.profileBio || "";
       </div>
     </footer>
   </main>
+
+  <ThemeLab />
 </Layout>

@@ -117,76 +117,94 @@ const { links } = Astro.props;
 </section>
 
 <script>
-  function measureTooltipWidths(btn: HTMLButtonElement) {
-    const swap = btn.querySelector(".tt-swap") as HTMLElement | null;
-    const tooltip = btn.querySelector(
-      ".card-copy-tooltip",
-    ) as HTMLElement | null;
-    if (!swap || !tooltip) return;
+  const measureTooltipWidths = (button: HTMLButtonElement) => {
+    const swap = button.querySelector<HTMLElement>(".tt-swap");
+    const tooltip = button.querySelector<HTMLElement>(".card-copy-tooltip");
+
+    if (!swap || !tooltip) {
+      return;
+    }
 
     const measurer = document.createElement("div");
     measurer.setAttribute("aria-hidden", "true");
     measurer.style.cssText =
       "position:absolute;left:-9999px;top:0;visibility:hidden;pointer-events:none;";
-    document.body.appendChild(measurer);
+    document.body.append(measurer);
 
+    // SAFETY: cloning an element node always returns an element.
     const clone = tooltip.cloneNode(true) as HTMLElement;
     clone.style.visibility = "hidden";
     clone.style.opacity = "0";
     clone.style.display = "inline-flex";
-    measurer.appendChild(clone);
+    measurer.append(clone);
 
     const widths: number[] = [];
-    clone.querySelectorAll(".tt-label").forEach((lbl) => {
-      const el = lbl as HTMLElement;
-      el.style.position = "static";
-      el.style.display = "inline-block";
-      widths.push(el.getBoundingClientRect().width);
-    });
+
+    for (const label of clone.querySelectorAll<HTMLElement>(".tt-label")) {
+      label.style.position = "static";
+      label.style.display = "inline-block";
+      widths.push(label.getBoundingClientRect().width);
+    }
 
     measurer.remove();
-    if (widths[0]) swap.style.setProperty("--tt-w-a", `${widths[0]}px`);
-    if (widths[1]) swap.style.setProperty("--tt-w-b", `${widths[1]}px`);
-  }
 
-  function fallbackCopy(text: string, onDone: () => void) {
+    if (widths[0]) {
+      swap.style.setProperty("--tt-w-a", `${widths[0]}px`);
+    }
+
+    if (widths[1]) {
+      swap.style.setProperty("--tt-w-b", `${widths[1]}px`);
+    }
+  };
+
+  const fallbackCopy = (text: string, onDone: () => void) => {
     try {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.append(textarea);
+      textarea.select();
       document.execCommand("copy");
-      document.body.removeChild(ta);
+      textarea.remove();
       onDone();
     } catch {
       /* ignore */
     }
-  }
+  };
 
-  document.querySelectorAll<HTMLButtonElement>(".card-copy").forEach((btn) => {
-    measureTooltipWidths(btn);
+  for (const button of document.querySelectorAll<HTMLButtonElement>(
+    ".card-copy"
+  )) {
+    measureTooltipWidths(button);
 
-    btn.addEventListener("click", async (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
 
-      const text = btn.getAttribute("data-clipboard-text");
-      if (!text) return;
+      const text = button.dataset.clipboardText;
+
+      if (!text) {
+        return;
+      }
 
       const markCopied = () => {
-        btn.setAttribute("data-copied", "true");
-        const swap = btn.querySelector(".tt-swap");
-        if (swap) swap.setAttribute("data-state", "copied");
+        button.dataset.copied = "true";
+        const swap = button.querySelector(".tt-swap");
+
+        if (swap) {
+          swap.dataset.state = "copied";
+        }
 
         const isTouch = window.matchMedia?.("(hover: none)").matches;
         const dwell = isTouch ? 2000 : 1600;
 
         window.setTimeout(() => {
-          btn.removeAttribute("data-copied");
+          delete button.dataset.copied;
           window.setTimeout(() => {
-            if (swap) swap.setAttribute("data-state", "copy");
+            if (swap) {
+              swap.dataset.state = "copy";
+            }
           }, 200);
         }, dwell);
       };
@@ -202,5 +220,5 @@ const { links } = Astro.props;
         fallbackCopy(text, markCopied);
       }
     });
-  });
+  }
 </script>
