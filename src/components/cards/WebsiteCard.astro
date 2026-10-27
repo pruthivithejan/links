@@ -1,0 +1,62 @@
+---
+import CardShell from "./CardShell.astro";
+import type { CardData } from "./types";
+
+interface Props {
+  card: CardData;
+  image?: string;
+  index: number;
+}
+
+const { card, image, index } = Astro.props;
+const displayUrl = card.href.replace(/^https?:\/\//u, "").replace(/\/$/u, "");
+---
+
+<CardShell card={card} index={index} kind="website" autoHeight>
+  <div class="flex flex-col">
+    <div class="website-card-media card-media-fallback relative w-full overflow-hidden">
+      <div class="absolute inset-0 flex items-center justify-center">
+        <img
+          src={`/icons/${card.icon}.svg`}
+          alt=""
+          class="h-8 w-8 opacity-40 filter-(--icon-filter)"
+          width={32}
+          height={32}
+        />
+      </div>
+      {
+        image && (
+          <img
+            src={image}
+            alt=""
+            class="relative block h-auto w-full"
+            width={1200}
+            height={630}
+            loading="lazy"
+            decoding="async"
+            data-card-image
+          />
+        )
+      }
+    </div>
+
+    <div class="flex shrink-0 flex-col gap-1.5 px-4 py-3 md:px-5">
+      <p class="min-w-0 truncate text-xs font-medium leading-4" title={card.href}>
+        {displayUrl}
+      </p>
+      {
+        card.description && (
+          <p class="line-clamp-2 text-xs leading-relaxed text-(--text-subtle)">
+            {card.description}
+          </p>
+        )
+      }
+    </div>
+  </div>
+</CardShell>
+
+<style>
+  .website-card-media:not(:has([data-card-image])) {
+    aspect-ratio: 1200 / 630;
+  }
+</style>
