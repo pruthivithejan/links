@@ -1,0 +1,79 @@
+---
+import FacebookCard from "./cards/FacebookCard.astro";
+import GitHubCard from "./cards/GitHubCard.astro";
+import InstagramCard from "./cards/InstagramCard.astro";
+import LinkedInCard from "./cards/LinkedInCard.astro";
+import WebsiteCard from "./cards/WebsiteCard.astro";
+import XCard from "./cards/XCard.astro";
+import { resolveCard } from "./cards/preview";
+import type { CardData, CardPreviews } from "./cards/types";
+import cardPreviews from "../data/link-card-previews.json";
+
+interface Props {
+  links: CardData[];
+}
+
+const { links } = Astro.props;
+
+// SAFETY: scripts/fetch-card-previews.mts writes this generated shape.
+const previews: CardPreviews = cardPreviews;
+
+const fallbackAvatar = links.map((link) => previews[link.href]).find((preview) => preview?.avatar)?.avatar
+  || Object.values(previews).find((preview) => preview?.avatar)?.avatar;
+
+const components = {
+  facebook: FacebookCard,
+  github: GitHubCard,
+  instagram: InstagramCard,
+  linkedin: LinkedInCard,
+  website: WebsiteCard,
+  x: XCard,
+};
+---
+
+{
+  links.length > 0 && (
+    <section class="-mb-4 w-full flex justify-center md:-mb-8" aria-label="Link previews">
+      <div class="grid w-full max-w-200 grid-cols-1 items-start gap-4 px-4 lg:grid-cols-2">
+        {links.map((link, index) => {
+          const { card, kind, name, username } = resolveCard(link, previews, fallbackAvatar);
+          const Component = components[kind];
+          return <Component card={card} image={previews[link.href]?.image} index={index} name={name} username={username} />;
+        })}
+      </div>
+    </section>
+  )
+}
+
+<script>
+  const images = [...document.querySelectorAll<HTMLImageElement>("[data-card-avatar], [data-card-image], [data-social-image]")];
+  const avatarSources = [...new Set(images.flatMap((image) => Object.hasOwn(image.dataset, "cardAvatar") ? [image.getAttribute("src"), image.dataset.fallbackAvatar] : []).filter((src): src is string => Boolean(src)))];
+
+  for (const image of images) {
+    const tried = new Set<string>();
+
+    const recover = () => {
+      const current = image.getAttribute("src");
+
+      if (current) {
+        tried.add(current);
+      }
+
+      const next = Object.hasOwn(image.dataset, "cardAvatar")
+        ? [image.dataset.fallbackAvatar, ...avatarSources].find((src) => src && !tried.has(src))
+        : undefined;
+
+      if (next) {
+        image.src = next;
+      } else {
+        image.remove();
+      }
+    };
+
+    image.addEventListener("error", recover);
+
+    if (image.complete && image.naturalWidth === 0) {
+      recover();
+    }
+  }
+</script>
