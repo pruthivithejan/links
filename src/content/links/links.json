@@ -1,15 +1,15 @@
 [
   {
+    "href": "https://lk.linkedin.com/in/pruthivithejan",
+    "icon": "linkedin",
+    "title": "LinkedIn",
+    "description": "Connect with me on LinkedIn."
+  },
+  {
     "href": "https://www.threads.net/@pruthivithejan",
     "icon": "threads",
     "title": "Threads",
     "description": "I post my designs, code snippets, and other content on Threads."
-  },
-  {
-    "href": "https://x.com/pruthivithejan",
-    "icon": "x",
-    "title": "X",
-    "description": "I share thoughts and updates on various topics."
   },
   {
     "href": "https://contra.com/pruthivithejan",
@@ -40,12 +40,6 @@
     "icon": "spotify",
     "title": "Spotify",
     "description": "Explore my curated playlists on Spotify."
-  },
-  {
-    "href": "https://t.me/pruthivithejan",
-    "icon": "telegram",
-    "title": "Telegram",
-    "description": "Drop a message if you want to create something or collaborate."
   },
   {
     "href": "https://buymeacoffee.com/pruthivithejan",

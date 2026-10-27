@@ -1,40 +1,17 @@
 [
   {
-    "href": "https://pruthivithejan.me/",
-    "icon": "link",
-    "label": "Website",
-    "preview": {
-      "title": "Personal site",
-      "meta": "pruthivithejan.me"
-    }
-  },
-  {
-    "href": "https://github.com/pruthivithejan",
-    "icon": "github",
-    "label": "GitHub",
-    "preview": {
-      "title": "GitHub Profile",
-      "meta": "github.com/pruthivithejan"
-    }
-  },
-  {
-    "href": "https://lk.linkedin.com/in/pruthivithejan",
-    "icon": "linkedin",
-    "label": "LinkedIn",
-    "preview": {
-      "title": "LinkedIn Profile",
-      "meta": "linkedin.com/in/pruthivithejan",
-      "description": "Connect with me on LinkedIn to explore my professional experience, network, and latest updates."
-    }
-  },
-  {
     "href": "mailto:hi@pruthivithejan.me",
     "icon": "mail",
-    "label": "Email",
-    "preview": {
-      "title": "Send an Email",
-      "meta": "hi@pruthivithejan.me",
-      "description": "Feel free to reach out directly via email for collaborations, questions, or just to say hello!"
-    }
+    "label": "Email"
+  },
+  {
+    "href": "https://t.me/pruthivithejan",
+    "icon": "telegram",
+    "label": "Telegram"
+  },
+  {
+    "href": "https://wa.me/pruthivithejan",
+    "icon": "whatsapp",
+    "label": "WhatsApp"
   }
 ]

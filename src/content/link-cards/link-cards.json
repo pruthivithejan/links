@@ -1,0 +1,22 @@
+[
+  {
+    "href": "https://pruthivithejan.me/",
+    "icon": "link",
+    "title": "Website"
+  },
+  {
+    "href": "https://showcase.pruthivithejan.me/",
+    "icon": "link",
+    "title": "Showcase"
+  },
+  {
+    "href": "https://github.com/pruthivithejan",
+    "icon": "github",
+    "title": "GitHub"
+  },
+  {
+    "href": "https://x.com/pruthivithejan",
+    "icon": "x",
+    "title": "X"
+  }
+]
