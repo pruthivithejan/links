@@ -5,6 +5,7 @@
 Welcome to **Links**, a website built with [Astro.js](https://astro.build/) and styled with [Tailwind CSS](https://tailwindcss.com/). This project provides a modern, fast, and customizable solution for developers and creators to showcase their links and social profiles on a single page.
 
 **Why this project?**
+
 - ⚡ **Ultra-fast** - Built with Astro for minimal JavaScript and blazing performance
 - 🎨 **Fully customizable** - Easy to change colors, fonts, links, and layout
 - 📱 **Responsive** - Works beautifully on all device sizes
@@ -18,23 +19,25 @@ Welcome to **Links**, a website built with [Astro.js](https://astro.build/) and 
 - [Git](https://git-scm.com/downloads) installed on your machine
 - [Bun.js](https://bun.com/)
 
-
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/pruthivithejan/links.git
 cd links
 ```
 
 2. Install dependencies:
+
 ```bash
 bun install
-# or 
+# or
 bun i
 ```
 
 3. Start the development server:
+
 ```bash
 bun run dev
 # or
@@ -63,6 +66,7 @@ Edit `src/content/personal/profile.json` to update your personal information:
 ```
 
 **Fields explained:**
+
 - `heading`: Appears in the browser tab and page title
 - `slogan.words`: Main slogan text
 - `slogan.highlight`: Part of the slogan that gets highlighted (shown in different styling)
@@ -92,10 +96,37 @@ Edit `src/content/links/links.json` to add, remove, or modify your links:
 ```
 
 **Fields explained:**
+
 - `href`: The URL the link points to
 - `icon`: Icon name (must match an SVG file in `public/` - see [Adding Icons](#adding-icons))
 - `title`: Link title displayed on the card
 - `description`: Short description of the link
+
+### Choosing where links appear
+
+Each section has its own JSON list. Add any URL to the section you want, in the order you want it displayed:
+
+- `src/content/quick-links/quick-links.json`: Compact header links with `href`, `icon`, and `label`.
+- `src/content/links/links.json`: Simple cards with `href`, `icon`, `title`, and your own `description`.
+- `src/content/link-cards/link-cards.json`: Rich previews with `href`, `icon`, and `title`.
+
+For example, a rich preview only needs:
+
+```json
+[
+  {
+    "href": "https://github.com/yourname",
+    "icon": "github",
+    "title": "GitHub"
+  }
+]
+```
+
+Rich previews select a component from the URL. GitHub, X, LinkedIn, Facebook, and Instagram have profile components; other URLs use a website preview. Removing a link from your lists keeps those components available for anyone else. An empty list hides that section.
+
+`bun run build` fetches public metadata for all three lists and stores it in `src/data/link-card-previews.json`. Run `bun run prebuild` to refresh previews during development. Avatars and media use remote URLs; there are no downloaded profile images to maintain. GitHub profiles and contributions use their APIs, X uses FxTwitter, and other sites use Open Graph and structured metadata from their public pages.
+
+When a site blocks fetching, the build keeps any previously fetched metadata for that URL. Without cached details, the card uses an avatar fetched for another configured link and hides unavailable bios, locations, and stats. It never copies another profile's details. If no avatar is available, the component keeps its initials or icon. Removed links are pruned from the cache, and duplicate URLs are fetched once.
 
 ## Customization
 
@@ -130,11 +161,12 @@ To use Google Fonts instead:
 3. Add to `src/styles/global.css`:
 
 ```css
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 @layer base {
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family:
+      "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
 }
 ```
@@ -162,16 +194,13 @@ Colors are defined using [OKLCH](https://oklch.com/) color space for modern, per
   }
 
   html {
-    background: linear-gradient(
-      to bottom,
-      oklch(0.86 0.005 283),
-      oklch(1 0 0)
-    );
+    background: linear-gradient(to bottom, oklch(0.86 0.005 283), oklch(1 0 0));
   }
 }
 ```
 
 **Quick color changes:**
+
 - **Background gradient**: Modify the `oklch()` values in the `background` property
 - **Text color**: Update the `color` property in `body`
 - **Card background**: Edit `--card-rgb` values

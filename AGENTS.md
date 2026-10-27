@@ -1,157 +1,194 @@
-# Coding Agent Guide for "Links" 🤖🚀
+# Agent guide for Links
 
-Welcome to the Developer Agent Handbook for **Links**! This document is specifically structured to help AI coding agents (such as Antigravity, Cursor, GitHub Copilot, Claude Engineer, or ChatGPT) understand this codebase instantly and assist you in customizing or building your own Linktree-style page.
+Links is a reusable personal links site. Customize the content for the person using it; keep the components available for other people and platforms.
 
----
+## Stack and commands
 
-## 🎯 How to Use This Guide
+The project uses Astro 7, TypeScript, Tailwind CSS v4, and Bun. `package.json` and `bun.lock` are the source of truth for dependency versions. The metadata scripts run TypeScript `.mts` files directly with Node; Node 24 works with this setup.
 
-If you are using an AI coding assistant, **copy and paste the System Prompt block below** into your agent's instructions (e.g., in `.cursorrules`, your Custom Instructions, or at the start of your chat session). It primes the AI to understand exactly how the project is structured and what rules to follow.
-
----
-
-## 🧠 System Prompt Addendum for AI Agents
-
-> [!TIP]
-> Copy the block below to give your AI Assistant instant expert knowledge of this repository.
-
-```markdown
-You are an expert AI developer assistant specialized in modern web development, Astro.js, Tailwind CSS v4, and TypeScript. You are helping build or customize a high-performance, aesthetically stunning developer Linktree named "Links".
-
-Here is what you need to know about the project architecture:
-
-1. Core Tech Stack:
-   - Framework: Astro.js v6 (static site generation, content collections)
-   - Styling: Tailwind CSS v4 (using the `@tailwindcss/vite` plugin inside Vite config)
-   - Package Manager: Bun (use `bun run dev`, `bun run build`, and `bun i`)
-2. Data & Content Structure:
-   - Profile Details: Managed in `src/content/personal/profile.json` (heading, slogan, GitHub handle, GA4 tracking, repo name).
-   - Core Links: Managed in `src/content/links/links.json` (href, icon, title, description).
-   - Quick Header Links: Managed in `src/content/quick-links/quick-links.json` (href, icon, label, optional manual preview config).
-   - Collections Schema: Defined in `src/content.config.ts` using Astro's `defineCollection` and Zod (`z.object`).
-
-3. Link Preview Mechanics:
-   - Scraper Script: `scripts/fetch-link-previews.mjs` runs prebuild, reads quick-links, fetches OG tags, and writes to `src/data/link-previews.json`.
-   - Hovercard Mechanics: `src/components/QuickLinks.astro` handles hovercard rendering.
-     - Server-side: Merges static metadata from `src/data/link-previews.json` with manual overrides from the JSON file.
-     - GitHub Customization: Detects GitHub profile URLs and prebuilds a contribution chart using `https://ghchart.rshah.org/<username>`.
-     - Client-side: If missing static data, fetches live metadata dynamically using the Microlink API (`https://api.microlink.io/?url=...`) with caching to prevent API spam.
-
-4. Guidelines for Code Edits:
-   - Preserve local styling and OKLCH color variables configured in `src/styles/global.css`.
-   - Ensure all interactive elements have unique and descriptive IDs or classnames.
-   - For icons, all SVG files must exist under the `public/icons/` folder, named `<name>.svg`. Refer to them in JSON files by `<name>` without the `.svg` extension.
-   - Always run verification checks (`bun run build` or Astro typechecks) when making changes to Zod schemas or components.
+```bash
+bun install
+bun run dev                         # Local development
+bun run prebuild                    # Fetch and cache public link metadata
+bun run build                       # Refresh metadata, then build dist/
+bun run preview                     # Serve the production build
+bun run check                       # Vite+ formatting and lint checks
+bun run astro build                 # Build using the existing metadata cache
+node --test scripts/card-preview.test.mts  # Metadata parsing and cache tests
 ```
 
----
+`bun run build` runs the `prebuild` lifecycle script. `bun run dev` and a direct Astro build do not refresh previews automatically. Run `bun run prebuild` after changing URLs during development.
 
-## 📂 Codebase Architecture Map
+## Make the site your own
 
-Here is the directory outline and what each part does:
+### 1. Replace the personal profile
 
-```
-├── .zed/
-│   └── settings.json           # Workspace settings for the Zed editor (tabs, Tailwind v4 class regex, format-on-save)
-├── public/
-│   ├── fonts/                  # Custom typographic fonts loaded locally
-│   └── icons/                  # SVG social/web icons named identically to JSON 'icon' fields
-├── scripts/
-│   └── fetch-link-previews.mjs # Prebuild script fetching OG meta tags to avoid slow run-time loading
-├── src/
-│   ├── components/
-│   │   ├── Hero.astro          # Personal identity banner and avatar loader
-│   │   ├── Links.astro         # List of primary links (main vertical column layout)
-│   │   └── QuickLinks.astro    # Pill-shaped quick links with premium hovercards and GH graph integration
-│   ├── content/
-│   │   ├── links/links.json    # JSON list of primary visual links
-│   │   ├── personal/profile.json # Basic metadata, slogans, and analytics IDs
-│   │   └── quick-links/        # Quick access pill links configurations
-│   ├── data/
-│   │   └── link-previews.json  # [AUTOMATED] Output of prebuild scraper
-│   ├── layouts/
-│   │   └── Layout.astro        # Base HTML wrapper, handles SEO metadata, Google Analytics, and dark mode base
-│   ├── pages/
-│   │   └── index.astro         # Root page mounting all sections and footer
-│   ├── styles/
-│   │   └── global.css          # Core CSS stylesheet utilizing Tailwind CSS v4 variables, OKLCH scales, and animations
-│   └── content.config.ts       # Astro Content Collections schemas written in Zod
+Edit `src/content/personal/profile.json`:
+
+```json
+{
+  "heading": "Your Name | Links",
+  "slogan": {
+    "words": "Your closing quote",
+    "highlight": "highlighted words"
+  },
+  "githubUsername": "yourhandle",
+  "profileName": "Your Name",
+  "profileBio": "A short introduction to what you do.",
+  "codeRepository": "links"
+}
 ```
 
----
+- `heading` sets the page title.
+- `profileName` and `profileBio` supply the hero name and introduction. Both are optional; the name falls back to `githubUsername`.
+- `githubUsername` supplies the hero's remote GitHub avatar and the owner in the footer repository URL.
+- `codeRepository` supplies the repository name in the footer's “Build Your Own” link. It does not configure the deployment base path.
+- `slogan.words` and `slogan.highlight` supply the footer quote.
+- Replace or remove the original `ga4` value. This optional field currently has no analytics loader wired up in `Layout.astro`; changing it alone does not enable analytics.
 
-## 🛠️ Common Tasks & How to Guide Your Agent
+Changing `githubUsername` does not rewrite URLs in the link lists. Replace each configured URL with the intended account or website. Accounts can have different usernames on different services.
 
-Here are exact prompt templates you can feed to your AI coder to build your own custom version of the linktree:
+### 2. Choose where each link appears
 
-### 1. Adding a New Social Link with Custom Icon
+There are three independent JSON lists. Array order controls display order within each section. Add, remove, or move entries between these files to arrange the page.
 
-- **What it requires**: Downloading a new SVG icon to `public/icons/`, adding it to `src/content/links/links.json` or `src/content/quick-links/quick-links.json`.
-- **Prompt to give your agent**:
+| Section | File | Entry fields |
+| --- | --- | --- |
+| Quick links: compact pills below the hero | `src/content/quick-links/quick-links.json` | `href`, `icon`, `label` |
+| Rich link cards: website previews and social profile cards | `src/content/link-cards/link-cards.json` | `href`, `icon`, `title` |
+| Small cards: title, description, and copy button | `src/content/links/links.json` | `href`, `icon`, `title`, `description` |
 
-  ```text
-  I want to add a new quick link to my profile:
-  URL: "https://x.com/myname"
-  Label: "X / Twitter"
-  Icon name: "twitter-x"
+The page renders the hero, quick links, rich cards, small cards, and footer in that order. `src/pages/index.astro` composes these sections. A link appears only in the lists where it is explicitly configured; an icon never promotes a small card into a rich card. Remove an entry from its previous list when moving it to avoid duplication. Use `[]` when a list is not needed.
 
-  Please do the following:
-  1. Check if public/icons/twitter-x.svg exists. If not, fetch/create a clean SVG representation for it (or use standard svg elements).
-  2. Add the entry to src/content/quick-links/quick-links.json.
-  3. Make sure to run `bun run prebuild` (or the node prebuild script) afterwards to cache the link preview metadata.
-  ```
+The current profile puts Email, Telegram, and WhatsApp in quick links; the two websites before GitHub and X in rich cards; and LinkedIn with the other small cards. These are content choices, not restrictions on the template.
 
-### 2. Changing the App Theme Colors
+#### Quick links
 
-- **What it requires**: Editing the CSS variables in `src/styles/global.css` using modern OKLCH color declarations.
-- **Prompt to give your agent**:
-  ```text
-  Let's customize the visual style and colors of the links template.
-  I want to switch to a luxurious emerald/emerald-dark color palette.
-  1. Read src/styles/global.css to see current background gradients and custom properties.
-  2. Suggest a gorgeous modern emerald-themed gradient using OKLCH colors for both light and dark mode.
-  3. Modify global.css to update the background variables, link cards hover rings, and popover borders.
-  ```
+```json
+[
+  {
+    "href": "mailto:hello@example.com",
+    "icon": "mail",
+    "label": "Email"
+  },
+  {
+    "href": "https://t.me/yourhandle",
+    "icon": "telegram",
+    "label": "Telegram"
+  },
+  {
+    "href": "https://wa.me/yourhandle",
+    "icon": "whatsapp",
+    "label": "WhatsApp"
+  }
+]
+```
 
-### 3. Adding an Interactive Feature (e.g. Share Button or Click Counter)
+Replace `yourhandle` with the actual account username. The WhatsApp example uses its username link. Use the account's own share link if it has a different format. Quick links do not render hovercards or profile details.
 
-- **What it requires**: Creating a new client-side script or modifying an existing Astro component.
-- **Prompt to give your agent**:
-  ```text
-  I want to add a "Copy Link" / "Share Profile" button inside the Hero component so users can easily copy my linktree URL to their clipboard.
-  1. Open src/components/Hero.astro.
-  2. Create a clean, responsive button with a copy-to-clipboard micro-animation and transition states.
-  3. Ensure it uses public/icons/copy.svg (creating the icon if missing).
-  4. Implement dynamic browser clipboard logic inside a client-side <script> tag in Hero.astro.
-  ```
+#### Rich cards
 
-### 4. Customizing the Metadata Prebuild Scraper
+```json
+[
+  {
+    "href": "https://example.com/",
+    "icon": "link",
+    "title": "Website"
+  },
+  {
+    "href": "https://github.com/yourhandle",
+    "icon": "github",
+    "title": "GitHub"
+  }
+]
+```
 
-- **What it requires**: Modifying `scripts/fetch-link-previews.mjs` to fetch additional metadata, increase retry logic, or skip specific domains.
-- **Prompt to give your agent**:
-  ```text
-  I want to enhance our prebuild link-preview scraper script.
-  1. Examine scripts/fetch-link-previews.mjs.
-  2. Add support for extracting meta descriptions (e.g., 'og:description' or 'description') during prebuild and saving it under a 'description' key in src/data/link-previews.json.
-  3. Ensure that if the scrape fails, we log a warning but don't break the build process.
-  ```
+The URL determines the rich card component, independently of its icon. GitHub and X profile URLs have dedicated cards; LinkedIn, Facebook, and Instagram hosts also have dedicated components. Other URLs use the website card. GitHub repository and X post URLs use website previews rather than the account profile card. Routing lives in `src/components/cards/preview.ts`.
 
----
+Website cards show the full OG image at its natural aspect ratio across the card width, with the URL and fetched description below. They have automatic height and no icon beside the displayed URL. Social card details also come from fetched metadata; do not add manual bios, avatars, locations, or counts to rich-card JSON.
 
-## ⚠️ Important Coding Gotchas for Agents
+#### Small cards
 
-Agents should be made aware of the following technical details to avoid breaking things:
+```json
+[
+  {
+    "href": "https://www.linkedin.com/in/yourhandle",
+    "icon": "linkedin",
+    "title": "LinkedIn",
+    "description": "Connect with me on LinkedIn."
+  }
+]
+```
 
-1.  **Tailwind CSS v4 CSS-First Styling**:
-    - This project uses Tailwind CSS v4. Unlike Tailwind v3, configuration is done directly in CSS files (`src/styles/global.css`) using `@theme`, rather than `tailwind.config.js`.
-    - Custom themes, utilities, and components should be defined in `src/styles/global.css`.
-2.  **Microlink API & Content Security Policies**:
-    - `QuickLinks.astro` makes client-side API requests to `api.microlink.io` to gather real-time website previews. If deploying behind strict CSP headers, ensure `api.microlink.io` and `ghchart.rshah.org` are whitelisted.
-3.  **Run Prebuild Scripts**:
-    - `src/data/link-previews.json` is a git-tracked cache. Whenever you add or edit links, run `bun run dev` or `bun run build`. Astro runs `prebuild` automatically before each build to populate previews, but running `bun run prebuild` manually will force-update them.
-4.  **Strict Astro Zod Schema**:
-    - The file `src/content.config.ts` enforces type safety. Adding fields to `links.json` or `quick-links.json` without declaring them in `content.config.ts` will trigger Zod schema validation compile errors during `bun run build`.
+Small-card descriptions are authored copy. They are separate from fetched rich-card profile details. Any platform can be placed here, even when a rich component exists for it.
 
----
+### 3. Add or reuse icons
 
-✨ _Now you're fully equipped to work seamlessly with AI to build the ultimate developer bio page!_ ✨
+Icons live in `public/icons/`. An entry with `"icon": "whatsapp"` loads `/icons/whatsapp.svg`.
+
+Check for an existing SVG before adding one. Use a clean SVG with a `viewBox`, consistent with the existing monochrome icons and theme filters. Store only the filename without `.svg` in JSON. Keep icons and reusable card components when removing someone's personal links. In particular, Facebook and Instagram remain supported even though this profile does not link to them.
+
+### 4. Replace the remaining branding
+
+`src/layouts/Layout.astro` still contains a personal fallback title, a hardcoded meta description, and favicon references. Update these for the new owner. The active favicon files are `public/pruthivi.svg` and `public/pruthivi-light.svg`; replace their artwork or point the layout to your own assets.
+
+Review the configured links, email address, footer repository, and profile introduction for the original owner's information. Keep the project license and attribution intact.
+
+### 5. Customize the theme
+
+`src/styles/global.css` owns the light/dark surface colors, typography, radii, shadows, motion tokens, and layout spacing. Tailwind v4 uses CSS-first configuration; do not introduce a Tailwind v3 configuration file.
+
+- Use the existing variables, including `--bg-page`, `--card-bg`, `--card-border`, `--text-strong`, `--text-muted`, and `--primary`, when changing the visual theme. Preserve the existing color conventions, including OKLCH where used.
+- Local fonts live in `public/fonts/`. Additional Theme Lab fonts load through the stylesheet in `Layout.astro`. When adding a selectable font, update its loading, the Theme Lab font options, and its mappings in `global.css`.
+- Theme Lab is implemented in `src/components/ThemeLab.astro`. Its choices persist in browser local storage under `links:theme-lab:v1`; they do not edit the source files or change the default theme for other visitors. Use Reset when checking source defaults.
+- Theme Lab and its trigger have opaque surfaces. On mobile below `48rem`, the trigger sits at the bottom right and the panel opens upward to the viewport width minus the page's left and right padding, using `calc()` and safe-area insets. Desktop retains a compact panel at the top right.
+- `--page-inline-padding` is shared by the page and the mobile panel: `1rem` by default, `1.5rem` from `40rem`, and `6rem` from `48rem`. Update this shared variable when changing the page gutters.
+
+### 6. Build for your host
+
+Run `bun run build` and deploy the generated `dist/` directory using your host's static-site workflow. Hosting settings belong in `astro.config.mjs` and the host configuration. If deploying under a subpath, review root-relative asset URLs as well as Astro's base setting; changing `codeRepository` alone does not handle this.
+
+## Fetched preview data
+
+`scripts/fetch-card-previews.mts` reads all three link lists and writes `src/data/link-card-previews.json`. Fetching and parsing live in `scripts/card-preview.mts`.
+
+- Each unique HTTP(S) URL is fetched once per refresh; non-web URLs such as `mailto:` are skipped.
+- Website metadata comes from public Open Graph tags and JSON-LD. GitHub profile data comes from the GitHub API, contributions from `github-contributions-api.jogruber.de`, and X profiles from FxTwitter with a public-page fallback.
+- The generated cache stores fetched fields and remote image URLs. Do not download profile avatars into `public/`, manually fill the cache, or invent missing profile information.
+- When a fetch fails or a site blocks public access, keep any previously fetched metadata for that exact URL. Without cached details, omit unavailable bios, locations, counts, and contribution data. Zero is a valid fetched count.
+- A missing or failed social avatar may reuse an avatar fetched for another configured card or link. Reuse only the image; never copy another account's name, bio, location, or metrics. If no avatar is available, retain the component's icon or initials where provided.
+- Removed URLs are pruned from the cache. New owners should refresh it after replacing the original links.
+- Rich previews render from the build cache; they do not call metadata APIs in the browser. Remote images and fonts still load when someone visits the page.
+
+There is no active Microlink hovercard pipeline, `fetch-link-previews.mjs`, or `src/data/link-previews.json`. Do not restore these older paths when making changes. A blocked site may render better as an authored small card.
+
+## Architecture
+
+| Path | Responsibility |
+| --- | --- |
+| `src/content/` | Personal profile and the three link lists |
+| `src/content.config.ts` | Astro content schemas using `astro/zod` |
+| `src/components/Hero.astro` | Profile introduction and remote GitHub avatar |
+| `src/components/QuickLinks.astro` | Compact link pills |
+| `src/components/LinkCards.astro` | Rich-card routing, fetched metadata, and image fallback handling |
+| `src/components/cards/` | Shared card shell, platform components, types, and preview helpers |
+| `src/components/Links.astro` | Small cards and copy-link behavior |
+| `src/components/ThemeLab.astro` | Theme controls, persistence, and panel behavior |
+| `src/layouts/Layout.astro` | HTML wrapper, metadata, icons, font loading, and initial theme restoration |
+| `src/pages/index.astro` | Page section composition and footer |
+| `src/styles/global.css` | Shared theme, layout, typography, and motion styles |
+| `src/data/link-card-previews.json` | Generated preview cache |
+| `scripts/card-preview.test.mts` | Preview parsing and cache regression tests |
+| `astro.config.mjs` | Astro and Tailwind Vite plugin configuration |
+| `vite.config.ts` | Vite+ formatting, lint, and staged-file checks |
+
+## Working rules and verification
+
+- Prefer content edits for personalizing or rearranging links. Preserve the reusable components and unrelated work in the checkout.
+- Keep `src/content.config.ts`, component props, and shared types in sync when introducing new content options.
+- Give interactive elements descriptive classes, data attributes, or unique IDs. Preserve keyboard access, focus restoration, ARIA state, and reduced-motion behavior.
+- For URL or link-list edits, run `bun run build` to refresh previews and validate the site. Review generated cache changes along with the content.
+- For component, schema, or styling edits that do not change URLs, run `bun run astro build` with the existing cache, plus `bun run check`.
+- When changing metadata fetching or parsing, also run `node --test scripts/card-preview.test.mts` and exercise the refresh. Network failures should warn and preserve usable cached data rather than break the site build.
+- Documentation-only changes need formatting checks, not a metadata refresh.
+- The site owner handles visual checks. Do not launch or automate a browser unless explicitly asked.
