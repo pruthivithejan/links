@@ -1,55 +1,59 @@
-import { defineCollection } from 'astro:content';
-import { z } from 'astro/zod';
+import { z } from "astro/zod";
+import { defineCollection } from "astro:content";
 
 const personalCollection = defineCollection({
-  type: 'data',
   schema: z.object({
-    heading: z.string(),
-    slogan: z.object({
-      words: z.string(),
-      highlight: z.string(),
-    }),
-    githubUsername: z.string(),
-    profileName: z.string().optional(),
-    profileBio: z.string().optional(),
     codeRepository: z.string(),
     ga4: z.string().optional(),
+    githubUsername: z.string(),
+    heading: z.string(),
+    profileBio: z.string().optional(),
+    profileName: z.string().optional(),
+    slogan: z.object({
+      highlight: z.string(),
+      words: z.string(),
+    }),
   }),
+  type: "data",
 });
 
 const linksCollection = defineCollection({
-  type: 'data',
   schema: z.array(
     z.object({
+      description: z.string(),
       href: z.url(),
       icon: z.string(),
       title: z.string(),
-      description: z.string(),
     })
   ),
+  type: "data",
 });
 
 const quickLinksCollection = defineCollection({
-  type: 'data',
   schema: z.array(
     z.object({
       href: z.url(),
       icon: z.string(),
       label: z.string(),
-      preview: z
-        .object({
-          title: z.string().optional(),
-          description: z.string().optional(),
-          meta: z.string().optional(),
-          image: z.string().optional(),
-        })
-        .optional(),
     })
   ),
+  type: "data",
+});
+
+const linkCardsCollection = defineCollection({
+  schema: z.array(
+    z.object({
+      href: z.url(),
+      icon: z.string(),
+      title: z.string(),
+    })
+  ),
+  type: "data",
 });
 
 export const collections = {
-  personal: personalCollection,
+  "link-cards": linkCardsCollection,
   links: linksCollection,
-  'quick-links': quickLinksCollection,
+  personal: personalCollection,
+  "quick-links": quickLinksCollection,
 };
