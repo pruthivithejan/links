@@ -24,6 +24,38 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Geist Pixel";
+  src: url("/fonts/GeistPixelVF.woff2") format("woff2");
+  font-weight: 400 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Geist Serif";
+  src: url("/fonts/GeistSerifVF.woff2") format("woff2");
+  font-weight: 400 900;
+  font-display: swap;
+  font-style: normal;
+}
+
 @layer base {
   :root {
     --page-inline-padding: 1rem;
@@ -298,6 +330,38 @@
     --font-leading: 1.55;
   }
 
+  html[data-font="geist"] {
+    --font-body:
+      "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+    --font-tracking: -0.011em;
+    --font-leading: 1.55;
+  }
+
+  html[data-font="geistmono"] {
+    --font-body:
+      "Geist Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco,
+      Consolas, monospace;
+    --font-tracking: -0.015em;
+    --font-leading: 1.55;
+  }
+
+  html[data-font="geistpixel"] {
+    --font-body:
+      "Geist Pixel", "Geist Mono", ui-monospace, SFMono-Regular, "SF Mono",
+      Menlo, Monaco, Consolas, monospace;
+    --font-tracking: 0.015em;
+    --font-leading: 1.6;
+  }
+
+  html[data-font="geistserif"] {
+    --font-body:
+      "Geist Serif", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+      serif;
+    --font-tracking: 0;
+    --font-leading: 1.55;
+  }
+
   html[data-heading-font="switzer"] {
     --font-heading:
       "Switzer-Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -357,6 +421,38 @@
       "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco,
       Consolas, monospace;
     --font-heading-tracking: -0.03em;
+    --font-heading-leading: 1.1;
+  }
+
+  html[data-heading-font="geist"] {
+    --font-heading:
+      "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+    --font-heading-tracking: -0.025em;
+    --font-heading-leading: 1.1;
+  }
+
+  html[data-heading-font="geistmono"] {
+    --font-heading:
+      "Geist Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco,
+      Consolas, monospace;
+    --font-heading-tracking: -0.03em;
+    --font-heading-leading: 1.1;
+  }
+
+  html[data-heading-font="geistpixel"] {
+    --font-heading:
+      "Geist Pixel", "Geist Mono", ui-monospace, SFMono-Regular, "SF Mono",
+      Menlo, Monaco, Consolas, monospace;
+    --font-heading-tracking: 0.01em;
+    --font-heading-leading: 1.15;
+  }
+
+  html[data-heading-font="geistserif"] {
+    --font-heading:
+      "Geist Serif", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+      serif;
+    --font-heading-tracking: -0.015em;
     --font-heading-leading: 1.1;
   }
 
