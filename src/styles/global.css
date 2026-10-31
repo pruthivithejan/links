@@ -9,22 +9,6 @@
 }
 
 @font-face {
-  font-family: "InstrumentSerif-Italic";
-  src: url("/fonts/InstrumentSerif-Italic.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "JetBrains Mono";
-  src: url("/fonts/JetBrainsMono-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-  font-style: normal;
-}
-
-@font-face {
   font-family: "Geist Serif";
   src: url("/fonts/GeistSerifVF.woff2") format("woff2");
   font-weight: 400 900;
@@ -106,8 +90,10 @@
     --morph-blur: 2px;
     --font-tracking: normal;
     --font-leading: normal;
+    --font-style: normal;
     --font-heading-tracking: 0.02em;
     --font-heading-leading: 1.15;
+    --font-heading-style: normal;
     --font-heading:
       "Switzer-Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
       "Helvetica Neue", Arial, sans-serif;
@@ -293,9 +279,10 @@
   }
 
   html[data-font="instrument"] {
-    --font-body: "InstrumentSerif-Italic", "Instrument Serif", Georgia, serif;
+    --font-body: "Instrument Serif", Georgia, serif;
     --font-tracking: 0.005em;
     --font-leading: 1.42;
+    --font-style: italic;
   }
 
   html[data-font="mono"] {
@@ -386,10 +373,10 @@
   }
 
   html[data-heading-font="instrument"] {
-    --font-heading:
-      "InstrumentSerif-Italic", "Instrument Serif", Georgia, serif;
+    --font-heading: "Instrument Serif", Georgia, serif;
     --font-heading-tracking: 0;
     --font-heading-leading: 1.05;
+    --font-heading-style: italic;
   }
 
   html[data-heading-font="mono"] {
@@ -452,6 +439,7 @@
   h1,
   h2 {
     font-family: var(--font-heading);
+    font-style: var(--font-heading-style);
   }
 
   body {
@@ -469,6 +457,7 @@
       var(--font-body, "Switzer-Regular"), -apple-system, BlinkMacSystemFont,
       "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif,
       "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-style: var(--font-style);
     letter-spacing: var(--font-tracking);
     line-height: var(--font-leading);
     -webkit-font-smoothing: antialiased;
@@ -546,8 +535,8 @@
 
   code {
     font-family:
-      var(--font-mono), "InstrumentSerif-Italic", source-code-pro, Menlo,
-      Monaco, Consolas, "Courier New", monospace;
+      var(--font-mono), "Instrument Serif", source-code-pro, Menlo, Monaco,
+      Consolas, "Courier New", monospace;
   }
 
   ::selection {
