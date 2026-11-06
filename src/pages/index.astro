@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
-import Links from "../components/Links.astro";
+import SmallLinks from "../components/SmallLinks.astro";
 import LinkCards from "../components/LinkCards.astro";
 import QuickLinks from "../components/QuickLinks.astro";
 import ThemeLab from "../components/ThemeLab.astro";
@@ -21,7 +21,7 @@ import { linkSections, personal } from "../content/registry.ts";
 
     <QuickLinks links={linkSections.quick} />
     <LinkCards links={linkSections.rich} />
-    <Links links={linkSections.small} />
+    <SmallLinks links={linkSections.small} />
 
     <!-- Footer: Quote on left, Build Your Own on right -->
     <footer class="w-full flex justify-center mt-12 md:mt-16">
