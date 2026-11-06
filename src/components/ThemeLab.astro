@@ -2,6 +2,7 @@
 import {
   THEME_AVATARS,
   THEME_FONTS,
+  THEME_MODES,
   THEME_PALETTES,
 } from "../features/theme/registry";
 ---
@@ -49,35 +50,34 @@ import {
       <div class="tl-section">
         <span class="tl-label">Mode</span>
         <div class="tl-seg" role="group" aria-label="Color mode">
-          <button type="button" data-mode="light" aria-pressed="false">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="4"></circle>
-              <path
-                d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"
-              ></path>
-            </svg>
-            Light
-          </button>
-          <button type="button" data-mode="dark" aria-pressed="false">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              aria-hidden="true"
-            >
-              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
-            </svg>
-            Dark
-          </button>
+          {
+            THEME_MODES.map((mode) => (
+              <button
+                type="button"
+                data-mode={mode.id}
+                aria-pressed="false"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  {mode.icon === "sun" ? (
+                    <>
+                      <circle cx="12" cy="12" r="4"></circle>
+                      <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
+                    </>
+                  ) : (
+                    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+                  )}
+                </svg>
+                {mode.label}
+              </button>
+            ))
+          }
         </div>
       </div>
 

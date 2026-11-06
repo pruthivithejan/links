@@ -1,4 +1,4 @@
-import { buildThemeTokens, normalizeHex, THEME_TOKEN_KEYS } from "./colors";
+import { buildThemeTokens, THEME_TOKEN_KEYS } from "./colors";
 import { parseStoredTheme } from "./model";
 import type { StoredTheme, ThemeState } from "./model";
 import {
@@ -7,7 +7,9 @@ import {
   DEFAULT_PALETTE_ID,
   THEME_AVATARS,
   THEME_AVATAR_VARIABLE_KEYS,
+  THEME_BOOT_STATE_ATTRIBUTE,
   THEME_FONTS,
+  THEME_MODES,
   THEME_PALETTES,
   THEME_STORAGE_KEY,
   themeAvatarVariables,
@@ -90,30 +92,16 @@ const isFontId = (value: string | undefined): value is ThemeFontId =>
   THEME_FONTS.some((font) => font.id === value);
 
 const isMode = (value: string | undefined): value is ThemeMode =>
-  value === "light" || value === "dark";
+  THEME_MODES.some((mode) => mode.id === value);
 
 const systemMode = (): ThemeMode => (media.matches ? "dark" : "light");
 
-const readStored = () => {
-  try {
-    return parseStoredTheme(localStorage.getItem(THEME_STORAGE_KEY));
-  } catch {
-    return null;
-  }
-};
+const readStored = () =>
+  parseStoredTheme(root.dataset[THEME_BOOT_STATE_ATTRIBUTE] ?? null);
 
 const stored = readStored();
 
-const storedPalette = THEME_PALETTES.find(
-  (palette) => palette.id === stored?.palette
-);
-
 const state: ThemeState = {
-  accent:
-    normalizeHex(stored?.accent) ??
-    storedPalette?.accent ??
-    defaultPalette?.accent ??
-    "#2d2d2d",
   avatar: stored?.avatar ?? DEFAULT_AVATAR_ID,
   borders: stored?.borders !== false,
   font: stored?.font ?? defaultFontId,
@@ -123,13 +111,16 @@ const state: ThemeState = {
   shadows: stored?.shadows !== false,
 };
 
+const paletteAccent = () =>
+  THEME_PALETTES.find((palette) => palette.id === state.palette)?.accent ??
+  defaultPalette?.accent ??
+  "#2d2d2d";
+
 let lastFocus: HTMLElement | null = null;
 
 const tokenKeys = THEME_TOKEN_KEYS;
 
-const isNeutralTheme = () =>
-  state.palette === defaultPalette?.id &&
-  normalizeHex(state.accent) === normalizeHex(defaultPalette?.accent);
+const isNeutralTheme = () => state.palette === defaultPalette?.id;
 
 const applyTheme = () => {
   root.classList.toggle("dark", state.mode === "dark");
@@ -139,7 +130,7 @@ const applyTheme = () => {
       root.style.removeProperty(key);
     }
   } else {
-    const tokens = buildThemeTokens(state.accent, state.mode);
+    const tokens = buildThemeTokens(paletteAccent(), state.mode);
 
     for (const [key, value] of Object.entries(tokens)) {
       root.style.setProperty(key, value);
@@ -190,8 +181,8 @@ const persistTheme = () => {
     tokens: neutral
       ? undefined
       : {
-          dark: buildThemeTokens(state.accent, "dark"),
-          light: buildThemeTokens(state.accent, "light"),
+          dark: buildThemeTokens(paletteAccent(), "dark"),
+          light: buildThemeTokens(paletteAccent(), "light"),
         },
   };
 
@@ -255,7 +246,6 @@ const setPalette = (id: string) => {
   }
 
   state.palette = palette.id;
-  state.accent = palette.accent;
   update();
 };
 
@@ -318,7 +308,6 @@ const shuffle = () => {
 
   if (palette) {
     state.palette = palette.id;
-    state.accent = palette.accent;
   }
 
   if (avatar) {
@@ -356,7 +345,6 @@ const reset = () => {
   state.shadows = true;
   state.mode = systemMode();
   state.palette = defaultPalette?.id ?? DEFAULT_PALETTE_ID;
-  state.accent = defaultPalette?.accent ?? "#2d2d2d";
   state.font = defaultFontId;
   state.headingFont = defaultFontId;
 
@@ -421,6 +409,8 @@ const closePanel = (restoreFocus = true) => {
     (lastFocus ?? trigger).focus({ preventScroll: true });
   }
 };
+
+applyTheme();
 
 syncUi();
 

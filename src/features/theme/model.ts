@@ -1,8 +1,18 @@
 import { z } from "astro/zod";
 
 import { THEME_TOKEN_KEYS } from "./colors";
-import { THEME_AVATARS, THEME_FONTS, THEME_PALETTES } from "./registry";
-import type { ThemeAvatarId, ThemeFontId, ThemePaletteId } from "./registry";
+import {
+  THEME_AVATARS,
+  THEME_FONTS,
+  THEME_MODES,
+  THEME_PALETTES,
+} from "./registry";
+import type {
+  ThemeAvatarId,
+  ThemeFontId,
+  ThemeMode,
+  ThemePaletteId,
+} from "./registry";
 
 const themeFontIdSchema = z.custom<ThemeFontId>((value) =>
   THEME_FONTS.some((font) => font.id === value)
@@ -16,7 +26,9 @@ const themeAvatarIdSchema = z.custom<ThemeAvatarId>((value) =>
   THEME_AVATARS.some((avatar) => avatar.id === value)
 );
 
-export const themeModeSchema = z.enum(["light", "dark"]);
+export const themeModeSchema = z.custom<ThemeMode>((value) =>
+  THEME_MODES.some((mode) => mode.id === value)
+);
 
 const tokenMapSchema = z
   .record(z.string(), z.string())
@@ -34,7 +46,6 @@ const themeTokensSchema = z.object({
 });
 
 export const themeStateSchema = z.object({
-  accent: z.string(),
   avatar: themeAvatarIdSchema,
   borders: z.boolean(),
   font: themeFontIdSchema,
@@ -51,8 +62,6 @@ export const storedThemeSchema = themeStateSchema
 export type ThemeState = z.infer<typeof themeStateSchema>;
 
 export type StoredTheme = z.infer<typeof storedThemeSchema>;
-
-export type { ThemeMode } from "./registry";
 
 export const parseStoredTheme = (raw: string | null): StoredTheme | null => {
   if (raw === null) {

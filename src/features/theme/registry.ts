@@ -1,4 +1,5 @@
 export const THEME_STORAGE_KEY = "links:theme-lab:v1";
+export const THEME_BOOT_STATE_ATTRIBUTE = "themeState";
 
 export const THEME_PALETTES = [
   { accent: "#2d2d2d", id: "mono", name: "Mono" },
@@ -9,6 +10,11 @@ export const THEME_PALETTES = [
   { accent: "#f43f5e", id: "rose", name: "Rose" },
   { accent: "#eab308", id: "sun", name: "Sun" },
   { accent: "#64748b", id: "ice", name: "Ice" },
+] as const;
+
+export const THEME_MODES = [
+  { icon: "sun", id: "light", label: "Light" },
+  { icon: "moon", id: "dark", label: "Dark" },
 ] as const;
 
 const systemStack =
@@ -217,7 +223,7 @@ export type ThemePaletteId = (typeof THEME_PALETTES)[number]["id"];
 
 export type ThemeAvatarId = (typeof THEME_AVATARS)[number]["id"];
 
-export type ThemeMode = "light" | "dark";
+export type ThemeMode = (typeof THEME_MODES)[number]["id"];
 
 export const GOOGLE_FONTS_HREF = `https://fonts.googleapis.com/css2?${THEME_FONTS.flatMap(
   (font) => (font.googleFamily ? [`family=${font.googleFamily}`] : [])
@@ -273,6 +279,10 @@ export const THEME_AVATAR_VARIABLES = Object.fromEntries(
   THEME_AVATARS.map((avatar) => [avatar.id, themeAvatarVariables(avatar.id)])
 );
 
-export const THEME_AVATAR_VARIABLE_KEYS = Object.keys(
-  themeAvatarVariables(DEFAULT_AVATAR_ID)
-);
+export const THEME_AVATAR_VARIABLE_KEYS = [
+  ...new Set(
+    THEME_AVATARS.flatMap((avatar) =>
+      Object.keys(themeAvatarVariables(avatar.id))
+    )
+  ),
+];

@@ -1,16 +1,30 @@
 ---
 import '../styles/global.css';
 import {
+	DEFAULT_AVATAR_ID,
+	DEFAULT_FONT_ID,
+	DEFAULT_PALETTE_ID,
 	GOOGLE_FONTS_HREF,
 	THEME_AVATAR_VARIABLES,
 	THEME_FONT_VARIABLES,
+	THEME_MODES,
+	THEME_PALETTES,
+	THEME_BOOT_STATE_ATTRIBUTE,
 	THEME_STORAGE_KEY,
 } from '../features/theme/registry';
 import { THEME_TOKEN_KEYS } from '../features/theme/colors';
 
 const themeBootConfig = {
 	avatars: THEME_AVATAR_VARIABLES,
+	defaults: {
+		avatar: DEFAULT_AVATAR_ID,
+		font: DEFAULT_FONT_ID,
+		palette: DEFAULT_PALETTE_ID,
+	},
 	fonts: THEME_FONT_VARIABLES,
+	modes: THEME_MODES,
+	palettes: Object.fromEntries(THEME_PALETTES.map(({ id, accent }) => [id, accent])),
+	stateAttribute: THEME_BOOT_STATE_ATTRIBUTE,
 	storageKey: THEME_STORAGE_KEY,
 	tokenKeys: THEME_TOKEN_KEYS,
 };
@@ -51,6 +65,38 @@ const { title, description, favicon } = Astro.props;
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href={GOOGLE_FONTS_HREF} rel="stylesheet" />
 		<script is:inline define:vars={{ themeBootConfig }}>
+			const normalizeTheme = (stored, config, systemMode) => {
+				const palette = Object.keys(config.palettes).find(
+					(id) => id === stored?.palette,
+				) ?? config.defaults.palette;
+
+				const mode = config.modes.find(
+					(option) => option.id === stored?.mode,
+				)?.id ?? systemMode;
+
+				const avatar = Object.keys(config.avatars).find(
+					(id) => id === stored?.avatar,
+				) ?? config.defaults.avatar;
+
+				const font = Object.keys(config.fonts).find(
+					(id) => id === stored?.font,
+				) ?? config.defaults.font;
+
+				const headingFont = Object.keys(config.fonts).find(
+					(id) => id === stored?.headingFont,
+				) ?? config.defaults.font;
+
+				return {
+					avatar,
+					borders: stored?.borders !== false,
+					font,
+					headingFont,
+					mode,
+					palette,
+					shadows: stored?.shadows !== false,
+				};
+			};
+
 			const applyTokens = (root, tokens, tokenKeys) => {
 				if (!tokens) {return;}
 
@@ -99,15 +145,17 @@ const { title, description, favicon } = Astro.props;
 					}
 				};
 
-				const theme = readTheme();
-				const mode = theme?.mode;
-				const isDark = mode === 'dark' || (mode !== 'light' && isSystemDark);
+				const stored = readTheme();
+				const systemMode = isSystemDark ? 'dark' : 'light';
+				const theme = normalizeTheme(stored, config, systemMode);
+				const isDark = theme.mode === 'dark';
+				root.dataset[config.stateAttribute] = JSON.stringify(theme);
 
 				root.classList.toggle('dark', isDark);
 
 				applyTokens(
 					root,
-					isDark ? theme?.tokens?.dark : theme?.tokens?.light,
+					isDark ? stored?.tokens?.dark : stored?.tokens?.light,
 					config.tokenKeys,
 				);
 
