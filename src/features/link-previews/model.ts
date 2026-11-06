@@ -14,7 +14,6 @@ export const cardMetaSchema = z.object({
   avatar: z.url().optional(),
   banner: z.url().optional(),
   connections: countSchema.optional(),
-  fallbackAvatar: z.url().optional(),
   followers: countSchema.optional(),
   following: countSchema.optional(),
   friends: countSchema.optional(),
@@ -45,9 +44,13 @@ export type CardPreview = z.infer<typeof cardPreviewSchema>;
 
 export type CardPreviews = z.infer<typeof cardPreviewsSchema>;
 
+export type ResolvedCardMeta = CardPreview & {
+  fallbackAvatar?: string;
+};
+
 export type CardData = LinkCard & {
   description?: string;
-  meta?: CardPreview;
+  meta?: ResolvedCardMeta;
 };
 
 export type CardKind =

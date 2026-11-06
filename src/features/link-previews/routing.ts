@@ -76,7 +76,6 @@ export const resolveCard = (
         fallbackAvatar,
       },
     },
-    host,
     kind,
     name: preview.name || username || card.title,
     username,
