@@ -4,7 +4,7 @@ import path from "node:path";
 import { previewLinks } from "../src/content/registry.ts";
 import { cardPreviewsSchema } from "../src/features/link-previews/model.ts";
 import type { CardPreviews } from "../src/features/link-previews/model.ts";
-import { updatePreviews } from "./card-preview.mts";
+import { updatePreviews } from "../src/features/link-previews/pipeline.ts";
 
 const root = path.join(import.meta.dirname, "..");
 

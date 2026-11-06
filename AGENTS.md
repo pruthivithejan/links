@@ -149,7 +149,7 @@ Run `bun run build` and deploy the generated `dist/` directory using your host's
 
 ## Fetched preview data
 
-`src/content/registry.ts` validates the profile and all three link lists. `scripts/fetch-card-previews.mts` refreshes the cache at `src/features/link-previews/cache.json`; provider fetching and parsing live in `scripts/card-preview.mts`.
+`src/content/registry.ts` validates the profile and all three link lists. `scripts/fetch-card-previews.mts` refreshes the cache at `src/features/link-previews/cache.json`; provider fetching, parsing, and cache updates live in `src/features/link-previews/pipeline.ts`.
 
 - Each unique HTTP(S) URL is fetched once per refresh; non-web URLs such as `mailto:` are skipped.
 - Website metadata comes from public Open Graph tags and JSON-LD. GitHub profile data comes from the GitHub API, contributions from `github-contributions-api.jogruber.de`, and X profiles from FxTwitter with a public-page fallback.
@@ -171,7 +171,7 @@ There is no active Microlink hovercard pipeline, `fetch-link-previews.mjs`, or `
 | `src/components/QuickLinks.astro` | Compact link pills |
 | `src/components/LinkCards.astro` | Rich-card routing, fetched metadata, and image fallback handling |
 | `src/components/cards/` | Shared card shell and platform components |
-| `src/features/link-previews/` | Shared preview schema, routing, and generated cache |
+| `src/features/link-previews/` | Preview schemas, provider parsing/fetching, cache updates, routing, and generated cache |
 | `src/components/Links.astro` | Small cards and copy-link behavior |
 | `src/components/ThemeLab.astro` | Theme controls, persistence, and panel behavior |
 | `src/layouts/Layout.astro` | HTML wrapper, metadata, icons, font loading, and initial theme restoration |
