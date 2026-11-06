@@ -172,7 +172,6 @@ There is no active Microlink hovercard pipeline, `fetch-link-previews.mjs`, or `
 | Path | Responsibility |
 | --- | --- |
 | `src/content/` | Personal profile, link lists, schemas, and validated registry |
-| `src/content.config.ts` | Astro collection definitions using the shared content schemas |
 | `src/components/Hero.astro` | Profile introduction and remote GitHub avatar |
 | `src/components/QuickLinks.astro` | Compact link pills |
 | `src/components/LinkCards.astro` | Rich-card routing and fetched metadata |
@@ -192,7 +191,7 @@ There is no active Microlink hovercard pipeline, `fetch-link-previews.mjs`, or `
 ## Working rules and verification
 
 - Prefer content edits for personalizing or rearranging links. Preserve the reusable components and unrelated work in the checkout.
-- Keep `src/content.config.ts`, component props, and shared types in sync when introducing new content options.
+- Keep `src/content/schemas.ts`, the validated registry, and component props in sync when introducing new content options.
 - Give interactive elements descriptive classes, data attributes, or unique IDs. Preserve keyboard access, focus restoration, ARIA state, and reduced-motion behavior.
 - For URL or link-list edits, run `bun run build` to refresh previews and validate the site. Review generated cache changes along with the content.
 - For component, schema, or styling edits that do not change URLs, run `bun run astro build` with the existing cache, plus `bun run check`.
