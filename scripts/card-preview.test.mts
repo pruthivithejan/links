@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { getKind, resolveCard } from "../src/components/cards/preview.ts";
-import { parsePreview, updatePreviews } from "./card-preview.mts";
+import {
+  parsePreview,
+  updatePreviews,
+} from "../src/features/link-previews/pipeline.ts";
+import { getKind, resolveCard } from "../src/features/link-previews/routing.ts";
 
 test("parses quoted metadata, entities, and relative images from a website", () => {
   const preview = parsePreview(
