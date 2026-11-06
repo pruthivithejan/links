@@ -16,28 +16,33 @@ const themeBootConfig = {
 };
 
 interface Props {
-	title?: string;
+	title: string;
+	description: string;
+	favicon: {
+		light: string;
+		dark: string;
+	};
 }
 
-const { title = 'Pruthivi Thejan | Links' } = Astro.props;
+const { title, description, favicon } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Pruthivi Thejan Links - Explore all my profiles and projects" />
+		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width" />
 		<link
 			rel="icon"
 			type="image/svg+xml"
-			href="/pruthivi.svg"
+			href={favicon.light}
 			media="(prefers-color-scheme: light)"
 		/>
 		<link
 			rel="icon"
 			type="image/svg+xml"
-			href="/pruthivi-light.svg"
+			href={favicon.dark}
 			media="(prefers-color-scheme: dark)"
 		/>
 		<meta name="generator" content={Astro.generator} />

@@ -9,7 +9,11 @@ import { linkSections, personal } from "../content/registry.ts";
 
 ---
 
-<Layout title={personal.heading}>
+<Layout
+  title={personal.heading}
+  description={personal.description}
+  favicon={personal.favicon}
+>
   <main
     class="flex flex-col justify-between items-center min-h-screen w-full gap-8 md:gap-12 px-(--page-inline-padding) pb-10 sm:pb-12 md:pb-24 pt-8"
   >

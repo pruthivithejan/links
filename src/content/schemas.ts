@@ -7,6 +7,11 @@ const linkSchema = z.object({
 
 export const personalProfileSchema = z.object({
   codeRepository: z.string(),
+  description: z.string(),
+  favicon: z.object({
+    dark: z.string(),
+    light: z.string(),
+  }),
   githubUsername: z.string(),
   heading: z.string(),
   profileBio: z.string().optional(),

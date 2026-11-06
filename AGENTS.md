@@ -28,6 +28,11 @@ Edit `src/content/personal/profile.json`:
 ```json
 {
   "heading": "Your Name | Links",
+  "description": "A short description of your links page.",
+  "favicon": {
+    "light": "/favicon-light.svg",
+    "dark": "/favicon-dark.svg"
+  },
   "slogan": {
     "words": "Your closing quote",
     "highlight": "highlighted words"
@@ -39,7 +44,8 @@ Edit `src/content/personal/profile.json`:
 }
 ```
 
-- `heading` sets the page title.
+- `heading` sets the page title; `description` supplies the meta description.
+- `favicon.light` and `favicon.dark` set the SVG paths for light and dark color schemes.
 - `profileName` and `profileBio` supply the hero name and introduction. Both are optional; the name falls back to `githubUsername`.
 - `githubUsername` supplies the hero's remote GitHub avatar and the owner in the footer repository URL.
 - `codeRepository` supplies the repository name in the footer's “Build Your Own” link. It does not configure the deployment base path.
@@ -129,7 +135,7 @@ Check for an existing SVG before adding one. Use a clean SVG with a `viewBox`, c
 
 ### 4. Replace the remaining branding
 
-`src/layouts/Layout.astro` still contains a personal fallback title, a hardcoded meta description, and favicon references. Update these for the new owner. The active favicon files are `public/pruthivi.svg` and `public/pruthivi-light.svg`; replace their artwork or point the layout to your own assets.
+The page title, meta description, and light/dark favicon paths are configured in `src/content/personal/profile.json`. Replace the favicon artwork in `public/` or point `favicon.light` and `favicon.dark` to your own assets.
 
 Review the configured links, email address, footer repository, and profile introduction for the original owner's information. Keep the project license and attribution intact.
 
@@ -138,8 +144,8 @@ Review the configured links, email address, footer repository, and profile intro
 `src/styles/global.css` owns the light/dark surface colors, typography, radii, shadows, motion tokens, and layout spacing. Tailwind v4 uses CSS-first configuration; do not introduce a Tailwind v3 configuration file.
 
 - Use the existing variables, including `--bg-page`, `--card-bg`, `--card-border`, `--text-strong`, `--text-muted`, and `--primary`, when changing the visual theme. Preserve the existing color conventions, including OKLCH where used.
-- Local fonts live in `public/fonts/`. Additional Theme Lab fonts load through the stylesheet in `Layout.astro`. When adding a selectable font, update its loading, the Theme Lab font options, and its mappings in `global.css`.
-- Theme Lab is implemented in `src/components/ThemeLab.astro`. Its choices persist in browser local storage under `links:theme-lab:v1`; they do not edit the source files or change the default theme for other visitors. Use Reset when checking source defaults.
+- Local fonts live in `public/fonts/`. Theme Lab font choices, metrics, and Google Fonts loading are registered in `src/features/theme/registry.ts`.
+- Theme Lab markup and styles live in `src/components/ThemeLab.astro`; validated preferences and browser behavior live in `src/features/theme/`. Choices persist in browser local storage under `links:theme-lab:v1`; they do not edit source files or change the default theme for other visitors. Use Reset when checking source defaults.
 - Theme Lab and its trigger have opaque surfaces. On mobile below `48rem`, the trigger sits at the bottom right and the panel opens upward to the viewport width minus the page's left and right padding, using `calc()` and safe-area insets. Desktop retains a compact panel at the top right.
 - `--page-inline-padding` is shared by the page and the mobile panel: `1rem` by default, `1.5rem` from `40rem`, and `6rem` from `48rem`. Update this shared variable when changing the page gutters.
 
@@ -174,8 +180,9 @@ There is no active Microlink hovercard pipeline, `fetch-link-previews.mjs`, or `
 | `src/features/link-previews/` | Preview schemas, provider parsing/fetching, cache updates, routing, and generated cache |
 | `src/components/SmallLinks.astro` | Small-card layout |
 | `src/components/links/CopyLinkButton.astro` | Copy interaction and clipboard feedback |
-| `src/components/ThemeLab.astro` | Theme controls, persistence, and panel behavior |
-| `src/layouts/Layout.astro` | HTML wrapper, metadata, icons, font loading, and initial theme restoration |
+| `src/components/ThemeLab.astro` | Theme Lab markup and scoped styles |
+| `src/features/theme/` | Theme option registry, preference validation, color tokens, and browser controller |
+| `src/layouts/Layout.astro` | HTML wrapper, profile metadata and icons, font loading, and initial theme restoration |
 | `src/pages/index.astro` | Page section composition and footer |
 | `src/styles/global.css` | Shared theme, layout, typography, and motion styles |
 | `scripts/card-preview.test.mts` | Preview parsing and cache regression tests |

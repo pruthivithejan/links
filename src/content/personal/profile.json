@@ -1,5 +1,10 @@
 {
   "heading": "Pruthivi Thejan | Links",
+  "description": "Pruthivi Thejan Links - Explore all my profiles and projects",
+  "favicon": {
+    "light": "/pruthivi.svg",
+    "dark": "/pruthivi-light.svg"
+  },
   "slogan": {
     "words": "Si vis pacem,",
     "highlight": "Para bellum"
