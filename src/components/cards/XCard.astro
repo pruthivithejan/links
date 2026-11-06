@@ -1,7 +1,19 @@
 ---
 import CardShell from "./CardShell.astro";
-import type { CardData } from "./types";
-import { formatCount } from "./preview";
+import type { CardData } from "../../features/link-previews/model.ts";
+
+const formatCount = (value: number | string) => {
+  const amount = Number(value);
+
+  if (Number.isNaN(amount)) {
+    return String(value);
+  }
+
+  return new Intl.NumberFormat("en", {
+    maximumFractionDigits: 1,
+    notation: "compact",
+  }).format(amount);
+};
 
 interface Props {
   card: CardData;

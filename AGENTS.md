@@ -102,7 +102,7 @@ Replace `yourhandle` with the actual account username. The WhatsApp example uses
 ]
 ```
 
-The URL determines the rich card component, independently of its icon. GitHub and X profile URLs have dedicated cards; LinkedIn, Facebook, and Instagram hosts also have dedicated components. Other URLs use the website card. GitHub repository and X post URLs use website previews rather than the account profile card. Routing lives in `src/components/cards/preview.ts`.
+The URL determines the rich card component, independently of its icon. GitHub and X profile URLs have dedicated cards; LinkedIn, Facebook, and Instagram hosts also have dedicated components. Other URLs use the website card. GitHub repository and X post URLs use website previews rather than the account profile card. Routing lives in `src/features/link-previews/routing.ts`.
 
 Website cards show the full OG image at its natural aspect ratio across the card width, with the URL and fetched description below. They have automatic height and no icon beside the displayed URL. Social card details also come from fetched metadata; do not add manual bios, avatars, locations, or counts to rich-card JSON.
 
@@ -149,7 +149,7 @@ Run `bun run build` and deploy the generated `dist/` directory using your host's
 
 ## Fetched preview data
 
-`scripts/fetch-card-previews.mts` reads all three link lists and writes `src/data/link-card-previews.json`. Fetching and parsing live in `scripts/card-preview.mts`.
+`src/content/registry.ts` validates the profile and all three link lists. `scripts/fetch-card-previews.mts` refreshes the cache at `src/features/link-previews/cache.json`; provider fetching and parsing live in `scripts/card-preview.mts`.
 
 - Each unique HTTP(S) URL is fetched once per refresh; non-web URLs such as `mailto:` are skipped.
 - Website metadata comes from public Open Graph tags and JSON-LD. GitHub profile data comes from the GitHub API, contributions from `github-contributions-api.jogruber.de`, and X profiles from FxTwitter with a public-page fallback.
@@ -165,18 +165,18 @@ There is no active Microlink hovercard pipeline, `fetch-link-previews.mjs`, or `
 
 | Path | Responsibility |
 | --- | --- |
-| `src/content/` | Personal profile and the three link lists |
-| `src/content.config.ts` | Astro content schemas using `astro/zod` |
+| `src/content/` | Personal profile, link lists, schemas, and validated registry |
+| `src/content.config.ts` | Astro collection definitions using the shared content schemas |
 | `src/components/Hero.astro` | Profile introduction and remote GitHub avatar |
 | `src/components/QuickLinks.astro` | Compact link pills |
 | `src/components/LinkCards.astro` | Rich-card routing, fetched metadata, and image fallback handling |
-| `src/components/cards/` | Shared card shell, platform components, types, and preview helpers |
+| `src/components/cards/` | Shared card shell and platform components |
+| `src/features/link-previews/` | Shared preview schema, routing, and generated cache |
 | `src/components/Links.astro` | Small cards and copy-link behavior |
 | `src/components/ThemeLab.astro` | Theme controls, persistence, and panel behavior |
 | `src/layouts/Layout.astro` | HTML wrapper, metadata, icons, font loading, and initial theme restoration |
 | `src/pages/index.astro` | Page section composition and footer |
 | `src/styles/global.css` | Shared theme, layout, typography, and motion styles |
-| `src/data/link-card-previews.json` | Generated preview cache |
 | `scripts/card-preview.test.mts` | Preview parsing and cache regression tests |
 | `astro.config.mjs` | Astro and Tailwind Vite plugin configuration |
 | `vite.config.ts` | Vite+ formatting, lint, and staged-file checks |

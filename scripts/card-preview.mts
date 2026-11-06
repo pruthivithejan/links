@@ -1,15 +1,15 @@
 import { z } from "astro/zod";
 import { load } from "cheerio";
 
+import type {
+  CardPreview,
+  CardPreviews,
+} from "../src/features/link-previews/model.ts";
 import {
   getKind,
   getUsername,
   parseLink,
-} from "../src/components/cards/preview.ts";
-import type {
-  CardPreview,
-  CardPreviews,
-} from "../src/components/cards/types.ts";
+} from "../src/features/link-previews/routing.ts";
 
 /* oxlint-disable promise/prefer-await-to-then, unicorn/no-useless-undefined -- These catches are Zod validation fallbacks, not promises. */
 const optionalText = z.string().trim().min(1).optional().catch(undefined);

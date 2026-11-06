@@ -5,9 +5,10 @@ import InstagramCard from "./cards/InstagramCard.astro";
 import LinkedInCard from "./cards/LinkedInCard.astro";
 import WebsiteCard from "./cards/WebsiteCard.astro";
 import XCard from "./cards/XCard.astro";
-import { resolveCard } from "./cards/preview";
-import type { CardData, CardPreviews } from "./cards/types";
-import cardPreviews from "../data/link-card-previews.json";
+import { cardPreviewsSchema } from '../features/link-previews/model.ts';
+import type { CardKind } from '../features/link-previews/model.ts';
+import { resolveCard } from "../features/link-previews/routing.ts";
+import cardPreviewsData from "../features/link-previews/cache.json";
 import type { LinkCard } from "../content/schemas.ts";
 
 interface Props {
@@ -16,8 +17,7 @@ interface Props {
 
 const { links } = Astro.props;
 
-// SAFETY: scripts/fetch-card-previews.mts writes this generated shape.
-const previews: CardPreviews = cardPreviews;
+const previews = cardPreviewsSchema.parse(cardPreviewsData);
 
 const fallbackAvatar = links.map((link) => previews[link.href]).find((preview) => preview?.avatar)?.avatar
   || Object.values(previews).find((preview) => preview?.avatar)?.avatar;
@@ -29,7 +29,7 @@ const components = {
   linkedin: LinkedInCard,
   website: WebsiteCard,
   x: XCard,
-};
+} satisfies Record<CardKind, typeof FacebookCard | typeof GitHubCard | typeof InstagramCard | typeof LinkedInCard | typeof WebsiteCard | typeof XCard>;
 ---
 
 {
