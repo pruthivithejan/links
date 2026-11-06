@@ -288,7 +288,7 @@ const shuffle = () => {
   );
 
   const fontIdList = THEME_FONTS.map((font) => font.id);
-  const modes: ThemeMode[] = ["light", "dark"];
+  const modes = THEME_MODES.map((mode) => mode.id);
 
   const pickFont = (exclude: string) => {
     const choices = fontIdList.filter((id) => id !== exclude);
