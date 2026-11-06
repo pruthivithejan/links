@@ -1,53 +1,29 @@
-import { z } from "astro/zod";
 import { defineCollection } from "astro:content";
 
+import {
+  linkCardsSchema,
+  personalProfileSchema,
+  quickLinksSchema,
+  smallLinksSchema,
+} from "./content/schemas.ts";
+
 const personalCollection = defineCollection({
-  schema: z.object({
-    codeRepository: z.string(),
-    ga4: z.string().optional(),
-    githubUsername: z.string(),
-    heading: z.string(),
-    profileBio: z.string().optional(),
-    profileName: z.string().optional(),
-    slogan: z.object({
-      highlight: z.string(),
-      words: z.string(),
-    }),
-  }),
+  schema: personalProfileSchema,
   type: "data",
 });
 
 const linksCollection = defineCollection({
-  schema: z.array(
-    z.object({
-      description: z.string(),
-      href: z.url(),
-      icon: z.string(),
-      title: z.string(),
-    })
-  ),
+  schema: smallLinksSchema,
   type: "data",
 });
 
 const quickLinksCollection = defineCollection({
-  schema: z.array(
-    z.object({
-      href: z.url(),
-      icon: z.string(),
-      label: z.string(),
-    })
-  ),
+  schema: quickLinksSchema,
   type: "data",
 });
 
 const linkCardsCollection = defineCollection({
-  schema: z.array(
-    z.object({
-      href: z.url(),
-      icon: z.string(),
-      title: z.string(),
-    })
-  ),
+  schema: linkCardsSchema,
   type: "data",
 });
 

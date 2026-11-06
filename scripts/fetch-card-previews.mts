@@ -1,28 +1,12 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { z } from "astro/zod";
-
 import type { CardPreviews } from "../src/components/cards/types.ts";
+import { previewLinks } from "../src/content/registry.ts";
 import { updatePreviews } from "./card-preview.mts";
 
 const root = path.join(import.meta.dirname, "..");
 const outputPath = path.join(root, "src", "data", "link-card-previews.json");
-const sources = ["links", "quick-links", "link-cards"];
-const linksSchema = z.array(z.object({ href: z.url() }));
-
-const lists = await Promise.all(
-  sources.map(async (source) =>
-    linksSchema.parse(
-      JSON.parse(
-        await readFile(
-          path.join(root, "src", "content", source, `${source}.json`),
-          "utf-8"
-        )
-      )
-    )
-  )
-);
 
 let previous: CardPreviews = {};
 
@@ -33,7 +17,7 @@ try {
   // The first build starts without a cache.
 }
 
-const result = await updatePreviews(lists.flat(), previous);
+const result = await updatePreviews(previewLinks, previous);
 
 await mkdir(path.dirname(outputPath), { recursive: true });
 

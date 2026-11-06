@@ -44,7 +44,6 @@ Edit `src/content/personal/profile.json`:
 - `githubUsername` supplies the hero's remote GitHub avatar and the owner in the footer repository URL.
 - `codeRepository` supplies the repository name in the footer's “Build Your Own” link. It does not configure the deployment base path.
 - `slogan.words` and `slogan.highlight` supply the footer quote.
-- Replace or remove the original `ga4` value. This optional field currently has no analytics loader wired up in `Layout.astro`; changing it alone does not enable analytics.
 
 Changing `githubUsername` does not rewrite URLs in the link lists. Replace each configured URL with the intended account or website. Accounts can have different usernames on different services.
 

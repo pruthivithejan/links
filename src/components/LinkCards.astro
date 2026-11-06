@@ -8,9 +8,10 @@ import XCard from "./cards/XCard.astro";
 import { resolveCard } from "./cards/preview";
 import type { CardData, CardPreviews } from "./cards/types";
 import cardPreviews from "../data/link-card-previews.json";
+import type { LinkCard } from "../content/schemas.ts";
 
 interface Props {
-  links: CardData[];
+  links: LinkCard[];
 }
 
 const { links } = Astro.props;

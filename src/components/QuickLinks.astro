@@ -1,9 +1,5 @@
 ---
-interface QuickLink {
-  href: string;
-  icon: string;
-  label: string;
-}
+import type { QuickLink } from "../content/schemas.ts";
 
 interface Props {
   links: QuickLink[];
@@ -13,10 +9,10 @@ const { links } = Astro.props;
 ---
 
 {
-  links?.length ? (
+  links.length ? (
     <nav class="-mx-4 -mt-4 w-full flex justify-center sm:-mx-6 md:mx-0 md:-mt-8" aria-label="Quick links">
       <div class="flex w-full max-w-[25rem] flex-wrap items-center justify-center gap-1.5 md:max-w-[36rem]">
-        {links.map((link: QuickLink, index: number) => (
+        {links.map((link, index) => (
           <a
             href={link.href}
             target="_blank"
