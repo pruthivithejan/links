@@ -5,10 +5,12 @@ import {
 	THEME_FONT_VARIABLES,
 	THEME_STORAGE_KEY,
 } from '../features/theme/registry';
+import { THEME_TOKEN_KEYS } from '../features/theme/colors';
 
 const themeBootConfig = {
 	fonts: THEME_FONT_VARIABLES,
 	storageKey: THEME_STORAGE_KEY,
+	tokenKeys: THEME_TOKEN_KEYS,
 };
 
 interface Props {
@@ -71,7 +73,9 @@ const { title = 'Pruthivi Thejan | Links' } = Astro.props;
 
 					if (tokens) {
 						for (const [property, value] of Object.entries(tokens)) {
-							root.style.setProperty(property, value);
+							if (config.tokenKeys.includes(property)) {
+								root.style.setProperty(property, value);
+							}
 						}
 					}
 				}
