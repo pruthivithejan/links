@@ -2,12 +2,14 @@
 import '../styles/global.css';
 import {
 	GOOGLE_FONTS_HREF,
+	THEME_AVATAR_VARIABLES,
 	THEME_FONT_VARIABLES,
 	THEME_STORAGE_KEY,
 } from '../features/theme/registry';
 import { THEME_TOKEN_KEYS } from '../features/theme/colors';
 
 const themeBootConfig = {
+	avatars: THEME_AVATAR_VARIABLES,
 	fonts: THEME_FONT_VARIABLES,
 	storageKey: THEME_STORAGE_KEY,
 	tokenKeys: THEME_TOKEN_KEYS,
@@ -44,6 +46,36 @@ const { title = 'Pruthivi Thejan | Links' } = Astro.props;
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href={GOOGLE_FONTS_HREF} rel="stylesheet" />
 		<script is:inline define:vars={{ themeBootConfig }}>
+			const applyTokens = (root, tokens, tokenKeys) => {
+				if (!tokens) {return;}
+
+				for (const [property, value] of Object.entries(tokens)) {
+					if (tokenKeys.includes(property)) {
+						root.style.setProperty(property, value);
+					}
+				}
+			};
+
+			const applyFont = (root, fonts, id, properties) => {
+				const variables = fonts?.[id];
+
+				if (!variables) {return;}
+
+				for (const property of properties) {
+					root.style.setProperty(property, variables[property]);
+				}
+			};
+
+			const applyAvatar = (root, avatars, id) => {
+				const variables = avatars?.[id];
+
+				if (!variables) {return;}
+
+				for (const [property, value] of Object.entries(variables)) {
+					root.style.setProperty(property, value);
+				}
+			};
+
 			(() => {
 				const root = document.documentElement;
 				const config = themeBootConfig;
@@ -68,42 +100,19 @@ const { title = 'Pruthivi Thejan | Links' } = Astro.props;
 
 				root.classList.toggle('dark', isDark);
 
-				if (theme?.tokens) {
-					const tokens = isDark ? theme.tokens.dark : theme.tokens.light;
+				applyTokens(
+					root,
+					isDark ? theme?.tokens?.dark : theme?.tokens?.light,
+					config.tokenKeys,
+				);
 
-					if (tokens) {
-						for (const [property, value] of Object.entries(tokens)) {
-							if (config.tokenKeys.includes(property)) {
-								root.style.setProperty(property, value);
-							}
-						}
-					}
-				}
+				if (theme?.borders === false) {root.dataset.borders = 'off';}
 
-				const attributes = {
-					avatar: theme?.avatar,
-					borders: theme?.borders === false ? 'off' : undefined,
-					shadows: theme?.shadows === false ? 'off' : undefined,
-				};
+				if (theme?.shadows === false) {root.dataset.shadows = 'off';}
 
-				for (const [name, value] of Object.entries(attributes)) {
-					if (value) {
-						root.dataset[name] = value;
-					}
-				}
-
-				const applyFont = (id, properties) => {
-					const variables = config.fonts?.[id];
-
-					if (!variables) {return;}
-
-					for (const property of properties) {
-						root.style.setProperty(property, variables[property]);
-					}
-				};
-
-				applyFont(theme?.font, ['--font-body', '--font-tracking', '--font-leading', '--font-style']);
-				applyFont(theme?.headingFont, ['--font-heading', '--font-heading-tracking', '--font-heading-leading', '--font-heading-style']);
+				applyFont(root, config.fonts, theme?.font, ['--font-body', '--font-tracking', '--font-leading', '--font-style']);
+				applyFont(root, config.fonts, theme?.headingFont, ['--font-heading', '--font-heading-tracking', '--font-heading-leading', '--font-heading-style']);
+				applyAvatar(root, config.avatars, theme?.avatar);
 			})();
 		</script>
 	</head>

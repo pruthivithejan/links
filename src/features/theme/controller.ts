@@ -6,9 +6,11 @@ import {
   DEFAULT_FONT_ID,
   DEFAULT_PALETTE_ID,
   THEME_AVATARS,
+  THEME_AVATAR_VARIABLE_KEYS,
   THEME_FONTS,
   THEME_PALETTES,
   THEME_STORAGE_KEY,
+  themeAvatarVariables,
   themeFontVariables,
 } from "./registry";
 import type { ThemeFontId, ThemeMode } from "./registry";
@@ -161,7 +163,11 @@ const applyTheme = () => {
     root.style.setProperty(property, headingVariables[property]);
   }
 
-  root.dataset.avatar = state.avatar;
+  for (const [property, value] of Object.entries(
+    themeAvatarVariables(state.avatar)
+  )) {
+    root.style.setProperty(property, value);
+  }
 
   if (state.borders) {
     delete root.dataset.borders;
@@ -338,9 +344,12 @@ const reset = () => {
     root.style.removeProperty(key);
   }
 
-  delete root.dataset.avatar;
   delete root.dataset.borders;
   delete root.dataset.shadows;
+
+  for (const property of THEME_AVATAR_VARIABLE_KEYS) {
+    root.style.removeProperty(property);
+  }
 
   state.avatar = DEFAULT_AVATAR_ID;
   state.borders = true;

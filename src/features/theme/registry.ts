@@ -145,10 +145,66 @@ export const THEME_FONTS = [
 ] as const;
 
 export const THEME_AVATARS = [
-  { id: "circle", name: "Rounded" },
-  { id: "squircle", name: "Squircle" },
-  { id: "square", name: "Squared" },
-  { id: "check", name: "Verified" },
+  {
+    background: "transparent",
+    borderColor: "transparent",
+    borderWidth: "0",
+    height: "8rem",
+    id: "circle",
+    imageRadius: "inherit",
+    imageTransform: "none",
+    mask: "none",
+    name: "Rounded",
+    radius: "999px",
+    shadow: "0 0 0 6px var(--theme-halo, transparent)",
+    transform: "none",
+    width: "8rem",
+  },
+  {
+    background: "transparent",
+    borderColor: "transparent",
+    borderWidth: "0",
+    height: "8rem",
+    id: "squircle",
+    imageRadius: "inherit",
+    imageTransform: "none",
+    mask: "none",
+    name: "Squircle",
+    radius: "34%",
+    shadow: "var(--shadow-card)",
+    transform: "none",
+    width: "8rem",
+  },
+  {
+    background: "transparent",
+    borderColor: "var(--card-border)",
+    borderWidth: "1px",
+    height: "8rem",
+    id: "square",
+    imageRadius: "inherit",
+    imageTransform: "none",
+    mask: "none",
+    name: "Squared",
+    radius: "12px",
+    shadow: "none",
+    transform: "none",
+    width: "8rem",
+  },
+  {
+    background: "var(--card-bg)",
+    borderColor: "transparent",
+    borderWidth: "0",
+    height: "9rem",
+    id: "check",
+    imageRadius: "0",
+    imageTransform: "none",
+    mask: "var(--mask-verified) center / 100% 100% no-repeat",
+    name: "Verified",
+    radius: "0",
+    shadow: "none",
+    transform: "none",
+    width: "9rem",
+  },
 ] as const;
 
 export const DEFAULT_FONT_ID = "switzer";
@@ -190,3 +246,33 @@ export const themeFontVariables = (id: ThemeFontId) => {
 export const THEME_FONT_VARIABLES = Object.fromEntries(
   THEME_FONTS.map((font) => [font.id, themeFontVariables(font.id)])
 ) as Record<ThemeFontId, ReturnType<typeof themeFontVariables>>;
+
+export const themeAvatarVariables = (id: ThemeAvatarId) => {
+  const avatar = THEME_AVATARS.find((preset) => preset.id === id);
+
+  if (!avatar) {
+    throw new Error(`Unknown avatar preset: ${id}`);
+  }
+
+  return {
+    "--avatar-background": avatar.background,
+    "--avatar-border-color": avatar.borderColor,
+    "--avatar-border-width": avatar.borderWidth,
+    "--avatar-height": avatar.height,
+    "--avatar-image-radius": avatar.imageRadius,
+    "--avatar-image-transform": avatar.imageTransform,
+    "--avatar-mask": avatar.mask,
+    "--avatar-radius": avatar.radius,
+    "--avatar-shadow": avatar.shadow,
+    "--avatar-transform": avatar.transform,
+    "--avatar-width": avatar.width,
+  };
+};
+
+export const THEME_AVATAR_VARIABLES = Object.fromEntries(
+  THEME_AVATARS.map((avatar) => [avatar.id, themeAvatarVariables(avatar.id)])
+);
+
+export const THEME_AVATAR_VARIABLE_KEYS = Object.keys(
+  themeAvatarVariables(DEFAULT_AVATAR_ID)
+);
