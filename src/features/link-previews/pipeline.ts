@@ -108,14 +108,16 @@ export const remoteUrl = (value?: string, base?: string) => {
     return;
   }
 
-  try {
-    const url = new URL(value, base);
+  let url: URL;
 
-    if (["http:", "https:"].includes(url.protocol)) {
-      return url.href;
-    }
+  try {
+    url = new URL(value, base);
   } catch {
-    // Invalid image and non-web URLs are omitted.
+    return;
+  }
+
+  if (["http:", "https:"].includes(url.protocol)) {
+    return url.href;
   }
 };
 

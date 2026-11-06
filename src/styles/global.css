@@ -20,7 +20,6 @@
   :root {
     --page-inline-padding: 1rem;
 
-    /* Surfaces */
     --bg-page: #fdfdfd;
     --card-bg: #ffffff;
     --card-bg-hover: color-mix(in srgb, var(--card-bg) 99%, #000 1%);
@@ -33,12 +32,10 @@
     --chip-bg-hover: #f1f1f1;
     --chip-bg-pressed: #eae9e9;
 
-    /* Text */
     --text-strong: #0d0d0d;
     --text-muted: #6c6c6c;
     --text-subtle: #767676;
 
-    /* Copy control */
     --copy-bg: rgba(255, 255, 255, 0.9);
     --copy-bg-tint: #bfc0cb;
     --copy-bg-hover: #f1f1f1;
@@ -46,7 +43,6 @@
     --icon-color: #0d0d0d;
     --icon-color-muted: rgba(13, 13, 13, 0.6);
 
-    /* Shadows — light mode layered rings */
     --shadow-card:
       var(--card-shadow), inset 0 0 0 1px var(--card-border),
       inset 0 -1px 0 0 var(--card-border);
@@ -60,13 +56,11 @@
       0 4px 42px 0 rgba(0, 0, 0, 0.06), 0 2px 6px 0 rgba(0, 0, 0, 0.05),
       0 0 0 1px rgba(0, 0, 0, 0.06);
 
-    /* Radii */
     --radius-card: 12px;
     --radius-chip: 50px;
     --radius-copy: 24px;
     --radius-ghost: 8px;
 
-    /* Motion */
     --text-swap-dur: 150ms;
     --text-swap-translate-y: 4px;
     --text-swap-blur: 2px;
@@ -98,7 +92,6 @@
       "Switzer-Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
       "Helvetica Neue", Arial, sans-serif;
 
-    /* Semantic aliases (existing components) */
     --background: var(--bg-page);
     --foreground: var(--text-strong);
     --card: var(--card-bg);

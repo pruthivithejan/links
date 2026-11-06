@@ -144,8 +144,8 @@ Review the configured links, email address, footer repository, and profile intro
 `src/styles/global.css` owns the light/dark surface colors, typography, radii, shadows, motion tokens, and layout spacing. Tailwind v4 uses CSS-first configuration; do not introduce a Tailwind v3 configuration file.
 
 - Use the existing variables, including `--bg-page`, `--card-bg`, `--card-border`, `--text-strong`, `--text-muted`, and `--primary`, when changing the visual theme. Preserve the existing color conventions, including OKLCH where used.
-- Local fonts live in `public/fonts/`. Theme Lab font choices, metrics, and Google Fonts loading are registered in `src/features/theme/registry.ts`.
-- Theme Lab markup and styles live in `src/components/ThemeLab.astro`; validated preferences and browser behavior live in `src/features/theme/`. Choices persist in browser local storage under `links:theme-lab:v1`; they do not edit source files or change the default theme for other visitors. Use Reset when checking source defaults.
+- Local fonts live in `public/fonts/`. Theme Lab modes, palettes, fonts, avatar presets, and font loading are registered in `src/features/theme/registry.ts`.
+- Theme Lab markup and styles live in `src/components/ThemeLab.astro`; validated preferences and browser behavior live in `src/features/theme/`. The head script normalizes stored preferences once, then the controller reads that same state. Choices persist in browser local storage under `links:theme-lab:v1`; they do not edit source files or change the default theme for other visitors. Use Reset when checking source defaults.
 - Theme Lab and its trigger have opaque surfaces. On mobile below `48rem`, the trigger sits at the bottom right and the panel opens upward to the viewport width minus the page's left and right padding, using `calc()` and safe-area insets. Desktop retains a compact panel at the top right.
 - `--page-inline-padding` is shared by the page and the mobile panel: `1rem` by default, `1.5rem` from `40rem`, and `6rem` from `48rem`. Update this shared variable when changing the page gutters.
 
