@@ -45,36 +45,3 @@ const components = {
     </section>
   )
 }
-
-<script>
-  const images = [...document.querySelectorAll<HTMLImageElement>("[data-card-avatar], [data-card-image], [data-social-image]")];
-  const avatarSources = [...new Set(images.flatMap((image) => Object.hasOwn(image.dataset, "cardAvatar") ? [image.getAttribute("src"), image.dataset.fallbackAvatar] : []).filter((src): src is string => Boolean(src)))];
-
-  for (const image of images) {
-    const tried = new Set<string>();
-
-    const recover = () => {
-      const current = image.getAttribute("src");
-
-      if (current) {
-        tried.add(current);
-      }
-
-      const next = Object.hasOwn(image.dataset, "cardAvatar")
-        ? [image.dataset.fallbackAvatar, ...avatarSources].find((src) => src && !tried.has(src))
-        : undefined;
-
-      if (next) {
-        image.src = next;
-      } else {
-        image.remove();
-      }
-    };
-
-    image.addEventListener("error", recover);
-
-    if (image.complete && image.naturalWidth === 0) {
-      recover();
-    }
-  }
-</script>

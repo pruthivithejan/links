@@ -1,5 +1,7 @@
 ---
 import CardShell from "./CardShell.astro";
+import PreviewImage from "./PreviewImage.astro";
+import ProfileInitials from "./ProfileInitials.astro";
 import type { CardData } from "../../features/link-previews/model.ts";
 
 interface Props {
@@ -12,18 +14,10 @@ interface Props {
 const { card, index, name, username } = Astro.props;
 
 const { meta } = card;
-const displayName = meta?.name || name || username;
+const displayName = name;
 const headline = meta?.headline;
 const avatar = meta?.avatar;
 const banner = meta?.banner;
-
-const initials = displayName
-  .split(/\s+/u)
-  .map((part) => part[0])
-  .filter(Boolean)
-  .slice(0, 2)
-  .join("")
-  .toUpperCase();
 ---
 
 <CardShell card={card} index={index} kind="linkedin" username={username}>
@@ -31,15 +25,7 @@ const initials = displayName
     {
       banner && (
         <div class="relative h-20 w-full shrink-0 overflow-hidden">
-          <img
-            src={banner}
-            alt=""
-            class="absolute inset-0 h-full w-full object-cover"
-            loading="lazy"
-            decoding="async"
-            referrerpolicy="no-referrer"
-            data-social-image
-          />
+          <PreviewImage classes="absolute inset-0 h-full w-full object-cover" src={banner} />
         </div>
       )
     }
@@ -51,23 +37,14 @@ const initials = displayName
         class={`flex items-end justify-between ${banner ? "-mt-10" : ""}`}
       >
         <div class="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-(--card-bg) bg-[linear-gradient(135deg,#0a66c2,#004182)] text-lg font-semibold text-white">
-          <span
-            class="absolute inset-0 flex items-center justify-center"
-            aria-hidden="true"
-          >
-            {initials || "in"}
-          </span>
+          <ProfileInitials classes="absolute inset-0 flex items-center justify-center" name={displayName} fallback="in" />
           {
             avatar && (
-              <img
+              <PreviewImage
                 src={avatar}
-                alt=""
-                class="relative h-full w-full object-cover"
-                loading="lazy"
-                decoding="async"
-                referrerpolicy="no-referrer"
-                data-card-avatar
-                data-fallback-avatar={meta?.fallbackAvatar}
+                avatar
+                classes="relative h-full w-full object-cover"
+                fallbackAvatar={meta?.fallbackAvatar}
               />
             )
           }

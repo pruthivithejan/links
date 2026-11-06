@@ -1,0 +1,13 @@
+---
+import { getInitials } from "./identity.ts";
+
+interface Props {
+  classes: string;
+  fallback: string;
+  name: string;
+}
+
+const { classes, fallback, name } = Astro.props;
+---
+
+<span class={classes} aria-hidden="true">{getInitials(name) || fallback}</span>

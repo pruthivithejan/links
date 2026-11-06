@@ -1,5 +1,7 @@
 ---
 import CardShell from "./CardShell.astro";
+import PreviewImage from "./PreviewImage.astro";
+import ProfileInitials from "./ProfileInitials.astro";
 import type { CardData } from "../../features/link-previews/model.ts";
 
 interface Props {
@@ -12,17 +14,9 @@ interface Props {
 const { card, index, name, username } = Astro.props;
 
 const { meta } = card;
-const displayName = meta?.name || name || username;
+const displayName = name;
 const bio = meta?.headline;
 const avatar = meta?.avatar;
-
-const initials = displayName
-  .split(/\s+/u)
-  .map((part) => part[0])
-  .filter(Boolean)
-  .slice(0, 2)
-  .join("")
-  .toUpperCase();
 
 const metrics = [
   meta?.posts === undefined ? "" : `${meta.posts} posts`,
@@ -37,23 +31,14 @@ const metrics = [
       <div class="shrink-0 rounded-full bg-[conic-gradient(from_180deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5,#feda75)] p-[3px]">
         <div class="rounded-full bg-(--card-bg) p-[3px]">
           <div class="relative flex h-18 w-18 items-center justify-center overflow-hidden rounded-full bg-(--chip-bg) text-base font-semibold text-(--text-muted)">
-            <span
-              class="absolute inset-0 flex items-center justify-center"
-              aria-hidden="true"
-            >
-              {initials || "ig"}
-            </span>
+            <ProfileInitials classes="absolute inset-0 flex items-center justify-center" name={displayName} fallback="ig" />
             {
               avatar && (
-                <img
+                <PreviewImage
                   src={avatar}
-                  alt=""
-                  class="relative h-full w-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                  referrerpolicy="no-referrer"
-                  data-card-avatar
-                  data-fallback-avatar={meta?.fallbackAvatar}
+                  avatar
+                  classes="relative h-full w-full object-cover"
+                  fallbackAvatar={meta?.fallbackAvatar}
                 />
               )
             }

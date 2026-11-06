@@ -1,5 +1,6 @@
 ---
 import CardShell from "./CardShell.astro";
+import PreviewImage from "./PreviewImage.astro";
 import type { CardData } from "../../features/link-previews/model.ts";
 
 interface Props {
@@ -26,15 +27,11 @@ const displayUrl = card.href.replace(/^https?:\/\//u, "").replace(/\/$/u, "");
       </div>
       {
         image && (
-          <img
+          <PreviewImage
             src={image}
-            alt=""
-            class="relative block h-auto w-full"
+            classes="relative block h-auto w-full"
             width={1200}
             height={630}
-            loading="lazy"
-            decoding="async"
-            data-card-image
           />
         )
       }
@@ -56,7 +53,7 @@ const displayUrl = card.href.replace(/^https?:\/\//u, "").replace(/\/$/u, "");
 </CardShell>
 
 <style>
-  .website-card-media:not(:has([data-card-image])) {
+  .website-card-media:not(:has([data-preview-image])) {
     aspect-ratio: 1200 / 630;
   }
 </style>

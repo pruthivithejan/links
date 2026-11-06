@@ -169,8 +169,8 @@ There is no active Microlink hovercard pipeline, `fetch-link-previews.mjs`, or `
 | `src/content.config.ts` | Astro collection definitions using the shared content schemas |
 | `src/components/Hero.astro` | Profile introduction and remote GitHub avatar |
 | `src/components/QuickLinks.astro` | Compact link pills |
-| `src/components/LinkCards.astro` | Rich-card routing, fetched metadata, and image fallback handling |
-| `src/components/cards/` | Shared card shell and platform components |
+| `src/components/LinkCards.astro` | Rich-card routing and fetched metadata |
+| `src/components/cards/` | Shared card shell, image recovery, and platform components |
 | `src/features/link-previews/` | Preview schemas, provider parsing/fetching, cache updates, routing, and generated cache |
 | `src/components/Links.astro` | Small cards and copy-link behavior |
 | `src/components/ThemeLab.astro` | Theme controls, persistence, and panel behavior |

@@ -1,5 +1,6 @@
 ---
 import CardShell from "./CardShell.astro";
+import PreviewImage from "./PreviewImage.astro";
 import type { CardData } from "../../features/link-previews/model.ts";
 
 const formatCount = (value: number | string) => {
@@ -34,13 +35,9 @@ const joined = joinedDate && !Number.isNaN(joinedDate.getTime())
 <CardShell card={card} index={index} kind="x" username={username}>
   <div class="flex h-full flex-col">
     <div class="card-media-fallback relative h-28 w-full shrink-0 overflow-hidden">
-      {meta?.banner && <img
+      {meta?.banner && <PreviewImage
         src={meta.banner}
-        alt=""
-        class="absolute inset-0 h-full w-full object-cover"
-        data-social-image
-        loading="lazy"
-        referrerpolicy="no-referrer"
+        classes="absolute inset-0 h-full w-full object-cover"
       />}
     </div>
 
@@ -59,14 +56,11 @@ const joined = joinedDate && !Number.isNaN(joinedDate.getTime())
               height={20}
             />
           </span>
-          {meta?.avatar && <img
+          {meta?.avatar && <PreviewImage
             src={meta.avatar}
-            alt=""
-            class="relative h-full w-full object-cover"
-            data-card-avatar
-            data-fallback-avatar={meta.fallbackAvatar}
-            loading="lazy"
-            referrerpolicy="no-referrer"
+            avatar
+            classes="relative h-full w-full object-cover"
+            fallbackAvatar={meta.fallbackAvatar}
           />}
         </div>
         <img

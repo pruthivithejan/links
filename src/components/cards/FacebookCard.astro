@@ -1,5 +1,7 @@
 ---
 import CardShell from "./CardShell.astro";
+import PreviewImage from "./PreviewImage.astro";
+import ProfileInitials from "./ProfileInitials.astro";
 import type { CardData } from "../../features/link-previews/model.ts";
 
 interface Props {
@@ -12,18 +14,10 @@ interface Props {
 const { card, index, name, username } = Astro.props;
 
 const { meta } = card;
-const displayName = meta?.name || name || username;
+const displayName = name;
 const bio = meta?.headline;
 const avatar = meta?.avatar;
 const banner = meta?.banner;
-
-const initials = displayName
-  .split(/\s+/u)
-  .map((part) => part[0])
-  .filter(Boolean)
-  .slice(0, 2)
-  .join("")
-  .toUpperCase();
 
 const stats = [
   meta?.followers === undefined ? "" : `${meta.followers} followers`,
@@ -38,15 +32,7 @@ const stats = [
     {
       banner && (
         <div class="relative h-24 w-full shrink-0 overflow-hidden">
-          <img
-            src={banner}
-            alt=""
-            class="absolute inset-0 h-full w-full object-cover"
-            loading="lazy"
-            decoding="async"
-            referrerpolicy="no-referrer"
-            data-social-image
-          />
+          <PreviewImage classes="absolute inset-0 h-full w-full object-cover" src={banner} />
         </div>
       )
     }
@@ -58,23 +44,14 @@ const stats = [
         class={`flex items-end justify-between ${banner ? "-mt-10" : ""}`}
       >
         <div class="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-(--card-bg) bg-[linear-gradient(135deg,#1877f2,#0c4082)] text-lg font-semibold text-white">
-          <span
-            class="absolute inset-0 flex items-center justify-center"
-            aria-hidden="true"
-          >
-            {initials || "f"}
-          </span>
+          <ProfileInitials classes="absolute inset-0 flex items-center justify-center" name={displayName} fallback="f" />
           {
             avatar && (
-              <img
+              <PreviewImage
                 src={avatar}
-                alt=""
-                class="relative h-full w-full object-cover"
-                loading="lazy"
-                decoding="async"
-                referrerpolicy="no-referrer"
-                data-card-avatar
-                data-fallback-avatar={meta?.fallbackAvatar}
+                avatar
+                classes="relative h-full w-full object-cover"
+                fallbackAvatar={meta?.fallbackAvatar}
               />
             )
           }

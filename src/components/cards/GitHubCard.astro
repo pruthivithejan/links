@@ -1,5 +1,6 @@
 ---
 import CardShell from "./CardShell.astro";
+import PreviewImage from "./PreviewImage.astro";
 import type { CardData } from "../../features/link-previews/model.ts";
 
 interface Props {
@@ -17,17 +18,13 @@ const contributions = meta?.contributions?.slice(-119);
 <CardShell card={card} index={index} kind="github" username={username}>
   <div class="flex h-full flex-col p-4 pb-4 md:p-5 md:pb-4">
     <div class="mb-3 flex items-center gap-3">
-      {meta?.avatar && <img
+      {meta?.avatar && <PreviewImage
         src={meta.avatar}
-        alt=""
-        class="h-10 w-10 shrink-0 rounded-full border border-(--border) bg-(--chip-bg) object-cover"
+        avatar
+        classes="h-10 w-10 shrink-0 rounded-full border border-(--border) bg-(--chip-bg) object-cover"
+        fallbackAvatar={meta.fallbackAvatar}
         width={40}
         height={40}
-        loading="lazy"
-        decoding="async"
-        referrerpolicy="no-referrer"
-        data-card-avatar
-        data-fallback-avatar={meta.fallbackAvatar}
       />}
       <div class="min-w-0">
         <p
