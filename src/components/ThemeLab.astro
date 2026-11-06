@@ -1,94 +1,9 @@
 ---
-const palettes = [
-  { accent: "#2d2d2d", id: "mono", name: "Mono" },
-  { accent: "#7c5cff", id: "violet", name: "Violet" },
-  { accent: "#f97316", id: "ember", name: "Ember" },
-  { accent: "#0ea5e9", id: "ocean", name: "Ocean" },
-  { accent: "#10b981", id: "forest", name: "Forest" },
-  { accent: "#f43f5e", id: "rose", name: "Rose" },
-  { accent: "#eab308", id: "sun", name: "Sun" },
-  { accent: "#64748b", id: "ice", name: "Ice" },
-];
-
-const fonts = [
-  {
-    id: "switzer",
-    name: "Switzer",
-    stack:
-      '"Switzer-Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-  },
-  {
-    id: "manrope",
-    name: "Manrope",
-    stack:
-      '"Manrope", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-  },
-  {
-    id: "dmsans",
-    name: "DM Sans",
-    stack:
-      '"DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-  },
-  {
-    id: "grotesk",
-    name: "Space Grotesk",
-    stack:
-      '"Space Grotesk", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-  },
-  {
-    id: "playfair",
-    name: "Playfair Display",
-    stack:
-      '"Playfair Display", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif',
-  },
-  {
-    id: "lora",
-    name: "Lora",
-    stack: '"Lora", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif',
-  },
-  {
-    id: "instrument",
-    name: "Instrument Serif",
-    stack: '"Instrument Serif", Georgia, serif',
-  },
-  {
-    id: "mono",
-    name: "JetBrains Mono",
-    stack:
-      '"JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace',
-  },
-  {
-    id: "geist",
-    name: "Geist",
-    stack:
-      '"Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-  },
-  {
-    id: "geistmono",
-    name: "Geist Mono",
-    stack:
-      '"Geist Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace',
-  },
-  {
-    id: "geistpixel",
-    name: "Geist Pixel",
-    stack:
-      '"Geist Pixel", "Geist Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace',
-  },
-  {
-    id: "geistserif",
-    name: "Geist Serif",
-    stack:
-      '"Geist Serif", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif',
-  },
-];
-
-const avatarPresets = [
-  { id: "circle", name: "Rounded" },
-  { id: "squircle", name: "Squircle" },
-  { id: "square", name: "Squared" },
-  { id: "check", name: "Verified" },
-];
+import {
+  THEME_AVATARS,
+  THEME_FONTS,
+  THEME_PALETTES,
+} from "../features/theme/registry";
 ---
 
 <aside
@@ -170,7 +85,7 @@ const avatarPresets = [
         <span class="tl-label">Profiles</span>
         <div class="tl-palettes" role="group" aria-label="Theme profiles">
           {
-            palettes.map((palette) => (
+            THEME_PALETTES.map((palette) => (
               <button
                 type="button"
                 class="tl-palette"
@@ -198,7 +113,7 @@ const avatarPresets = [
                 aria-label="Title font"
               >
                 {
-                  fonts.map((font) => (
+                  THEME_FONTS.map((font) => (
                     <option value={font.id} style={`font-family:${font.stack}`}>
                       {font.name}
                     </option>
@@ -216,7 +131,7 @@ const avatarPresets = [
                 aria-label="Body font"
               >
                 {
-                  fonts.map((font) => (
+                  THEME_FONTS.map((font) => (
                     <option value={font.id} style={`font-family:${font.stack}`}>
                       {font.name}
                     </option>
@@ -263,7 +178,7 @@ const avatarPresets = [
           <span class="tl-label">Avatar</span>
           <div class="tl-seg tl-seg--avatar" role="group" aria-label="Avatar">
             {
-              avatarPresets.map((preset) => (
+              THEME_AVATARS.map((preset) => (
                 <button
                   type="button"
                   data-avatar-preset={preset.id}
@@ -882,7 +797,9 @@ const avatarPresets = [
 </style>
 
 <script>
-  const STORAGE_KEY = "links:theme-lab:v1";
+  import { DEFAULT_AVATAR_ID, DEFAULT_FONT_ID, DEFAULT_PALETTE_ID, THEME_AVATARS, THEME_FONTS, THEME_PALETTES, THEME_STORAGE_KEY, themeFontVariables } from '../features/theme/registry';
+import type { ThemeFontId } from '../features/theme/registry';
+
   const root = document.documentElement;
 
   const morph = document.querySelector<HTMLElement>("[data-theme-lab]");
@@ -937,27 +854,24 @@ const avatarPresets = [
     id: button.dataset.avatarPreset ?? "circle",
   }));
 
-  const fontIds = new Set(
-    Array.from(bodyFontSelect?.options ?? [], (option) => option.value)
-  );
-
   const defaultPalette =
-    palettes.find((palette) => palette.id === "mono") ?? palettes[0];
+    THEME_PALETTES.find((palette) => palette.id === DEFAULT_PALETTE_ID) ??
+    THEME_PALETTES[0];
 
-  const defaultFontId = "switzer";
+  const defaultFontId = DEFAULT_FONT_ID;
 
   const media = window.matchMedia("(prefers-color-scheme: dark)");
 
   type Mode = "light" | "dark";
 
-  type AvatarPreset = "circle" | "squircle" | "square" | "check";
+  type AvatarPreset = (typeof THEME_AVATARS)[number]["id"];
 
   interface StoredTheme {
     mode: Mode;
     palette: string;
     accent: string;
-    font: string;
-    headingFont: string;
+    font: ThemeFontId;
+    headingFont: ThemeFontId;
     avatar: AvatarPreset;
     borders: boolean;
     shadows: boolean;
@@ -968,16 +882,16 @@ const avatarPresets = [
     value === "light" || value === "dark";
 
   const isAvatarPreset = (value: string | undefined): value is AvatarPreset =>
-    value === "circle" ||
-    value === "squircle" ||
-    value === "square" ||
-    value === "check";
+    THEME_AVATARS.some((preset) => preset.id === value);
+
+  const isFontId = (value: string | undefined): value is ThemeFontId =>
+    THEME_FONTS.some((font) => font.id === value);
 
   const systemMode = (): Mode => (media.matches ? "dark" : "light");
 
   const readStored = (): StoredTheme | null => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(THEME_STORAGE_KEY);
 
       if (!raw) {
         return null;
@@ -1026,14 +940,12 @@ const avatarPresets = [
       storedPalette?.accent ??
       defaultPalette?.accent ??
       "#2d2d2d",
-    avatar: isAvatarPreset(stored?.avatar) ? stored.avatar : "circle",
+    avatar: isAvatarPreset(stored?.avatar) ? stored.avatar : DEFAULT_AVATAR_ID,
     borders: stored?.borders !== false,
-    font: fontIds.has(stored?.font ?? "") ? (stored?.font ?? "") : defaultFontId,
-    headingFont: fontIds.has(stored?.headingFont ?? "")
-      ? (stored?.headingFont ?? "")
-      : defaultFontId,
+    font: isFontId(stored?.font) ? stored.font : defaultFontId,
+    headingFont: isFontId(stored?.headingFont) ? stored.headingFont : defaultFontId,
     mode: isMode(stored?.mode) ? stored.mode : systemMode(),
-    palette: storedPalette?.id ?? defaultPalette?.id ?? "mono",
+    palette: storedPalette?.id ?? defaultPalette?.id ?? DEFAULT_PALETTE_ID,
     shadows: stored?.shadows !== false,
   };
 
@@ -1163,14 +1075,7 @@ const avatarPresets = [
     normalizeHex(state.accent) === normalizeHex(defaultPalette?.accent);
 
   const applyTheme = () => {
-    const font = fontIds.has(state.font) ? state.font : defaultFontId;
-
-    const headingFont = fontIds.has(state.headingFont)
-      ? state.headingFont
-      : defaultFontId;
-
     root.classList.toggle("dark", state.mode === "dark");
-    root.dataset.theme = state.mode;
 
     if (isNeutralTheme()) {
       for (const key of tokenKeys) {
@@ -1184,16 +1089,21 @@ const avatarPresets = [
       }
     }
 
-    if (font === defaultFontId) {
-      delete root.dataset.font;
-    } else {
-      root.dataset.font = font;
+    for (const [property, value] of Object.entries(
+      themeFontVariables(state.font),
+    )) {
+      root.style.setProperty(property, value);
     }
 
-    if (headingFont === defaultFontId) {
-      delete root.dataset.headingFont;
-    } else {
-      root.dataset.headingFont = headingFont;
+    const headingVariables = themeFontVariables(state.headingFont);
+
+    for (const property of [
+      "--font-heading",
+      "--font-heading-tracking",
+      "--font-heading-leading",
+      "--font-heading-style",
+    ] as const) {
+      root.style.setProperty(property, headingVariables[property]);
     }
 
     root.dataset.avatar = state.avatar;
@@ -1225,7 +1135,7 @@ const avatarPresets = [
     };
 
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(payload));
     } catch {
       /* storage can be unavailable in private windows */
     }
@@ -1289,7 +1199,7 @@ const avatarPresets = [
   };
 
   const setFont = (id: string) => {
-    if (!fontIds.has(id)) {
+    if (!isFontId(id)) {
       return;
     }
 
@@ -1298,7 +1208,7 @@ const avatarPresets = [
   };
 
   const setHeadingFont = (id: string) => {
-    if (!fontIds.has(id)) {
+    if (!isFontId(id)) {
       return;
     }
 
@@ -1324,7 +1234,7 @@ const avatarPresets = [
       (preset) => preset.id !== state.avatar
     );
 
-    const fontIdList = [...fontIds];
+    const fontIdList = THEME_FONTS.map((font) => font.id);
     const modes: Mode[] = ["light", "dark"];
 
     const pickFont = (exclude: string) => {
@@ -1360,18 +1270,11 @@ const avatarPresets = [
     state.mode = mode;
     state.shadows = Math.random() < 0.5;
     update();
-
-    if (shuffleButton) {
-      shuffleButton.dataset.busy = "true";
-      window.setTimeout(() => {
-        shuffleButton.dataset.busy = "false";
-      }, 480);
-    }
   };
 
   const reset = () => {
     try {
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(THEME_STORAGE_KEY);
     } catch {
       /* ignore */
     }
@@ -1380,21 +1283,24 @@ const avatarPresets = [
       root.style.removeProperty(key);
     }
 
-    delete root.dataset.theme;
-    delete root.dataset.font;
-    delete root.dataset.headingFont;
     delete root.dataset.avatar;
     delete root.dataset.borders;
     delete root.dataset.shadows;
 
-    state.avatar = "circle";
+    state.avatar = DEFAULT_AVATAR_ID;
     state.borders = true;
     state.shadows = true;
     state.mode = systemMode();
-    state.palette = defaultPalette?.id ?? "mono";
+    state.palette = defaultPalette?.id ?? DEFAULT_PALETTE_ID;
     state.accent = defaultPalette?.accent ?? "#2d2d2d";
     state.font = defaultFontId;
     state.headingFont = defaultFontId;
+
+    for (const [property, value] of Object.entries(
+      themeFontVariables(defaultFontId),
+    )) {
+      root.style.setProperty(property, value);
+    }
 
     root.classList.toggle("dark", state.mode === "dark");
     syncUi();
