@@ -6,6 +6,9 @@ import {
   THEME_FONTS,
   THEME_MODES,
   THEME_PALETTES,
+  THEME_QR_COLORS,
+  THEME_QR_CORNERS,
+  THEME_QR_STYLES,
 } from "./registry";
 import type {
   ThemeAvatarId,
@@ -52,6 +55,9 @@ export const themeStateSchema = z.object({
   headingFont: themeFontIdSchema,
   mode: themeModeSchema,
   palette: themePaletteIdSchema,
+  qrColor: z.enum(THEME_QR_COLORS.map(({ id }) => id)),
+  qrCorners: z.enum(THEME_QR_CORNERS.map(({ id }) => id)),
+  qrStyle: z.enum(THEME_QR_STYLES.map(({ id }) => id)),
   shadows: z.boolean(),
 });
 

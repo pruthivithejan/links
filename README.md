@@ -55,13 +55,20 @@ Edit `src/content/personal/profile.json` to update your personal information:
 ```json
 {
   "heading": "Your Name | Links",
+  "description": "A short description of your links page.",
+  "favicon": {
+    "light": "/favicon-light.svg",
+    "dark": "/favicon-dark.svg"
+  },
   "slogan": {
     "words": "Your main text",
     "highlight": "highlighted part"
   },
   "githubUsername": "your-github-username",
-  "codeRepository": "links",
-  "ga4": "G-XXXXXXXXXX"
+  "profileName": "Your Name",
+  "profileBio": "A short introduction to what you do.",
+  "siteUrl": "https://links.example.com/",
+  "codeRepository": "links"
 }
 ```
 
@@ -71,8 +78,19 @@ Edit `src/content/personal/profile.json` to update your personal information:
 - `slogan.words`: Main slogan text
 - `slogan.highlight`: Part of the slogan that gets highlighted (shown in different styling)
 - `githubUsername`: Used to fetch your GitHub avatar automatically
-- `codeRepository`: Repository name (used for GitHub Pages deployment)
-- `ga4`: (Optional) Google Analytics 4 tracking ID
+- `profileName` and `profileBio`: Name and introduction shown on both the home and share pages
+- `siteUrl`: Full public homepage URL, including `https://` and any deployment subpath. Used for the share QR code and Astro's `site` setting. Change this when cloning the repo.
+- `codeRepository`: Repository name used in the footer's “Build Your Own” link
+
+### Share page
+
+Visit `/share/` or use “Share profile” in the homepage footer. The page uses the same profile, avatar, fonts, palette, and surface preferences as the homepage. Its QR code is generated at build time with [uqr](https://github.com/unjs/uqr) and opens the share page at `siteUrl` + `share/`. The “All links” button returns to the homepage. No QR service or browser API request is needed to generate the code.
+
+Contact rows reuse your quick links, any email or telephone links in the other lists, and the first HTTP(S) link with the `link` icon in the rich or small cards. Edit those lists to change the contact details; no separate contact profile is needed.
+
+On the share page, open Theme Lab to choose square, rounded, or dotted QR modules, square or rounded corners, and ink or theme color. The code keeps a white background, a four-module quiet zone, and dark foreground colors in both modes. “Save card” downloads a PNG of the avatar, name, bio, styled QR code, and contact details using [html-to-image](https://github.com/bubkoo/html-to-image). The saved image omits the “All links,” copy, save, and Theme Lab buttons. “Copy link” copies the share page URL. Progress, success, and errors appear within the action buttons.
+
+Theme Lab preferences, including QR styles, persist only in the current browser under `links:theme-lab:v1`. Reset restores source defaults. To change the default QR options for every visitor, edit `DEFAULT_QR_STYLE`, `DEFAULT_QR_CORNERS`, and `DEFAULT_QR_COLOR` in `src/features/theme/registry.ts`. A clone should also replace the profile and configured links before building.
 
 ### Managing Links
 

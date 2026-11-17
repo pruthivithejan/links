@@ -40,6 +40,7 @@ Edit `src/content/personal/profile.json`:
   "githubUsername": "yourhandle",
   "profileName": "Your Name",
   "profileBio": "A short introduction to what you do.",
+  "siteUrl": "https://links.example.com/",
   "codeRepository": "links"
 }
 ```
@@ -47,6 +48,7 @@ Edit `src/content/personal/profile.json`:
 - `heading` sets the page title; `description` supplies the meta description.
 - `favicon.light` and `favicon.dark` set the SVG paths for light and dark color schemes.
 - `profileName` and `profileBio` supply the hero name and introduction. Both are optional; the name falls back to `githubUsername`.
+- `siteUrl` is the full public homepage URL, including the protocol and any deployment subpath. It supplies the `/share/` QR destination and Astro's `site` setting. Replace it when cloning the repo; it does not set Astro's `base`.
 - `githubUsername` supplies the hero's remote GitHub avatar and the owner in the footer repository URL.
 - `codeRepository` supplies the repository name in the footer's “Build Your Own” link. It does not configure the deployment base path.
 - `slogan.words` and `slogan.highlight` supply the footer quote.
@@ -153,6 +155,12 @@ Review the configured links, email address, footer repository, and profile intro
 
 Run `bun run build` and deploy the generated `dist/` directory using your host's static-site workflow. Hosting settings belong in `astro.config.mjs` and the host configuration. If deploying under a subpath, review root-relative asset URLs as well as Astro's base setting; changing `codeRepository` alone does not handle this.
 
+### 7. Share your profile
+
+`/share/` reuses the hero profile and theme. The QR is generated at build time with `uqr` and opens `share/` relative to `siteUrl`. The “All links” button returns to the homepage. Contact rows reuse the quick links, email/telephone links from the other lists, and the first HTTP(S) rich or small link with the `link` icon. Do not duplicate these details in a separate profile.
+
+Theme Lab on this page adds module shape, corner shape, and ink/theme color controls. The registry owns their options and defaults; the head script and controller restore the same validated state. QR preferences use the existing browser storage key and Reset/Surprise me behavior. Keep the QR's white background, four-module quiet zone, fixed timing/alignment modules, and dark foreground when styling it. “Save card” captures `[data-share-card]` as a PNG with `html-to-image`, preserving the current profile, theme, and QR appearance. Keep navigation, action buttons, and Theme Lab outside the saved image. Show copy/save feedback within the buttons, with accessible live labels.
+
 ## Fetched preview data
 
 `src/content/registry.ts` validates the profile and all three link lists. `scripts/fetch-card-previews.mts` refreshes the cache at `src/features/link-previews/cache.json`; provider fetching, parsing, and cache updates live in `src/features/link-previews/pipeline.ts`.
@@ -183,6 +191,9 @@ There is no active Microlink hovercard pipeline, `fetch-link-previews.mjs`, or `
 | `src/features/theme/` | Theme option registry, preference validation, color tokens, and browser controller |
 | `src/layouts/Layout.astro` | HTML wrapper, profile metadata and icons, font loading, and initial theme restoration |
 | `src/pages/index.astro` | Page section composition and footer |
+| `src/pages/share.astro` | Share profile layout and contact links |
+| `src/components/ShareQr.astro` | Build-time QR encoding and themed SVG rendering |
+| `src/features/share/` | Contact selection and share/copy/download behavior |
 | `src/styles/global.css` | Shared theme, layout, typography, and motion styles |
 | `scripts/card-preview.test.mts` | Preview parsing and cache regression tests |
 | `astro.config.mjs` | Astro and Tailwind Vite plugin configuration |

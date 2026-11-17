@@ -4,7 +4,16 @@ import {
   THEME_FONTS,
   THEME_MODES,
   THEME_PALETTES,
+  THEME_QR_COLORS,
+  THEME_QR_CORNERS,
+  THEME_QR_STYLES,
 } from "../features/theme/registry";
+
+interface Props {
+  showQrControls?: boolean;
+}
+
+const { showQrControls = false } = Astro.props;
 ---
 
 <aside
@@ -196,6 +205,37 @@ import {
           </div>
         </div>
       </div>
+      {showQrControls && (
+        <div class="tl-section">
+          <span class="tl-label">QR code</span>
+          <div class="tl-selects">
+            <label class="tl-select-row">
+              <span class="tl-select-label">Modules</span>
+              <span class="tl-select-wrap">
+                <select class="tl-select" data-qr-style-choice aria-label="QR module style">
+                  {THEME_QR_STYLES.map((option) => <option value={option.id}>{option.name}</option>)}
+                </select>
+              </span>
+            </label>
+            <label class="tl-select-row">
+              <span class="tl-select-label">Corners</span>
+              <span class="tl-select-wrap">
+                <select class="tl-select" data-qr-corners-choice aria-label="QR corner style">
+                  {THEME_QR_CORNERS.map((option) => <option value={option.id}>{option.name}</option>)}
+                </select>
+              </span>
+            </label>
+            <label class="tl-select-row">
+              <span class="tl-select-label">Color</span>
+              <span class="tl-select-wrap">
+                <select class="tl-select" data-qr-color-choice aria-label="QR color">
+                  {THEME_QR_COLORS.map((option) => <option value={option.id}>{option.name}</option>)}
+                </select>
+              </span>
+            </label>
+          </div>
+        </div>
+      )}
     </div>
 
     <footer class="tl-foot">

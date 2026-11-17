@@ -16,6 +16,7 @@ export const personalProfileSchema = z.object({
   heading: z.string(),
   profileBio: z.string().optional(),
   profileName: z.string().optional(),
+  siteUrl: z.url({ protocol: /^https?$/u }),
   slogan: z.object({
     highlight: z.string(),
     words: z.string(),

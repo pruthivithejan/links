@@ -1,0 +1,96 @@
+---
+import { encode, QrCodeDataType } from "uqr";
+
+interface Props {
+  href: string;
+  name: string;
+}
+
+const { href, name } = Astro.props;
+
+// Four modules of quiet space are part of the SVG, so exports remain scannable.
+const border = 4;
+const qr = encode(href, { border, ecc: "H" });
+
+const modules = qr.data.flatMap((row, y) =>
+  row.flatMap((dark, x) => {
+    const type = qr.types[y]?.[x];
+
+    return dark && type !== QrCodeDataType.Position
+      ? [{ isData: type === QrCodeDataType.Data, x, y }]
+      : [];
+  })
+);
+
+const farCorner = qr.size - border - 7;
+
+const corners = [
+  { x: border, y: border },
+  { x: farCorner, y: border },
+  { x: border, y: farCorner },
+];
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  class="share-qr"
+  data-share-qr
+  data-qr-url={href}
+  viewBox={`0 0 ${qr.size} ${qr.size}`}
+  width="320"
+  height="320"
+  role="img"
+  aria-label={`Scan to open ${name}'s share page`}
+>
+  <rect width={qr.size} height={qr.size} fill="#ffffff" />
+  <g class="qr-ink" fill="#111111">
+    {modules.map(({ x, y, isData }) => (
+      <rect x={x} y={y} width="1" height="1" class={isData ? "qr-module" : "qr-function"} />
+    ))}
+    {corners.map(({ x, y }) => (
+      <g>
+        <rect x={x} y={y} width="7" height="7" class="qr-corner-outer" />
+        <rect x={x + 1} y={y + 1} width="5" height="5" fill="#ffffff" class="qr-corner-middle" />
+        <rect x={x + 2} y={y + 2} width="3" height="3" class="qr-corner-inner" />
+      </g>
+    ))}
+  </g>
+</svg>
+
+<style>
+  .share-qr {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  :global(html[data-qr-style="rounded"]) .qr-module {
+    rx: 0.28px;
+    ry: 0.28px;
+  }
+
+  :global(html[data-qr-style="dots"]) .qr-module {
+    rx: 0.5px;
+    ry: 0.5px;
+  }
+
+  :global(html[data-qr-corners="rounded"]) .qr-corner-outer {
+    rx: 1.5px;
+    ry: 1.5px;
+  }
+
+  :global(html[data-qr-corners="rounded"]) .qr-corner-middle {
+    rx: 1px;
+    ry: 1px;
+  }
+
+  :global(html[data-qr-corners="rounded"]) .qr-corner-inner {
+    rx: 0.5px;
+    ry: 0.5px;
+  }
+
+  :global(html[data-qr-color="theme"]) .qr-ink {
+    fill: color-mix(in srgb, var(--qr-accent, #2d2d2d) 60%, #000000 40%);
+  }
+</style>

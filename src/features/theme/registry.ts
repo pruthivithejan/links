@@ -17,6 +17,26 @@ export const THEME_MODES = [
   { icon: "moon", id: "dark", label: "Dark" },
 ] as const;
 
+export const THEME_QR_STYLES = [
+  { id: "square", name: "Square" },
+  { id: "rounded", name: "Rounded" },
+  { id: "dots", name: "Dots" },
+] as const;
+
+export const THEME_QR_CORNERS = [
+  { id: "square", name: "Square" },
+  { id: "rounded", name: "Rounded" },
+] as const;
+
+export const THEME_QR_COLORS = [
+  { id: "ink", name: "Ink" },
+  { id: "theme", name: "Theme color" },
+] as const;
+
+export const DEFAULT_QR_STYLE = "square";
+export const DEFAULT_QR_CORNERS = "square";
+export const DEFAULT_QR_COLOR = "ink";
+
 const systemStack =
   'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
 
@@ -226,7 +246,7 @@ export type ThemeAvatarId = (typeof THEME_AVATARS)[number]["id"];
 export type ThemeMode = (typeof THEME_MODES)[number]["id"];
 
 export const GOOGLE_FONTS_HREF = `https://fonts.googleapis.com/css2?${THEME_FONTS.flatMap(
-  (font) => (font.googleFamily ? [`family=${font.googleFamily}`] : [])
+  (font) => ("googleFamily" in font ? [`family=${font.googleFamily}`] : [])
 ).join("&")}&display=swap`;
 
 export const themeFontVariables = (id: ThemeFontId) => {
@@ -240,10 +260,11 @@ export const themeFontVariables = (id: ThemeFontId) => {
     "--font-body": font.stack,
     "--font-heading": font.stack,
     "--font-heading-leading": font.headingLeading,
-    "--font-heading-style": font.headingStyle ?? "normal",
+    "--font-heading-style":
+      "headingStyle" in font ? font.headingStyle : "normal",
     "--font-heading-tracking": font.headingTracking,
     "--font-leading": font.bodyLeading,
-    "--font-style": font.bodyStyle ?? "normal",
+    "--font-style": "bodyStyle" in font ? font.bodyStyle : "normal",
     "--font-tracking": font.bodyTracking,
   };
 };

@@ -41,11 +41,21 @@ import { linkSections, personal } from "../content/registry.ts";
             >{personal.slogan.highlight}</code
           >."
         </p>
+        <nav class="flex flex-wrap items-center justify-center gap-3" aria-label="Page links">
+        <a
+          href={`${import.meta.env.BASE_URL.replace(/\/$/u, "")}/share/`}
+          class="site-pill"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM20 14v3M14 20h3M20 20h1v1h-1z" />
+          </svg>
+          Share profile
+        </a>
         <a
           href={`https://github.com/${personal.githubUsername}/${personal.codeRepository}`}
           target="_blank"
           rel="noopener noreferrer"
-          class="hidden h-9 items-center justify-center gap-2 rounded-(--radius-chip) bg-(--chip-bg) px-[13px] font-[inherit] tracking-(--font-tracking) text-(--text-muted) shadow-(--shadow-border) transition-colors duration-150 hover:text-(--text-strong) md:inline-flex"
+          class="site-pill hidden md:inline-flex"
         >
           Build Your Own
           <img
@@ -56,6 +66,7 @@ import { linkSections, personal } from "../content/registry.ts";
             height={24}
           />
         </a>
+        </nav>
       </div>
     </footer>
   </main>

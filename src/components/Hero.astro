@@ -3,16 +3,17 @@ interface Props {
   githubUsername: string;
   profileName?: string;
   profileBio?: string;
+  compact?: boolean;
 }
 
-const { githubUsername, profileName, profileBio } = Astro.props;
+const { githubUsername, profileName, profileBio, compact = false } = Astro.props;
 const displayName = profileName || githubUsername;
 ---
 
 <section
-  class="w-full flex flex-col items-center justify-center gap-2 md:gap-3"
+  class:list={["w-full flex flex-col items-center justify-center gap-2 md:gap-3", { "hero--compact": compact }]}
 >
-  <div class="flex items-center justify-center px-4 pt-4 md:pt-6">
+  <div class="hero-avatar flex items-center justify-center px-4 pt-4 md:pt-6">
     <div class="avatar-stage">
       <div class="avatar">
         <img
@@ -44,3 +45,33 @@ const displayName = profileName || githubUsername;
     }
   </div>
 </section>
+
+<style>
+  .hero--compact .avatar-stage {
+    width: 7rem;
+    height: 7rem;
+    align-items: center;
+  }
+
+  .hero--compact .hero-avatar {
+    padding-top: 0;
+  }
+
+  .hero--compact {
+    gap: 0.25rem;
+  }
+
+  .hero--compact .avatar {
+    flex: none;
+    scale: 0.75;
+  }
+
+  .hero--compact h1 {
+    font-size: 1.875rem;
+  }
+
+  .hero--compact p {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+</style>

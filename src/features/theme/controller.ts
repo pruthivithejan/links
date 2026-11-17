@@ -1,16 +1,22 @@
 import { buildThemeTokens, THEME_TOKEN_KEYS } from "./colors";
-import { parseStoredTheme } from "./model";
+import { parseStoredTheme, themeStateSchema } from "./model";
 import type { StoredTheme, ThemeState } from "./model";
 import {
   DEFAULT_AVATAR_ID,
   DEFAULT_FONT_ID,
   DEFAULT_PALETTE_ID,
+  DEFAULT_QR_COLOR,
+  DEFAULT_QR_CORNERS,
+  DEFAULT_QR_STYLE,
   THEME_AVATARS,
   THEME_AVATAR_VARIABLE_KEYS,
   THEME_BOOT_STATE_ATTRIBUTE,
   THEME_FONTS,
   THEME_MODES,
   THEME_PALETTES,
+  THEME_QR_COLORS,
+  THEME_QR_CORNERS,
+  THEME_QR_STYLES,
   THEME_STORAGE_KEY,
   themeAvatarVariables,
   themeFontVariables,
@@ -64,6 +70,18 @@ const avatarPresetButtons = [
   ...document.querySelectorAll<HTMLButtonElement>("button[data-avatar-preset]"),
 ];
 
+const qrStyleSelect = document.querySelector<HTMLSelectElement>(
+  "[data-qr-style-choice]"
+);
+
+const qrCornersSelect = document.querySelector<HTMLSelectElement>(
+  "[data-qr-corners-choice]"
+);
+
+const qrColorSelect = document.querySelector<HTMLSelectElement>(
+  "[data-qr-color-choice]"
+);
+
 const palettes = THEME_PALETTES.flatMap((palette) => {
   const button = paletteButtons.find(
     (candidate) => candidate.dataset.palette === palette.id
@@ -108,6 +126,9 @@ const state: ThemeState = {
   headingFont: stored?.headingFont ?? defaultFontId,
   mode: stored?.mode ?? systemMode(),
   palette: stored?.palette ?? defaultPalette?.id ?? DEFAULT_PALETTE_ID,
+  qrColor: stored?.qrColor ?? DEFAULT_QR_COLOR,
+  qrCorners: stored?.qrCorners ?? DEFAULT_QR_CORNERS,
+  qrStyle: stored?.qrStyle ?? DEFAULT_QR_STYLE,
   shadows: stored?.shadows !== false,
 };
 
@@ -124,6 +145,10 @@ const isNeutralTheme = () => state.palette === defaultPalette?.id;
 
 const applyTheme = () => {
   root.classList.toggle("dark", state.mode === "dark");
+  root.dataset.qrStyle = state.qrStyle;
+  root.dataset.qrCorners = state.qrCorners;
+  root.dataset.qrColor = state.qrColor;
+  root.style.setProperty("--qr-accent", paletteAccent());
 
   if (isNeutralTheme()) {
     for (const key of tokenKeys) {
@@ -225,6 +250,18 @@ const syncUi = () => {
 
   bordersToggle?.setAttribute("aria-checked", String(state.borders));
   shadowsToggle?.setAttribute("aria-checked", String(state.shadows));
+
+  if (qrStyleSelect) {
+    qrStyleSelect.value = state.qrStyle;
+  }
+
+  if (qrCornersSelect) {
+    qrCornersSelect.value = state.qrCorners;
+  }
+
+  if (qrColorSelect) {
+    qrColorSelect.value = state.qrColor;
+  }
 };
 
 const update = () => {
@@ -319,6 +356,15 @@ const shuffle = () => {
   state.headingFont = pickFont(state.headingFont);
   state.mode = mode;
   state.shadows = Math.random() < 0.5;
+  state.qrStyle =
+    THEME_QR_STYLES[Math.floor(Math.random() * THEME_QR_STYLES.length)]?.id ??
+    DEFAULT_QR_STYLE;
+  state.qrCorners =
+    THEME_QR_CORNERS[Math.floor(Math.random() * THEME_QR_CORNERS.length)]?.id ??
+    DEFAULT_QR_CORNERS;
+  state.qrColor =
+    THEME_QR_COLORS[Math.floor(Math.random() * THEME_QR_COLORS.length)]?.id ??
+    DEFAULT_QR_COLOR;
   update();
 };
 
@@ -347,6 +393,9 @@ const reset = () => {
   state.palette = defaultPalette?.id ?? DEFAULT_PALETTE_ID;
   state.font = defaultFontId;
   state.headingFont = defaultFontId;
+  state.qrStyle = DEFAULT_QR_STYLE;
+  state.qrCorners = DEFAULT_QR_CORNERS;
+  state.qrColor = DEFAULT_QR_COLOR;
 
   for (const [property, value] of Object.entries(
     themeFontVariables(defaultFontId)
@@ -354,7 +403,7 @@ const reset = () => {
     root.style.setProperty(property, value);
   }
 
-  root.classList.toggle("dark", state.mode === "dark");
+  applyTheme();
   syncUi();
 };
 
@@ -441,6 +490,35 @@ if (headingFontSelect) {
 for (const preset of avatarPresets) {
   preset.button.addEventListener("click", () => setAvatarPreset(preset.id));
 }
+
+qrStyleSelect?.addEventListener("change", () => {
+  const result = themeStateSchema.shape.qrStyle.safeParse(qrStyleSelect.value);
+
+  if (result.success) {
+    state.qrStyle = result.data;
+    update();
+  }
+});
+
+qrCornersSelect?.addEventListener("change", () => {
+  const result = themeStateSchema.shape.qrCorners.safeParse(
+    qrCornersSelect.value
+  );
+
+  if (result.success) {
+    state.qrCorners = result.data;
+    update();
+  }
+});
+
+qrColorSelect?.addEventListener("change", () => {
+  const result = themeStateSchema.shape.qrColor.safeParse(qrColorSelect.value);
+
+  if (result.success) {
+    state.qrColor = result.data;
+    update();
+  }
+});
 
 bordersToggle?.addEventListener("click", () => {
   state.borders = !state.borders;

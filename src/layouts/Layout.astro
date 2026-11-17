@@ -4,11 +4,17 @@ import {
 	DEFAULT_AVATAR_ID,
 	DEFAULT_FONT_ID,
 	DEFAULT_PALETTE_ID,
+	DEFAULT_QR_COLOR,
+	DEFAULT_QR_CORNERS,
+	DEFAULT_QR_STYLE,
 	GOOGLE_FONTS_HREF,
 	THEME_AVATAR_VARIABLES,
 	THEME_FONT_VARIABLES,
 	THEME_MODES,
 	THEME_PALETTES,
+	THEME_QR_COLORS,
+	THEME_QR_CORNERS,
+	THEME_QR_STYLES,
 	THEME_BOOT_STATE_ATTRIBUTE,
 	THEME_STORAGE_KEY,
 } from '../features/theme/registry';
@@ -20,10 +26,16 @@ const themeBootConfig = {
 		avatar: DEFAULT_AVATAR_ID,
 		font: DEFAULT_FONT_ID,
 		palette: DEFAULT_PALETTE_ID,
+		qrColor: DEFAULT_QR_COLOR,
+		qrCorners: DEFAULT_QR_CORNERS,
+		qrStyle: DEFAULT_QR_STYLE,
 	},
 	fonts: THEME_FONT_VARIABLES,
 	modes: THEME_MODES,
 	palettes: Object.fromEntries(THEME_PALETTES.map(({ id, accent }) => [id, accent])),
+	qrColors: THEME_QR_COLORS,
+	qrCorners: THEME_QR_CORNERS,
+	qrStyles: THEME_QR_STYLES,
 	stateAttribute: THEME_BOOT_STATE_ATTRIBUTE,
 	storageKey: THEME_STORAGE_KEY,
 	tokenKeys: THEME_TOKEN_KEYS,
@@ -93,6 +105,9 @@ const { title, description, favicon } = Astro.props;
 					headingFont,
 					mode,
 					palette,
+					qrColor: config.qrColors.find((option) => option.id === stored?.qrColor)?.id ?? config.defaults.qrColor,
+					qrCorners: config.qrCorners.find((option) => option.id === stored?.qrCorners)?.id ?? config.defaults.qrCorners,
+					qrStyle: config.qrStyles.find((option) => option.id === stored?.qrStyle)?.id ?? config.defaults.qrStyle,
 					shadows: stored?.shadows !== false,
 				};
 			};
@@ -152,6 +167,10 @@ const { title, description, favicon } = Astro.props;
 				root.dataset[config.stateAttribute] = JSON.stringify(theme);
 
 				root.classList.toggle('dark', isDark);
+				root.dataset.qrColor = theme.qrColor;
+				root.dataset.qrCorners = theme.qrCorners;
+				root.dataset.qrStyle = theme.qrStyle;
+				root.style.setProperty('--qr-accent', config.palettes[theme.palette]);
 
 				applyTokens(
 					root,
