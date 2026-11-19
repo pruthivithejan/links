@@ -50,7 +50,7 @@ Edit `src/content/personal/profile.json`:
 - `profileName` and `profileBio` supply the hero name and introduction. Both are optional; the name falls back to `githubUsername`.
 - `siteUrl` is the full public homepage URL, including the protocol and any deployment subpath. It supplies the `/share/` QR destination and Astro's `site` setting. Replace it when cloning the repo; it does not set Astro's `base`.
 - `githubUsername` supplies the hero's remote GitHub avatar and the owner in the footer repository URL.
-- `codeRepository` supplies the repository name in the footer's “Build Your Own” link. It does not configure the deployment base path.
+- `codeRepository` supplies the repository name used by the footer GitHub icon. It does not configure the deployment base path.
 - `slogan.words` and `slogan.highlight` supply the footer quote.
 
 Changing `githubUsername` does not rewrite URLs in the link lists. Replace each configured URL with the intended account or website. Accounts can have different usernames on different services.
@@ -137,7 +137,7 @@ Check for an existing SVG before adding one. Use a clean SVG with a `viewBox`, c
 
 ### 4. Replace the remaining branding
 
-The page title, meta description, and light/dark favicon paths are configured in `src/content/personal/profile.json`. Replace the favicon artwork in `public/` or point `favicon.light` and `favicon.dark` to your own assets.
+The page title, meta description, and light/dark favicon paths are configured in `src/content/personal/profile.json`. Replace the favicon artwork in `public/` or point `favicon.light` and `favicon.dark` to your own assets; the current profile uses `public/pruthivi.svg` and `public/pruthivi-light.svg`.
 
 Review the configured links, email address, footer repository, and profile introduction for the original owner's information. Keep the project license and attribution intact.
 
@@ -146,14 +146,17 @@ Review the configured links, email address, footer repository, and profile intro
 `src/styles/global.css` owns the light/dark surface colors, typography, radii, shadows, motion tokens, and layout spacing. Tailwind v4 uses CSS-first configuration; do not introduce a Tailwind v3 configuration file.
 
 - Use the existing variables, including `--bg-page`, `--card-bg`, `--card-border`, `--text-strong`, `--text-muted`, and `--primary`, when changing the visual theme. Preserve the existing color conventions, including OKLCH where used.
-- Local fonts live in `public/fonts/`. Theme Lab modes, palettes, fonts, avatar presets, and font loading are registered in `src/features/theme/registry.ts`.
+- Local fonts live in `src/assets/fonts/`. Theme Lab modes, palettes, fonts, avatar presets, and font loading are registered in `src/features/theme/registry.ts`.
 - Theme Lab markup and styles live in `src/components/ThemeLab.astro`; validated preferences and browser behavior live in `src/features/theme/`. The head script normalizes stored preferences once, then the controller reads that same state. Choices persist in browser local storage under `links:theme-lab:v1`; they do not edit source files or change the default theme for other visitors. Use Reset when checking source defaults.
 - Theme Lab and its trigger have opaque surfaces. On mobile below `48rem`, the trigger sits at the bottom right and the panel opens upward to the viewport width minus the page's left and right padding, using `calc()` and safe-area insets. Desktop retains a compact panel at the top right.
 - `--page-inline-padding` is shared by the page and the mobile panel: `1rem` by default, `1.5rem` from `40rem`, and `6rem` from `48rem`. Update this shared variable when changing the page gutters.
+- To ship a fixed design, set the `DEFAULT_*` values and source tokens for the intended look, then remove the `ThemeLab` component and its trigger from `src/pages/index.astro` and `src/pages/share.astro`.
 
 ### 6. Build for your host
 
-Run `bun run build` and deploy the generated `dist/` directory using your host's static-site workflow. Hosting settings belong in `astro.config.mjs` and the host configuration. If deploying under a subpath, review root-relative asset URLs as well as Astro's base setting; changing `codeRepository` alone does not handle this.
+Run `bun run build` and deploy the generated `dist/` directory using your host's static-site workflow. Hosting settings belong in `astro.config.mjs` and the host configuration. If deploying under a subpath, set Astro's `base`; public assets resolve through `src/utils/asset.ts`, and local fonts are bundled from `src/assets/fonts/`, so they follow the base path. Changing `codeRepository` alone does not handle this.
+
+The included `.github/workflows/deploy.yml` deploys to GitHub Pages on pushes to `main`. It installs Bun, runs `bun install` and `bunx astro build`, uploads `dist/`, and deploys through GitHub Actions. Because CI uses `astro build` rather than `bun run build`, it builds from the committed `src/features/link-previews/cache.json`; refresh and commit the cache locally after changing URLs. Enable Pages with GitHub Actions as the source. For project pages, set `base` to the repository subpath. For a custom domain, set `site` and `base` for the root domain, add the domain to `public/CNAME`, point DNS at GitHub Pages (A/AAAA for an apex domain, CNAME for `www`), and enable HTTPS after DNS resolves. `siteUrl` in `profile.json` supplies Astro's `site` and the share QR destination.
 
 ### 7. Share your profile
 
@@ -183,10 +186,15 @@ There is no active Microlink hovercard pipeline, `fetch-link-previews.mjs`, or `
 | `src/components/Hero.astro` | Profile introduction and remote GitHub avatar |
 | `src/components/QuickLinks.astro` | Compact link pills |
 | `src/components/LinkCards.astro` | Rich-card routing and fetched metadata |
-| `src/components/cards/` | Shared card shell, image recovery, and platform components |
+| `src/components/ui/` | Reusable Button, Card family, CopyButton, Avatar, Icon, and PreviewImage primitives, plus the initials helper |
+| `src/components/cards/` | GitHub, X, LinkedIn, Facebook, Instagram, and website rich cards, now built on the `ui` primitives with no shared CardShell |
 | `src/features/link-previews/` | Preview schemas, provider parsing/fetching, cache updates, routing, and generated cache |
 | `src/components/SmallLinks.astro` | Small-card layout |
-| `src/components/links/CopyLinkButton.astro` | Copy interaction and clipboard feedback |
+| `src/components/links/CopyLinkButton.astro` | Small-card copy control; thin wrapper around `ui/CopyButton.astro` |
+| `src/components/BuildYourOwn.astro` | Footer copy-prompt control for the build prompt |
+| `src/content/build-prompt.ts` | Extracts the build prompt from the AGENTS.md markers at build time |
+| `src/utils/cn.ts` | Shared class-name join helper used by the UI primitives |
+| `src/utils/asset.ts` | Resolves public asset paths against Astro's configured base path |
 | `src/components/ThemeLab.astro` | Theme Lab markup and scoped styles |
 | `src/features/theme/` | Theme option registry, preference validation, color tokens, and browser controller |
 | `src/layouts/Layout.astro` | HTML wrapper, profile metadata and icons, font loading, and initial theme restoration |
@@ -199,6 +207,14 @@ There is no active Microlink hovercard pipeline, `fetch-link-previews.mjs`, or `
 | `astro.config.mjs` | Astro and Tailwind Vite plugin configuration |
 | `vite.config.ts` | Vite+ formatting, lint, and staged-file checks |
 
+### UI primitives
+
+Content components compose the primitives in `src/components/ui/`: `Button`, the `Card` family (`Card`, `CardHeader`, `CardContent`, `CardFooter`, `CardMedia`, `CardTitle`, `CardDescription`), `Icon`, `Avatar`, `CopyButton`, and `PreviewImage`. The class-name helper `src/utils/cn.ts` joins their class lists, and `src/components/ui/initials.ts` supplies avatar fallbacks.
+
+Reuse these primitives for new UI instead of re-adding card, button, icon, avatar, preview, or copy markup. Platform cards in `src/components/cards/` compose the `Card` family directly; there is no shared `CardShell`. `src/utils/asset.ts` prefixes public asset paths with Astro's base URL, so icons, favicons, and other public files keep working under a deployment subpath.
+
+`CopyButton` owns clipboard behavior: the Clipboard API with a legacy `execCommand` fallback, icon or inline-label swap, the `data-copied` state, and screen-reader status messages. Use its `icon` variant for icon-only actions and its `bare` variant for an inline label with no background. `src/components/links/CopyLinkButton.astro` and `src/components/BuildYourOwn.astro` are thin wrappers that pass text and labels.
+
 ## Working rules and verification
 
 - Prefer content edits for personalizing or rearranging links. Preserve the reusable components and unrelated work in the checkout.
@@ -209,3 +225,54 @@ There is no active Microlink hovercard pipeline, `fetch-link-previews.mjs`, or `
 - When changing metadata fetching or parsing, also run `node --test scripts/card-preview.test.mts` and exercise the refresh. Network failures should warn and preserve usable cached data rather than break the site build.
 - Documentation-only changes need formatting checks, not a metadata refresh.
 - The site owner handles visual checks. Do not launch or automate a browser unless explicitly asked.
+
+## Build your own with an AI agent
+
+The footer's **Build Your Own** button copies the prompt below from this file, so the copy button and this document never drift apart. A separate GitHub icon beside it links to the source repository. The start and end markers are required: `src/content/build-prompt.ts` reads the text between them at build time. Do not remove or rename the markers.
+
+<!-- build-prompt:start -->
+
+Build a personal links page for me from this repository (Astro 7, TypeScript, Tailwind CSS v4, and Bun), then deploy it to GitHub Pages.
+
+Work step by step. Ask me one short group of questions at a time, wait for my answers, and only then change files. Do not invent my name, bio, links, or profile data.
+
+1. Profile
+
+- Ask for my display name, GitHub username, one-sentence bio, page title, meta description, and a short closing slogan with the words you should highlight.
+- Ask whether to keep the GitHub avatar or use a different image URL.
+- Ask for a favicon preference only if I already have artwork; otherwise keep the template favicon for now.
+
+2. Links
+
+- Ask me for every link I want, in the order I want them displayed. For each link, collect its label or title, URL, icon name, and any optional description.
+- Then ask which section each link belongs to:
+  - quick link: a compact pill below the hero, best for email, Telegram, WhatsApp, and short contact links.
+  - rich link card: a large preview card with fetched metadata, best for websites, GitHub, X, LinkedIn, Facebook, and Instagram profiles.
+  - small card: a simple card with a title, an authored description, and a copy button.
+- A link belongs in only one list. Recommend the best section for each URL, but let me decide. Use `src/content/quick-links/quick-links.json`, `src/content/link-cards/link-cards.json`, and `src/content/links/links.json`. Check `public/icons/` before adding an icon, and add a clean SVG only when needed.
+
+3. Base style
+
+- Run `bun install` and `bun run dev`, then open the local site in my browser.
+- Ask me to open Theme Lab and choose my base style: light or dark mode, palette or ink color, title and body fonts, avatar shape, borders, and shadows.
+- If I want a font that is not listed, offer to add it. For a local font, place the file in `src/assets/fonts/`, add an `@font-face` rule in `src/styles/global.css`, and register it in `src/features/theme/registry.ts`. For a Google font, add it to the Theme Lab registry and to the Google Fonts URL in that registry.
+- When I confirm the look, save it as the site default in source, not only in browser local storage. Update `DEFAULT_FONT_ID`, `DEFAULT_PALETTE_ID`, and `DEFAULT_AVATAR_ID` in `src/features/theme/registry.ts`; persist the chosen palette tokens and mode defaults so every visitor sees them; and keep the values consistent between `Layout.astro` and the theme controller.
+- Ask whether Theme Lab should stay visible to visitors. If I say no, remove the `ThemeLab` component and its trigger from `src/pages/index.astro` and `src/pages/share.astro` while keeping the saved base style as the default.
+
+4. Build and verify
+
+- Replace `src/content/personal/profile.json`, then fill all three link lists. Remove template links and the original owner's details.
+- Run `bun run build` to refresh rich-card metadata and validate the site, then run `bun run check` and fix anything that fails.
+- Refresh the metadata cache after changing URLs. If a site blocks public fetching, keep usable cached data and tell me which preview is incomplete instead of inventing details.
+- Confirm the home page, `/share/`, Theme Lab when enabled, and the copy buttons work locally.
+
+5. Deploy to GitHub Pages
+
+- Ask whether I have a custom domain.
+- If I do not: create or use a GitHub repository, set Astro's `site` and `base` for the repository subpath (for example `base: "/my-links/"`), keep the GitHub Actions workflow that builds with Bun and deploys `dist/`, enable Pages with GitHub Actions as the source, and give me the final `https://<username>.github.io/<repo>/` URL.
+- If I do: ask for the domain, set `site` and `base` for the root domain, add the domain to `public/CNAME`, and explain the DNS records: A and AAAA records for an apex domain, or a CNAME for `www`. Tell me to enable HTTPS in GitHub Pages after DNS resolves.
+- Update `siteUrl`, `githubUsername`, and `codeRepository` in `src/content/personal/profile.json` to match the live deployment before the final build.
+- Finish by giving me the live URL, the repository URL, and a short checklist of what I should customize later.
+
+Keep the existing components, accessibility behavior, reduced-motion support, and license attribution. Prefer content edits over rewriting components.
+<!-- build-prompt:end -->

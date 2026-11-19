@@ -1,10 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import BuildYourOwn from "../components/BuildYourOwn.astro";
 import Hero from "../components/Hero.astro";
 import SmallLinks from "../components/SmallLinks.astro";
 import LinkCards from "../components/LinkCards.astro";
 import QuickLinks from "../components/QuickLinks.astro";
 import ThemeLab from "../components/ThemeLab.astro";
+import Button from "../components/ui/Button.astro";
+import Icon from "../components/ui/Icon.astro";
 import { linkSections, personal } from "../content/registry.ts";
 
 ---
@@ -42,30 +45,22 @@ import { linkSections, personal } from "../content/registry.ts";
           >."
         </p>
         <nav class="flex flex-wrap items-center justify-center gap-3" aria-label="Page links">
-        <a
-          href={`${import.meta.env.BASE_URL.replace(/\/$/u, "")}/share/`}
-          class="site-pill"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM20 14v3M14 20h3M20 20h1v1h-1z" />
-          </svg>
-          Share profile
-        </a>
-        <a
-          href={`https://github.com/${personal.githubUsername}/${personal.codeRepository}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="site-pill hidden md:inline-flex"
-        >
-          Build Your Own
-          <img
-            src="/icons/github.svg"
-            alt="Github Logo"
-            class="h-6 w-6 filter-(--icon-filter) transition-[filter] duration-200"
-            width={24}
-            height={24}
-          />
-        </a>
+          <Button href={`${import.meta.env.BASE_URL.replace(/\/$/u, "")}/share/`} variant="pill">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM20 14v3M14 20h3M20 20h1v1h-1z" />
+            </svg>
+            Share profile
+          </Button>
+          <BuildYourOwn />
+          <Button
+            href={`https://github.com/${personal.githubUsername}/${personal.codeRepository}`}
+            variant="plain"
+            class="size-9 text-(--text-muted) transition-colors duration-150 hover:text-(--text-strong)"
+            aria-label="Open the source repository on GitHub"
+            title="GitHub"
+          >
+            <Icon name="github" size={28} class="h-7 w-7" />
+          </Button>
         </nav>
       </div>
     </footer>

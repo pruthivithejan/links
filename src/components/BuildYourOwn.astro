@@ -1,0 +1,20 @@
+---
+import { buildPrompt } from "../content/build-prompt.ts";
+import CopyButton from "./ui/CopyButton.astro";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<CopyButton
+  text={buildPrompt}
+  label="Build Your Own"
+  copiedLabel="Prompt copied"
+  copiedStatus="Build prompt copied."
+  errorStatus="Could not copy the build prompt. Try again."
+  variant="pill"
+  class={className}
+/>
