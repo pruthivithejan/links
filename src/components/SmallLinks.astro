@@ -1,6 +1,11 @@
 ---
-import type { SmallLink } from "../content/schemas.ts";
+import Card from "./ui/Card.astro";
+import CardDescription from "./ui/CardDescription.astro";
+import CardHeader from "./ui/CardHeader.astro";
+import CardTitle from "./ui/CardTitle.astro";
+import Icon from "./ui/Icon.astro";
 import CopyLinkButton from "./links/CopyLinkButton.astro";
+import type { SmallLink } from "../content/schemas.ts";
 
 interface Props {
   links: SmallLink[];
@@ -15,9 +20,11 @@ const { links } = Astro.props;
   >
     {
       links.map((card, index) => (
-        <article
-          class="group relative flex h-full flex-col overflow-visible rounded-(--radius-card) border border-(--card-border) bg-(--card-bg) text-(--foreground) opacity-0 shadow-(--shadow-card) transition-[border-color,box-shadow,background-color] duration-150 animate-[enter_500ms_forwards] [animation-delay:calc(var(--stagger,0)*200ms)] hover:border-(--card-border-hover) hover:bg-(--card-bg-hover)"
-          style={`--stagger: ${index + 3}`}
+        <Card
+          interactive
+          index={index}
+          overflow="visible"
+          class="h-full"
         >
           <a
             href={card.href}
@@ -25,34 +32,24 @@ const { links } = Astro.props;
             rel="noopener noreferrer"
             class="flex h-full cursor-pointer flex-col p-4 text-(--foreground) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--icon-color) md:p-5"
           >
-            <h2 class="mb-2 flex items-center gap-2 text-base font-semibold leading-none tracking-tight transition-colors group-hover:text-(--foreground) sm:text-lg">
-              <img
-                src={`/icons/${card.icon}.svg`}
-                alt=""
-                class="h-6 w-6 shrink-0 filter-(--icon-filter) transition-[filter] duration-200"
-                width={24}
-                height={24}
-              />
-              {card.title}
+            <CardHeader class="mb-2 gap-2">
+              <Icon name={card.icon} size={24} class="h-6 w-6" />
+              <CardTitle as="h2" class="text-base sm:text-lg">
+                {card.title}
+              </CardTitle>
               <span
                 class="inline-block font-mono transition-transform duration-200 group-hover:animate-[card-hover-arrow_200ms_forwards]"
                 aria-hidden="true"
               >
-                <img
-                  src="/arrow-right.svg"
-                  alt=""
-                  class="h-8 w-8 filter-(--icon-filter) transition-[filter] duration-200"
-                  width={16}
-                  height={16}
-                />
+                <Icon src="/arrow-right.svg" size={16} class="h-8 w-8" />
               </span>
-            </h2>
-            <p class="m-0 max-w-none text-sm leading-relaxed text-(--text-subtle) md:max-w-[34ch]">
+            </CardHeader>
+            <CardDescription class="max-w-none text-sm md:max-w-[34ch]">
               {card.description}
-            </p>
+            </CardDescription>
           </a>
           <CopyLinkButton href={card.href} />
-        </article>
+        </Card>
       ))
     }
   </div>

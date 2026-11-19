@@ -1,6 +1,9 @@
 ---
-import CardShell from "./CardShell.astro";
-import PreviewImage from "./PreviewImage.astro";
+import Card from "../ui/Card.astro";
+import CardContent from "../ui/CardContent.astro";
+import CardDescription from "../ui/CardDescription.astro";
+import CardMedia from "../ui/CardMedia.astro";
+import PreviewImage from "../ui/PreviewImage.astro";
 import type { CardData } from "../../features/link-previews/model.ts";
 
 interface Props {
@@ -13,18 +16,9 @@ const { card, image, index } = Astro.props;
 const displayUrl = card.href.replace(/^https?:\/\//u, "").replace(/\/$/u, "");
 ---
 
-<CardShell card={card} index={index} kind="website" autoHeight>
+<Card href={card.href} index={index} kind="website" autoHeight>
   <div class="flex flex-col">
-    <div class="website-card-media card-media-fallback relative w-full overflow-hidden">
-      <div class="absolute inset-0 flex items-center justify-center">
-        <img
-          src={`/icons/${card.icon}.svg`}
-          alt=""
-          class="h-8 w-8 opacity-40 filter-(--icon-filter)"
-          width={32}
-          height={32}
-        />
-      </div>
+    <CardMedia fallbackIcon={card.icon} class="website-card-media">
       {
         image && (
           <PreviewImage
@@ -35,22 +29,22 @@ const displayUrl = card.href.replace(/^https?:\/\//u, "").replace(/\/$/u, "");
           />
         )
       }
-    </div>
+    </CardMedia>
 
-    <div class="flex shrink-0 flex-col gap-1.5 px-4 py-3 md:px-5">
+    <CardContent class="shrink-0 gap-1.5 px-4 py-3 md:px-5">
       <p class="min-w-0 truncate text-xs font-medium leading-4" title={card.href}>
         {displayUrl}
       </p>
       {
         card.description && (
-          <p class="line-clamp-2 text-xs leading-relaxed text-(--text-subtle)">
+          <CardDescription class="line-clamp-2 text-xs">
             {card.description}
-          </p>
+          </CardDescription>
         )
       }
-    </div>
+    </CardContent>
   </div>
-</CardShell>
+</Card>
 
 <style>
   .website-card-media:not(:has([data-preview-image])) {

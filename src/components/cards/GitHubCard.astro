@@ -1,6 +1,8 @@
 ---
-import CardShell from "./CardShell.astro";
-import PreviewImage from "./PreviewImage.astro";
+import Avatar from "../ui/Avatar.astro";
+import Card from "../ui/Card.astro";
+import CardContent from "../ui/CardContent.astro";
+import Icon from "../ui/Icon.astro";
 import type { CardData } from "../../features/link-previews/model.ts";
 
 interface Props {
@@ -15,56 +17,61 @@ const { meta } = card;
 const contributions = meta?.contributions?.slice(-119);
 ---
 
-<CardShell card={card} index={index} kind="github" username={username}>
-  <div class="flex h-full flex-col p-4 pb-4 md:p-5 md:pb-4">
+<Card href={card.href} index={index} kind="github" username={username}>
+  <CardContent class="p-4 pb-4 md:p-5 md:pb-4">
     <div class="mb-3 flex items-center gap-3">
-      {meta?.avatar && <PreviewImage
-        src={meta.avatar}
-        avatar
-        classes="h-10 w-10 shrink-0 rounded-full border border-(--border) bg-(--chip-bg) object-cover"
-        fallbackAvatar={meta.fallbackAvatar}
-        width={40}
-        height={40}
-      />}
+      {
+        meta?.avatar && (
+          <Avatar
+            name={name}
+            src={meta.avatar}
+            fallbackAvatar={meta.fallbackAvatar}
+            class="border border-(--border) bg-(--chip-bg)"
+          />
+        )
+      }
       <div class="min-w-0">
-        <p
-          class="truncate text-sm font-semibold leading-tight"
-          data-gh-name
-        >
+        <p class="truncate text-sm font-semibold leading-tight" data-gh-name>
           {name}
         </p>
         <p class="truncate text-xs leading-tight text-(--text-muted)">
           @{username}
         </p>
       </div>
-      <img
-        src="/icons/github.svg"
-        alt=""
-        class="ml-auto h-5 w-5 shrink-0 filter-(--icon-filter)"
-        width={20}
-        height={20}
-      />
+      <Icon name="github" size={20} class="ml-auto h-5 w-5 shrink-0" />
     </div>
 
-    {contributions && <div class="grid grid-flow-col grid-rows-7 gap-1" aria-hidden="true">
-      {contributions.map((day) => (
+    {
+      contributions && (
         <div
-          class="gh-cell h-3 w-3 rounded-[2px]"
-          data-gh-cell
-          data-level={day.level}
-          title={`${day.count} contributions on ${day.date}`}
-        />
-      ))}
-    </div>}
+          class="grid grid-flow-col grid-rows-7 gap-1"
+          aria-hidden="true"
+        >
+          {contributions.map((day) => (
+            <div
+              class="gh-cell h-3 w-3 rounded-[2px]"
+              data-gh-cell
+              data-level={day.level}
+              title={`${day.count} contributions on ${day.date}`}
+            />
+          ))}
+        </div>
+      )
+    }
 
-    {meta?.contributionsTotal !== undefined && <p
-      class="mt-auto pt-3 font-[family-name:var(--font-body)] text-[11px] text-(--text-muted)"
-      data-gh-total
-    >
-      {meta.contributionsTotal.toLocaleString()} contributions in {meta.contributionsYear}
-    </p>}
-  </div>
-</CardShell>
+    {
+      meta?.contributionsTotal !== undefined && (
+        <p
+          class="mt-auto pt-3 font-[family-name:var(--font-body)] text-[11px] text-(--text-muted)"
+          data-gh-total
+        >
+          {meta.contributionsTotal.toLocaleString()} contributions in{" "}
+          {meta.contributionsYear}
+        </p>
+      )
+    }
+  </CardContent>
+</Card>
 
 <style>
   .gh-cell {

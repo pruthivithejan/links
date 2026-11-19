@@ -1,4 +1,6 @@
 ---
+import Button from "./ui/Button.astro";
+import Icon from "./ui/Icon.astro";
 import type { QuickLink } from "../content/schemas.ts";
 
 interface Props {
@@ -10,26 +12,21 @@ const { links } = Astro.props;
 
 {
   links.length ? (
-    <nav class="-mx-4 -mt-4 w-full flex justify-center sm:-mx-6 md:mx-0 md:-mt-8" aria-label="Quick links">
+    <nav
+      class="-mx-4 -mt-4 w-full flex justify-center sm:-mx-6 md:mx-0 md:-mt-8"
+      aria-label="Quick links"
+    >
       <div class="flex w-full max-w-[25rem] flex-wrap items-center justify-center gap-1.5 md:max-w-[36rem]">
         {links.map((link, index) => (
-          <a
+          <Button
             href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="quick-link inline-flex h-9 items-center justify-center gap-1.5 whitespace-nowrap rounded-(--radius-chip) bg-(--chip-bg) px-3 text-[0.8125rem] font-medium text-(--foreground) no-underline opacity-0 shadow-(--shadow-border) transition-[background-color,box-shadow,color] duration-150 animate-[enter_500ms_forwards] [animation-delay:calc(var(--stagger,0)*200ms)] hover:bg-(--chip-bg-hover) hover:text-(--foreground) active:bg-(--chip-bg-pressed) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--icon-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--background) [&_img]:pointer-events-none [&_img]:h-3.5 [&_img]:w-3.5 [&_img]:shrink-0"
+            variant="chip"
+            class="quick-link opacity-0 animate-[enter_500ms_forwards]"
             style={`--stagger: ${index + 3}`}
           >
-            <img
-              src={`/icons/${link.icon}.svg`}
-              alt=""
-              class="filter-(--icon-filter) transition-[filter] duration-200"
-              width={14}
-              height={14}
-              loading="lazy"
-            />
+            <Icon name={link.icon} size={14} class="h-3.5 w-3.5" />
             <span>{link.label}</span>
-          </a>
+          </Button>
         ))}
       </div>
     </nav>
