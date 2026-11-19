@@ -1,0 +1,38 @@
+---
+import { assetUrl } from "../../utils/asset.ts";
+import { cn } from "../../utils/cn.ts";
+
+interface Props {
+  alt?: string;
+  class?: string;
+  loading?: "eager" | "lazy";
+  name?: string;
+  size?: number;
+  src?: string;
+}
+
+const {
+  alt = "",
+  class: className,
+  loading = "lazy",
+  name,
+  size = 16,
+  src,
+} = Astro.props;
+
+const resolvedSrc = assetUrl(src ?? (name ? `/icons/${name}.svg` : ""));
+
+if (!resolvedSrc) {
+  throw new Error("Icon requires either `name` or `src`.");
+}
+---
+
+<img
+  src={resolvedSrc}
+  alt={alt}
+  width={size}
+  height={size}
+  loading={loading}
+  decoding="async"
+  class:list={["filter-(--icon-filter)", className]}
+/>

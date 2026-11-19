@@ -1,0 +1,228 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn.ts";
+
+type CopyButtonVariant = "bare" | "icon" | "pill";
+
+interface Props extends HTMLAttributes<"button"> {
+  copiedLabel?: string;
+  copiedStatus?: string;
+  errorStatus?: string;
+  label?: string;
+  position?: "absolute" | "relative";
+  text: string;
+  variant?: CopyButtonVariant;
+}
+
+const {
+  class: className,
+  copiedLabel = "Copied",
+  copiedStatus = "Copied to clipboard.",
+  errorStatus = "Could not copy. Try again.",
+  label = "Copy",
+  position = "relative",
+  text,
+  type = "button",
+  variant = "icon",
+  ...rest
+} = Astro.props;
+
+const baseStyles =
+  "group/copy inline-flex cursor-pointer items-center justify-center whitespace-nowrap border-0 font-medium transition-[background-color,color,opacity,scale] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--icon-color) [-webkit-tap-highlight-color:transparent]";
+
+const variantStyles: Record<CopyButtonVariant, string> = {
+  bare: "gap-1.5 text-(--text-muted) hover:text-(--text-strong) active:scale-[0.98]",
+  icon: "h-11 w-11 rounded-(--radius-copy) border-0 bg-(--copy-bg-tint) p-0 text-(--icon-color-muted) bg-[linear-gradient(90deg,var(--copy-bg)_0%,var(--copy-bg)_100%)] hover:bg-(--copy-bg-tint) hover:text-(--icon-color) hover:bg-[linear-gradient(90deg,var(--copy-bg-hover)_0%,var(--copy-bg-hover)_100%)] active:bg-(--copy-bg-tint) active:text-(--icon-color) active:bg-[linear-gradient(90deg,var(--copy-bg-pressed)_0%,var(--copy-bg-pressed)_100%)] dark:bg-(--copy-bg) dark:bg-none dark:hover:bg-(--copy-bg-hover) dark:hover:bg-none dark:active:bg-(--copy-bg-pressed) dark:active:bg-none",
+  pill: "min-h-9 gap-2 rounded-(--radius-chip) bg-(--chip-bg) px-3.25 py-1.5 text-sm text-(--text-muted) shadow-(--shadow-border) hover:bg-(--chip-bg-hover) hover:text-(--text-strong)",
+};
+
+const classes = cn(
+  baseStyles,
+  position,
+  variantStyles[variant],
+  className
+);
+---
+
+<button
+  type={type}
+  class={classes}
+  data-copy-button
+  data-copy-text={text}
+  data-copy-status-text={copiedStatus}
+  data-copy-error-text={errorStatus}
+  data-copy-label={copiedLabel}
+  data-copy-default-label={label}
+  aria-label={label}
+  {...rest}
+>
+  <span
+    class="relative inline-flex size-4 shrink-0 items-center justify-center"
+    aria-hidden="true"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="absolute scale-100 opacity-100 transition-[opacity,scale] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[copied=true]/copy:scale-25 group-data-[copied=true]/copy:opacity-0"
+    >
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+    </svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="absolute scale-25 opacity-0 transition-[opacity,scale] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[copied=true]/copy:scale-100 group-data-[copied=true]/copy:opacity-100"
+    >
+      <path d="M20 6 9 17l-5-5"></path>
+    </svg>
+  </span>
+
+  {
+    variant !== "icon" && (
+      <span class="relative inline-grid overflow-hidden text-left">
+        <span class="col-start-1 row-start-1 truncate transition-[opacity,translate] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[copied=true]/copy:translate-y-1 group-data-[copied=true]/copy:opacity-0">
+          {label}
+        </span>
+        <span class="col-start-1 row-start-1 truncate translate-y-1 opacity-0 transition-[opacity,translate] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[copied=true]/copy:translate-y-0 group-data-[copied=true]/copy:opacity-100">
+          {copiedLabel}
+        </span>
+      </span>
+    )
+  }
+
+  {
+    variant === "icon" && (
+      <span
+        class="pointer-events-none invisible absolute bottom-[calc(100%+8px)] left-1/2 z-10 box-border inline-flex h-8 -translate-x-1/2 items-center whitespace-nowrap rounded-full bg-white px-3 text-xs font-normal leading-4 text-[#17181c] opacity-0 shadow-(--shadow-tooltip) transition-[opacity,visibility] duration-150 group-hover/copy:visible group-hover/copy:opacity-100 group-focus-visible/copy:visible group-focus-visible/copy:opacity-100 group-data-[copied=true]/copy:visible group-data-[copied=true]/copy:opacity-100 dark:bg-[#181818] dark:text-[#e3e3e3]"
+        role="tooltip"
+        aria-hidden="true"
+      >
+        <span class="relative inline-grid">
+          <span class="col-start-1 row-start-1 transition-[opacity,translate] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[copied=true]/copy:translate-y-1 group-data-[copied=true]/copy:opacity-0">
+            {label}
+          </span>
+          <span class="col-start-1 row-start-1 translate-y-1 opacity-0 transition-[opacity,translate] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[copied=true]/copy:translate-y-0 group-data-[copied=true]/copy:opacity-100">
+            {copiedLabel}
+          </span>
+        </span>
+      </span>
+    )
+  }
+
+  <span class="sr-only" aria-live="polite" data-copy-status></span>
+</button>
+
+<script>
+  const timers = new WeakMap<HTMLButtonElement, number>();
+
+  const legacyCopy = (value: string) => {
+    const previousFocus = document.activeElement;
+    const textarea = document.createElement("textarea");
+    textarea.value = value;
+    textarea.style.cssText = "position:fixed;opacity:0;pointer-events:none";
+    textarea.setAttribute("aria-label", "Text to copy");
+
+    try {
+      document.body.append(textarea);
+      textarea.select();
+
+      return document.execCommand("copy");
+    } catch {
+      return false;
+    } finally {
+      textarea.remove();
+
+      if (previousFocus instanceof HTMLElement) {
+        previousFocus.focus({ preventScroll: true });
+      }
+    }
+  };
+
+  const copyText = async (value: string) => {
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(value);
+
+        return true;
+      } catch {
+        return legacyCopy(value);
+      }
+    }
+
+    return legacyCopy(value);
+  };
+
+  for (const button of document.querySelectorAll<HTMLButtonElement>(
+    "[data-copy-button]"
+  )) {
+    button.addEventListener("click", async () => {
+      const value = button.dataset.copyText;
+
+      if (!value) {
+        return;
+      }
+
+      const status = button.querySelector<HTMLElement>("[data-copy-status]");
+      const defaultLabel = button.dataset.copyDefaultLabel;
+      const copiedLabel = button.dataset.copyLabel;
+
+      const copied = await copyText(value);
+
+      if (!copied) {
+        if (status) {
+          status.textContent =
+            button.dataset.copyErrorText ?? "Could not copy. Try again.";
+        }
+
+        return;
+      }
+
+      if (status) {
+        status.textContent =
+          button.dataset.copyStatusText ?? "Copied to clipboard.";
+      }
+
+      button.dataset.copied = "true";
+
+      if (copiedLabel) {
+        button.setAttribute("aria-label", copiedLabel);
+      }
+
+      window.clearTimeout(timers.get(button));
+
+      const isTouch = window.matchMedia?.("(hover: none)").matches;
+      const dwell = isTouch ? 2200 : 1800;
+
+      timers.set(
+        button,
+        window.setTimeout(() => {
+          delete button.dataset.copied;
+
+          if (status) {
+            status.textContent = "";
+          }
+
+          if (defaultLabel) {
+            button.setAttribute("aria-label", defaultLabel);
+          }
+
+          timers.delete(button);
+        }, dwell)
+      );
+    });
+  }
+</script>

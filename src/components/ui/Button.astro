@@ -1,0 +1,87 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn.ts";
+
+type ButtonSize = "sm" | "md" | "lg";
+
+type ButtonVariant = "chip" | "ghost" | "icon" | "pill" | "plain";
+
+interface Props extends HTMLAttributes<"button"> {
+  disabled?: boolean;
+  href?: string;
+  iconOnly?: boolean;
+  newTab?: boolean;
+  rel?: string;
+  size?: ButtonSize;
+  target?: string;
+  variant?: ButtonVariant;
+}
+
+const {
+  class: className,
+  disabled = false,
+  href,
+  iconOnly = false,
+  newTab,
+  rel,
+  size = "md",
+  target,
+  type = "button",
+  variant = "pill",
+  ...rest
+} = Astro.props;
+
+const variantStyles: Record<ButtonVariant, string> = {
+  chip: "h-9 rounded-(--radius-chip) bg-(--chip-bg) px-3 text-[0.8125rem] text-(--foreground) shadow-(--shadow-border) hover:bg-(--chip-bg-hover) active:bg-(--chip-bg-pressed)",
+  ghost:
+    "rounded-(--radius-ghost) text-(--text-muted) hover:bg-(--chip-bg) hover:text-(--text-strong)",
+  icon: "size-9 rounded-(--radius-ghost) text-(--text-muted) hover:bg-(--chip-bg) hover:text-(--text-strong)",
+  pill: "min-h-9 gap-2 rounded-(--radius-chip) bg-(--chip-bg) px-3.25 py-1.5 text-sm leading-6 text-(--text-muted) shadow-(--shadow-border) hover:text-(--text-strong) active:scale-[0.96]",
+  plain: "",
+};
+
+const sizeStyles: Record<ButtonSize, string> = {
+  lg: "h-11 px-4 text-base",
+  md: "",
+  sm: "h-8 px-2.5 text-xs",
+};
+
+const iconOnlyStyles: Record<ButtonSize, string> = {
+  lg: "size-11",
+  md: "size-9",
+  sm: "size-8",
+};
+
+const classes = cn(
+  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap font-medium no-underline transition-[background-color,border-color,box-shadow,color,scale] duration-150",
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring) disabled:pointer-events-none disabled:opacity-50",
+  "[&_img]:pointer-events-none [&_img]:shrink-0 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  variantStyles[variant],
+  iconOnly ? iconOnlyStyles[size] : sizeStyles[size],
+  className
+);
+
+const external = href ? (newTab ?? /^https?:/u.test(href)) : false;
+---
+
+{
+  href ? (
+    <a
+      href={href}
+      target={target ?? (external ? "_blank" : undefined)}
+      rel={rel ?? (external ? "noopener noreferrer" : undefined)}
+      class={classes}
+      {...rest}
+    >
+      <slot name="start" />
+      <slot />
+      <slot name="end" />
+    </a>
+  ) : (
+    <button type={type} class={classes} disabled={disabled} {...rest}>
+      <slot name="start" />
+      <slot />
+      <slot name="end" />
+    </button>
+  )
+}

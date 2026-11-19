@@ -1,0 +1,14 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<p
+  class:list={["m-0 text-sm leading-relaxed text-(--text-subtle)", className]}
+  data-slot="card-description"
+>
+  <slot />
+</p>

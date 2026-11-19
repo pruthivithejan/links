@@ -1,0 +1,33 @@
+---
+import { cn } from "../../utils/cn.ts";
+
+type CardTitleSize = "base" | "lg" | "sm";
+
+type CardTitleTag = "h2" | "h3" | "p" | "span";
+
+interface Props {
+  as?: CardTitleTag;
+  class?: string;
+  size?: CardTitleSize;
+}
+
+const {
+  as: Tag = "h2",
+  class: className,
+  size = "base",
+} = Astro.props;
+
+const sizeStyles: Record<CardTitleSize, string> = {
+  base: "text-base",
+  lg: "text-lg",
+  sm: "text-sm",
+};
+
+const classes = cn(
+  "min-w-0 truncate font-semibold leading-tight",
+  sizeStyles[size],
+  className
+);
+---
+
+<Tag class={classes} data-slot="card-title"><slot /></Tag>

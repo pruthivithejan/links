@@ -1,0 +1,75 @@
+---
+import { cn } from "../../utils/cn.ts";
+import PreviewImage from "./PreviewImage.astro";
+import { getInitials } from "./initials.ts";
+
+type AvatarCorners = "circle" | "rounded" | "square";
+
+type AvatarSize = "sm" | "md" | "lg" | "xl";
+
+interface Props {
+  class?: string;
+  fallback?: string;
+  fallbackAvatar?: string;
+  fallbackClass?: string;
+  imageClass?: string;
+  name: string;
+  corners?: AvatarCorners;
+  size?: AvatarSize;
+  src?: string;
+}
+
+const {
+  class: className,
+  fallback = "",
+  fallbackAvatar,
+  fallbackClass,
+  imageClass,
+  name,
+  corners = "circle",
+  size = "sm",
+  src,
+} = Astro.props;
+
+const sizeStyles: Record<AvatarSize, string> = {
+  lg: "size-18 text-base",
+  md: "size-14 text-sm",
+  sm: "size-10 text-xs",
+  xl: "size-20 text-lg",
+};
+
+const cornerStyles: Record<AvatarCorners, string> = {
+  circle: "rounded-full",
+  rounded: "rounded-2xl",
+  square: "rounded-none",
+};
+
+const classes = cn(
+  "relative flex shrink-0 items-center justify-center overflow-hidden font-semibold",
+  sizeStyles[size],
+  cornerStyles[corners],
+  className
+);
+---
+
+<span class={classes}>
+  <span
+    class:list={[
+      "absolute inset-0 flex items-center justify-center",
+      fallbackClass,
+    ]}
+    aria-hidden="true"
+  >
+    <slot name="fallback">{getInitials(name) || fallback}</slot>
+  </span>
+  {
+    src && (
+      <PreviewImage
+        src={src}
+        avatar
+        fallbackAvatar={fallbackAvatar}
+        classes={cn("relative h-full w-full object-cover", imageClass)}
+      />
+    )
+  }
+</span>

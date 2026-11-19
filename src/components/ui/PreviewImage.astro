@@ -1,0 +1,81 @@
+---
+interface Props {
+  avatar?: boolean;
+  classes: string;
+  fallbackAvatar?: string;
+  height?: number;
+  src: string;
+  width?: number;
+}
+
+const {
+  avatar = false,
+  classes,
+  fallbackAvatar,
+  height,
+  src,
+  width,
+} = Astro.props;
+---
+
+<img
+  src={src}
+  alt=""
+  class={classes}
+  width={width}
+  height={height}
+  loading="lazy"
+  decoding="async"
+  referrerpolicy="no-referrer"
+  data-preview-image={avatar ? "avatar" : "media"}
+  data-fallback-avatar={avatar ? fallbackAvatar : undefined}
+/>
+
+<script>
+  const images = [
+    ...document.querySelectorAll<HTMLImageElement>("[data-preview-image]"),
+  ];
+
+  const avatarSources = [
+    ...new Set(
+      images
+        .flatMap((image) =>
+          image.dataset.previewImage === "avatar"
+            ? [image.getAttribute("src"), image.dataset.fallbackAvatar]
+            : []
+        )
+        .filter((src): src is string => Boolean(src))
+    ),
+  ];
+
+  for (const image of images) {
+    const tried = new Set<string>();
+
+    const recover = () => {
+      const current = image.getAttribute("src");
+
+      if (current) {
+        tried.add(current);
+      }
+
+      const next =
+        image.dataset.previewImage === "avatar"
+          ? [image.dataset.fallbackAvatar, ...avatarSources].find(
+              (src) => src && !tried.has(src)
+            )
+          : undefined;
+
+      if (next) {
+        image.src = next;
+      } else {
+        image.remove();
+      }
+    };
+
+    image.addEventListener("error", recover);
+
+    if (image.complete && image.naturalWidth === 0) {
+      recover();
+    }
+  }
+</script>

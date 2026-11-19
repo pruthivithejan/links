@@ -19,6 +19,7 @@ import {
 	THEME_STORAGE_KEY,
 } from '../features/theme/registry';
 import { THEME_TOKEN_KEYS } from '../features/theme/colors';
+import { assetUrl } from '../utils/asset.ts';
 
 const themeBootConfig = {
 	avatars: THEME_AVATAR_VARIABLES,
@@ -62,13 +63,13 @@ const { title, description, favicon } = Astro.props;
 		<link
 			rel="icon"
 			type="image/svg+xml"
-			href={favicon.light}
+			href={assetUrl(favicon.light)}
 			media="(prefers-color-scheme: light)"
 		/>
 		<link
 			rel="icon"
 			type="image/svg+xml"
-			href={favicon.dark}
+			href={assetUrl(favicon.dark)}
 			media="(prefers-color-scheme: dark)"
 		/>
 		<meta name="generator" content={Astro.generator} />

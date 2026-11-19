@@ -1,0 +1,83 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn.ts";
+
+type CardTag = "article" | "div" | "section";
+
+type CardOverflow = "hidden" | "visible";
+
+interface Props extends HTMLAttributes<"article"> {
+  animated?: boolean;
+  as?: CardTag;
+  autoHeight?: boolean;
+  href?: string;
+  index?: number;
+  interactive?: boolean;
+  kind?: string;
+  overflow?: CardOverflow;
+  username?: string;
+}
+
+const {
+  animated = true,
+  as: Tag = "article",
+  autoHeight = false,
+  class: className,
+  href,
+  index,
+  interactive = Boolean(href),
+  kind,
+  overflow = "hidden",
+  style,
+  username,
+  ...rest
+} = Astro.props;
+
+const classes = cn(
+  "group relative flex w-full min-w-0 flex-col rounded-(--radius-card) border border-(--card-border) bg-(--card-bg) text-(--foreground) shadow-(--shadow-card) transition-[border-color,box-shadow,background-color] duration-150",
+  overflow === "hidden" ? "overflow-hidden" : "overflow-visible",
+  autoHeight ? "h-auto" : "h-[16.5rem]",
+  animated &&
+    "opacity-0 animate-[enter_500ms_forwards] [animation-delay:calc(var(--stagger,0)*200ms)]",
+  interactive &&
+    "hover:border-(--card-border-hover) hover:bg-(--card-bg-hover)",
+  className
+);
+
+const cardStyle = [
+  index === undefined ? undefined : `--stagger: ${index + 3}`,
+  style,
+]
+  .filter(Boolean)
+  .join("; ");
+---
+
+<Tag
+  class={classes}
+  style={cardStyle || undefined}
+  data-card
+  data-kind={kind}
+  data-username={username}
+  {...rest}
+>
+  {
+    href ? (
+      <>
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex h-full flex-col text-(--foreground) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring)"
+        >
+          <slot />
+        </a>
+        <slot name="actions" />
+      </>
+    ) : (
+      <>
+        <slot />
+        <slot name="actions" />
+      </>
+    )
+  }
+</Tag>

@@ -1,0 +1,32 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  class?: string;
+  fallbackIcon?: string;
+  fallbackSize?: number;
+}
+
+const { class: className, fallbackIcon, fallbackSize = 32 } = Astro.props;
+---
+
+<div
+  class:list={[
+    "card-media-fallback relative w-full overflow-hidden",
+    className,
+  ]}
+  data-slot="card-media"
+>
+  {
+    fallbackIcon && (
+      <div class="absolute inset-0 flex items-center justify-center">
+        <Icon
+          name={fallbackIcon}
+          size={fallbackSize}
+          class="opacity-40"
+        />
+      </div>
+    )
+  }
+  <slot />
+</div>

@@ -1,0 +1,14 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div
+  class:list={["flex min-h-0 flex-1 flex-col", className]}
+  data-slot="card-content"
+>
+  <slot />
+</div>
